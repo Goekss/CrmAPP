@@ -1,0 +1,942 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{255B9AFA-7A45-4A54-A4A0-3837936F98E8}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CrmAPP</RootNamespace>
+    <AssemblyName>CrmAPP</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <IISExpressSSLPort>44312</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.10.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.10\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.105.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.105.0\lib\netstandard2.0\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML.Parser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1d5f7376574c51ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.Parser.2.0.0\lib\netstandard2.0\ClosedXML.Parser.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=33.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.33.1.0\lib\net47\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.1.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.1.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.1.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.1.1\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Enums.NET, Version=5.0.0.0, Culture=neutral, PublicKeyToken=7ea1c1650d506225, processorArchitecture=MSIL">
+      <HintPath>..\packages\Enums.NET.5.0.0\lib\net461\Enums.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=8.2.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.8.2.1\lib\net462\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus.Interfaces, Version=8.1.0.0, Culture=neutral, PublicKeyToken=a694d7f3b0907a61, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.Interfaces.8.1.0\lib\net462\EPPlus.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ExcelDataReader, Version=3.8.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.3.8.0\lib\net462\ExcelDataReader.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelDataReader.DataSet, Version=3.8.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDataReader.DataSet.3.8.0\lib\net462\ExcelDataReader.DataSet.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="ExtendedNumerics.BigDecimal, Version=2025.1001.2.129, Culture=neutral, PublicKeyToken=65f1315a45ad8949, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExtendedNumerics.BigDecimal.2025.1001.2.129\lib\net472\ExtendedNumerics.BigDecimal.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FuzzySharp, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FuzzySharp.2.0.2\lib\net461\FuzzySharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.4.2.13, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.4.2\lib\netstandard2.0\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MailKit, Version=2.15.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.2.15.0\lib\net47\MailKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.Signed.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.4\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.Memory, Version=9.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Memory.9.0.0\lib\net462\Microsoft.Bcl.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.TimeProvider, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.TimeProvider.8.0.1\lib\net462\Microsoft.Bcl.TimeProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.1.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Abstractions, Version=8.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Abstractions.8.3.1\lib\net472\Microsoft.IdentityModel.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=8.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.8.3.1\lib\net472\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=8.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.8.3.1\lib\net472\Microsoft.IdentityModel.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=8.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.8.3.1\lib\net472\Microsoft.IdentityModel.Tokens.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.3.0.1\lib\netstandard2.0\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit, Version=2.15.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.2.15.0\lib\net47\MimeKit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.Core, Version=2.7.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.7.5\lib\net472\NPOI.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.7.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.7.5\lib\net472\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.7.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.7.5\lib\net472\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.7.5.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.7.5\lib\net472\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="NSax, Version=1.0.2.0, Culture=neutral, PublicKeyToken=0b3d9671cbd3c8d0, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSax.1.0.2\lib\net472\NSax.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="RBush, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c77e27b81f4d0187, processorArchitecture=MSIL">
+      <HintPath>..\packages\RBush.Signed.4.0.0\lib\net47\RBush.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.Fonts.1.0.1\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.ImageSharp.2.1.11\lib\net472\SixLabors.ImageSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Specialized.4.3.0\lib\net46\System.Collections.Specialized.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.10.0.0-preview.4.25258.110\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=8.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.8.3.1\lib\net472\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Xml, Version=8.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Xml.8.0.2\lib\net462\System.Security.Cryptography.Xml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.5.0.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.8.0.0\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=8.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.8.0.5\lib\net462\System.Text.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Cors, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.3.0\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.3.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.3.0\lib\net45\System.Web.Http.Cors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.3.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="Twilio, Version=7.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.7.9.1\lib\net462\Twilio.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Twilio.AspNet.Common, Version=8.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Twilio.AspNet.Common.8.1.1\lib\netstandard2.0\Twilio.AspNet.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="ZString, Version=2.6.0.0, Culture=neutral, PublicKeyToken=df4c250b14d82627, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZString.2.6.0\lib\netstandard2.0\ZString.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-grid.rtl.css" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.css" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css" />
+    <Content Include="Content\bootstrap-utilities.css" />
+    <Content Include="Content\bootstrap-utilities.min.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.css" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.rtl.css" />
+    <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\select2.min.css" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.esm.js" />
+    <Content Include="Scripts\bootstrap.esm.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
+    <None Include="Scripts\jquery-3.7.0-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.7.0.js" />
+    <Content Include="Scripts\jquery-3.7.0.min.js" />
+    <Content Include="Scripts\jquery-3.7.0.slim.js" />
+    <Content Include="Scripts\jquery-3.7.0.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\select2.min.js" />
+    <Content Include="THEMA\assets\img\backgrounds\amalfi.jpg" />
+    <Content Include="THEMA\assets\img\elements\FVS.png" />
+    <Content Include="THEMA\assets\img\elements\LoginImg.jpg" />
+    <Content Include="THEMA\assets\img\elements\LoginImgEd2.jpg" />
+    <Content Include="THEMA\assets\img\elements\Vista4.png" />
+    <Content Include="THEMA\assets\img\illustrations\undefined - Imgur.gif" />
+    <Content Include="wwwroot\images\**\*.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebRestApiConfig.cs.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BerichtsController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\KundenDatensController.cs" />
+    <Compile Include="Controllers\LiveSupportController.cs" />
+    <Compile Include="Controllers\MeinProfilController.cs" />
+    <Compile Include="Controllers\PersonalAngabensController.cs" />
+    <Compile Include="Controllers\PersonalProjektesController.cs" />
+    <Compile Include="Controllers\RestApi\KundenRestApiController.cs" />
+    <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Controllers\TestimageController.cs" />
+    <Compile Include="Controllers\TestlogoController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202501241531071_UpdateDatabase.cs" />
+    <Compile Include="Migrations\202501241531071_UpdateDatabase.Designer.cs">
+      <DependentUpon>202501241531071_UpdateDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202503141045371_FixTableMigration.cs" />
+    <Compile Include="Migrations\202503141045371_FixTableMigration.Designer.cs">
+      <DependentUpon>202503141045371_FixTableMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505160837278_FixModelChanges.cs" />
+    <Compile Include="Migrations\202505160837278_FixModelChanges.Designer.cs">
+      <DependentUpon>202505160837278_FixModelChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505160840033_UpdateAnsprechpartnerToString.cs" />
+    <Compile Include="Migrations\202505160840033_UpdateAnsprechpartnerToString.Designer.cs">
+      <DependentUpon>202505160840033_UpdateAnsprechpartnerToString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505160905275_AddMultipleAnsprechpartnerFields.cs" />
+    <Compile Include="Migrations\202505160905275_AddMultipleAnsprechpartnerFields.Designer.cs">
+      <DependentUpon>202505160905275_AddMultipleAnsprechpartnerFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505220711365_AnsprechpartnerRefactor.cs" />
+    <Compile Include="Migrations\202505220711365_AnsprechpartnerRefactor.Designer.cs">
+      <DependentUpon>202505220711365_AnsprechpartnerRefactor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505230733090_UpdatePersonalProjekteModel.cs" />
+    <Compile Include="Migrations\202505230733090_UpdatePersonalProjekteModel.Designer.cs">
+      <DependentUpon>202505230733090_UpdatePersonalProjekteModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505230944275_ModelGuncelleme.cs" />
+    <Compile Include="Migrations\202505230944275_ModelGuncelleme.Designer.cs">
+      <DependentUpon>202505230944275_ModelGuncelleme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202506111214572_UpdatePersonalProjektModel.cs" />
+    <Compile Include="Migrations\202506111214572_UpdatePersonalProjektModel.Designer.cs">
+      <DependentUpon>202506111214572_UpdatePersonalProjektModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507230932564_AddLockoutFields.cs" />
+    <Compile Include="Migrations\202507230932564_AddLockoutFields.Designer.cs">
+      <DependentUpon>202507230932564_AddLockoutFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507280638489_ModelUpdate.cs" />
+    <Compile Include="Migrations\202507280638489_ModelUpdate.Designer.cs">
+      <DependentUpon>202507280638489_ModelUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202508110726241_AddFailedLoginCount.cs" />
+    <Compile Include="Migrations\202508110726241_AddFailedLoginCount.Designer.cs">
+      <DependentUpon>202508110726241_AddFailedLoginCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202510311422283_AddBerichtAndRelations.cs" />
+    <Compile Include="Migrations\202510311422283_AddBerichtAndRelations.Designer.cs">
+      <DependentUpon>202510311422283_AddBerichtAndRelations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202511050917152_AddedKundenDatenRelationship.cs" />
+    <Compile Include="Migrations\202511050917152_AddedKundenDatenRelationship.Designer.cs">
+      <DependentUpon>202511050917152_AddedKundenDatenRelationship.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202511051454341_PersonalProjekte_KundenDatenID_Ekleme.cs" />
+    <Compile Include="Migrations\202511051454341_PersonalProjekte_KundenDatenID_Ekleme.Designer.cs">
+      <DependentUpon>202511051454341_PersonalProjekte_KundenDatenID_Ekleme.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202511051553309_Bericht_FK_Attrs.cs" />
+    <Compile Include="Migrations\202511051553309_Bericht_FK_Attrs.Designer.cs">
+      <DependentUpon>202511051553309_Bericht_FK_Attrs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202511071301536_BerichtForeignKeyFix.cs" />
+    <Compile Include="Migrations\202511071301536_BerichtForeignKeyFix.Designer.cs">
+      <DependentUpon>202511071301536_BerichtForeignKeyFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202511190928384_UpdateBerichtModel.cs" />
+    <Compile Include="Migrations\202511190928384_UpdateBerichtModel.Designer.cs">
+      <DependentUpon>202511190928384_UpdateBerichtModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\DataContext\DBc_Context.cs" />
+    <Compile Include="Models\Kunden\Ansprechpartner.cs" />
+    <Compile Include="Models\Kunden\KundenDaten.cs" />
+    <Compile Include="Models\Personal\PersonalAngaben.cs" />
+    <Compile Include="Models\Projekt\Bericht.cs" />
+    <Compile Include="Models\Projekt\PersonalProjekte.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Roller\UserRoller.cs" />
+    <Compile Include="Services\EmailService.cs" />
+    <Compile Include="ViewModels\BerichtCreateEditViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\DashboardViewModel.cs" />
+    <Compile Include="ViewModels\KundenCreateViewModel.cs" />
+    <Compile Include="ViewModels\KundenEditViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\ProjektEditViewModel.cs" />
+    <Compile Include="ViewModels\VerifyCodeViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\googlefont.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\supportfont.css" />
+    <Content Include="Scripts\apexcharts.js" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\chart.js" />
+    <Content Include="Scripts\hcharts-3d.js" />
+    <Content Include="Scripts\highdiagram.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\whatsappchat.js" />
+    <Content Include="THEMA\assets\css\demo.css" />
+    <Content Include="THEMA\assets\img\avatars\1.png" />
+    <Content Include="THEMA\assets\img\avatars\5.png" />
+    <Content Include="THEMA\assets\img\avatars\6.png" />
+    <Content Include="THEMA\assets\img\avatars\7.png" />
+    <Content Include="THEMA\assets\img\backgrounds\18.jpg" />
+    <Content Include="THEMA\assets\img\backgrounds\header.jpg" />
+    <Content Include="THEMA\assets\img\elements\1.jpg" />
+    <Content Include="THEMA\assets\img\elements\11.jpg" />
+    <Content Include="THEMA\assets\img\elements\12.jpg" />
+    <Content Include="THEMA\assets\img\elements\13.jpg" />
+    <Content Include="THEMA\assets\img\elements\17.jpg" />
+    <Content Include="THEMA\assets\img\elements\18.jpg" />
+    <Content Include="THEMA\assets\img\elements\19.jpg" />
+    <Content Include="THEMA\assets\img\elements\2.jpg" />
+    <Content Include="THEMA\assets\img\elements\20.jpg" />
+    <Content Include="THEMA\assets\img\elements\3.jpg" />
+    <Content Include="THEMA\assets\img\elements\4.jpg" />
+    <Content Include="THEMA\assets\img\elements\5.jpg" />
+    <Content Include="THEMA\assets\img\elements\7.jpg" />
+    <Content Include="THEMA\assets\img\elements\Crm1.jpg" />
+    <Content Include="THEMA\assets\img\favicon\earth.ico" />
+    <Content Include="THEMA\assets\img\favicon\favicon.ico" />
+    <Content Include="THEMA\assets\img\favicon\World.ico" />
+    <Content Include="THEMA\assets\img\icons\brands\asana.png" />
+    <Content Include="THEMA\assets\img\icons\brands\behance.png" />
+    <Content Include="THEMA\assets\img\icons\brands\dribbble.png" />
+    <Content Include="THEMA\assets\img\icons\brands\facebook.png" />
+    <Content Include="THEMA\assets\img\icons\brands\github.png" />
+    <Content Include="THEMA\assets\img\icons\brands\google.png" />
+    <Content Include="THEMA\assets\img\icons\brands\instagram.png" />
+    <Content Include="THEMA\assets\img\icons\brands\mailchimp.png" />
+    <Content Include="THEMA\assets\img\icons\brands\slack.png" />
+    <Content Include="THEMA\assets\img\icons\brands\twitter.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\cc-primary.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\cc-success.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\cc-warning.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\chart-success.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\chart.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\hohe1.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\mittlere.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\paypal.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\wallet-info.png" />
+    <Content Include="THEMA\assets\img\icons\unicons\wallet.png" />
+    <Content Include="THEMA\assets\img\illustrations\girl-doing-yoga-light.png" />
+    <Content Include="THEMA\assets\img\illustrations\man-with-laptop-light.png" />
+    <Content Include="THEMA\assets\img\illustrations\page-misc-error-light.png" />
+    <Content Include="THEMA\assets\js\config.js" />
+    <Content Include="THEMA\assets\js\dashboards-analytics.js" />
+    <Content Include="THEMA\assets\js\extended-ui-perfect-scrollbar.js" />
+    <Content Include="THEMA\assets\js\form-basic-inputs.js" />
+    <Content Include="THEMA\assets\js\main.js" />
+    <Content Include="THEMA\assets\js\pages-account-settings-account.js" />
+    <Content Include="THEMA\assets\js\ui-modals.js" />
+    <Content Include="THEMA\assets\js\ui-popover.js" />
+    <Content Include="THEMA\assets\js\ui-toasts.js" />
+    <Content Include="THEMA\assets\vendor\css\core.css" />
+    <Content Include="THEMA\assets\vendor\css\pages\page-account-settings.css" />
+    <Content Include="THEMA\assets\vendor\css\pages\page-auth.css" />
+    <Content Include="THEMA\assets\vendor\css\pages\page-icons.css" />
+    <Content Include="THEMA\assets\vendor\css\pages\page-misc.css" />
+    <Content Include="THEMA\assets\vendor\css\theme-default.css" />
+    <Content Include="THEMA\assets\vendor\fonts\boxicons.css" />
+    <Content Include="THEMA\assets\vendor\fonts\boxicons\boxicons.svg" />
+    <Content Include="THEMA\assets\vendor\js\bootstrap.js" />
+    <Content Include="THEMA\assets\vendor\js\helpers.js" />
+    <Content Include="THEMA\assets\vendor\js\menu.js" />
+    <Content Include="THEMA\assets\vendor\libs\apex-charts\apex-charts.css" />
+    <Content Include="THEMA\assets\vendor\libs\apex-charts\apexcharts.js" />
+    <Content Include="THEMA\assets\vendor\libs\highlight\highlight-github.css" />
+    <Content Include="THEMA\assets\vendor\libs\highlight\highlight.css" />
+    <Content Include="THEMA\assets\vendor\libs\highlight\highlight.js" />
+    <Content Include="THEMA\assets\vendor\libs\jquery\jquery.js" />
+    <Content Include="THEMA\assets\vendor\libs\masonry\masonry.js" />
+    <Content Include="THEMA\assets\vendor\libs\perfect-scrollbar\perfect-scrollbar.css" />
+    <Content Include="THEMA\assets\vendor\libs\perfect-scrollbar\perfect-scrollbar.js" />
+    <Content Include="THEMA\assets\vendor\libs\popper\popper.js" />
+    <Content Include="THEMA\build-config.js" />
+    <Content Include="THEMA\gulpfile.js" />
+    <Content Include="THEMA\html\auth-forgot-password-basic.html" />
+    <Content Include="THEMA\html\auth-login-basic.html" />
+    <Content Include="THEMA\html\auth-register-basic.html" />
+    <Content Include="THEMA\html\cards-basic.html" />
+    <Content Include="THEMA\html\extended-ui-perfect-scrollbar.html" />
+    <Content Include="THEMA\html\extended-ui-text-divider.html" />
+    <Content Include="THEMA\html\form-layouts-horizontal.html" />
+    <Content Include="THEMA\html\form-layouts-vertical.html" />
+    <Content Include="THEMA\html\forms-basic-inputs.html" />
+    <Content Include="THEMA\html\forms-input-groups.html" />
+    <Content Include="THEMA\html\icons-boxicons.html" />
+    <Content Include="THEMA\html\index.html" />
+    <Content Include="THEMA\html\layouts-blank.html" />
+    <Content Include="THEMA\html\layouts-container.html" />
+    <Content Include="THEMA\html\layouts-fluid.html" />
+    <Content Include="THEMA\html\layouts-without-menu.html" />
+    <Content Include="THEMA\html\layouts-without-navbar.html" />
+    <Content Include="THEMA\html\pages-account-settings-account.html" />
+    <Content Include="THEMA\html\pages-account-settings-connections.html" />
+    <Content Include="THEMA\html\pages-account-settings-notifications.html" />
+    <Content Include="THEMA\html\pages-misc-error.html" />
+    <Content Include="THEMA\html\pages-misc-under-maintenance.html" />
+    <Content Include="THEMA\html\tables-basic.html" />
+    <Content Include="THEMA\html\ui-accordion.html" />
+    <Content Include="THEMA\html\ui-alerts.html" />
+    <Content Include="THEMA\html\ui-badges.html" />
+    <Content Include="THEMA\html\ui-buttons.html" />
+    <Content Include="THEMA\html\ui-carousel.html" />
+    <Content Include="THEMA\html\ui-collapse.html" />
+    <Content Include="THEMA\html\ui-dropdowns.html" />
+    <Content Include="THEMA\html\ui-footer.html" />
+    <Content Include="THEMA\html\ui-list-groups.html" />
+    <Content Include="THEMA\html\ui-modals.html" />
+    <Content Include="THEMA\html\ui-navbar.html" />
+    <Content Include="THEMA\html\ui-offcanvas.html" />
+    <Content Include="THEMA\html\ui-pagination-breadcrumbs.html" />
+    <Content Include="THEMA\html\ui-progress.html" />
+    <Content Include="THEMA\html\ui-spinners.html" />
+    <Content Include="THEMA\html\ui-tabs-pills.html" />
+    <Content Include="THEMA\html\ui-toasts.html" />
+    <Content Include="THEMA\html\ui-tooltips-popovers.html" />
+    <Content Include="THEMA\html\ui-typography.html" />
+    <Content Include="THEMA\js\bootstrap.js" />
+    <Content Include="THEMA\js\helpers.js" />
+    <Content Include="THEMA\js\menu.js" />
+    <Content Include="THEMA\klang_datei\error-sound2.mp3" />
+    <Content Include="THEMA\klang_datei\success.mp3" />
+    <Content Include="THEMA\klang_datei\success2.mp3" />
+    <Content Include="THEMA\libs\apex-charts\apexcharts.js" />
+    <Content Include="THEMA\libs\highlight\highlight.js" />
+    <Content Include="THEMA\libs\jquery\jquery.js" />
+    <Content Include="THEMA\libs\masonry\masonry.js" />
+    <Content Include="THEMA\libs\perfect-scrollbar\perfect-scrollbar.js" />
+    <Content Include="THEMA\libs\popper\popper.js" />
+    <Content Include="THEMA\tasks\build.js" />
+    <Content Include="THEMA\tasks\prod.js" />
+    <Content Include="THEMA\webpack.config.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="THEMA\.eslintrc.json" />
+    <Content Include="THEMA\.prettierignore" />
+    <Content Include="THEMA\.prettierrc.json" />
+    <Content Include="THEMA\assets\vendor\fonts\boxicons\boxicons.eot" />
+    <Content Include="THEMA\assets\vendor\fonts\boxicons\boxicons.ttf" />
+    <Content Include="THEMA\assets\vendor\fonts\boxicons\boxicons.woff" />
+    <Content Include="THEMA\assets\vendor\fonts\boxicons\boxicons.woff2" />
+    <Content Include="THEMA\fonts\boxicons.scss" />
+    <Content Include="THEMA\libs\apex-charts\apex-charts.scss" />
+    <Content Include="THEMA\libs\highlight\highlight-github.scss" />
+    <Content Include="THEMA\libs\highlight\highlight.scss" />
+    <Content Include="THEMA\libs\perfect-scrollbar\perfect-scrollbar.scss" />
+    <Content Include="THEMA\LICENSE.md" />
+    <Content Include="THEMA\package-lock.json" />
+    <Content Include="THEMA\package.json" />
+    <Content Include="THEMA\README.md" />
+    <Content Include="THEMA\scss\core.scss" />
+    <Content Include="THEMA\scss\pages\page-account-settings.scss" />
+    <Content Include="THEMA\scss\pages\page-auth.scss" />
+    <Content Include="THEMA\scss\pages\page-icons.scss" />
+    <Content Include="THEMA\scss\pages\page-misc.scss" />
+    <Content Include="THEMA\scss\theme-default.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_floating-labels.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_form-control.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_form-range.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_form-select.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_input-group.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_labels.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\forms\_validation.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_alert.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_badge.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_buttons.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_caret.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_dropdown.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_forms.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_list-group.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_misc.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_navs.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_pagination.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_progress.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_table-variants.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\mixins\_toasts.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_accordion.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_alert.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_badge.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_breadcrumb.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_button-group.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_buttons.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_card.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_carousel.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_close.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_dropdown.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_forms.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_functions.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_include.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_list-group.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_mixins.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_modal.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_nav.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_navbar.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_offcanvas.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_pagination.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_popover.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_progress.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_reboot.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_root.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_spinners.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_tables.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_toasts.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_tooltip.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_type.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_utilities-ltr.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_utilities.scss" />
+    <Content Include="THEMA\scss\_bootstrap-extended\_variables.scss" />
+    <Content Include="THEMA\scss\_bootstrap.scss" />
+    <Content Include="THEMA\scss\_colors.scss" />
+    <Content Include="THEMA\scss\_components.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_app-brand.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_avatar.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_footer.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_menu.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_misc.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_navbar.scss" />
+    <Content Include="THEMA\scss\_components\mixins\_text-divider.scss" />
+    <Content Include="THEMA\scss\_components\_app-brand.scss" />
+    <Content Include="THEMA\scss\_components\_avatar.scss" />
+    <Content Include="THEMA\scss\_components\_base.scss" />
+    <Content Include="THEMA\scss\_components\_common.scss" />
+    <Content Include="THEMA\scss\_components\_footer.scss" />
+    <Content Include="THEMA\scss\_components\_include.scss" />
+    <Content Include="THEMA\scss\_components\_layout.scss" />
+    <Content Include="THEMA\scss\_components\_menu.scss" />
+    <Content Include="THEMA\scss\_components\_mixins.scss" />
+    <Content Include="THEMA\scss\_components\_text-divider.scss" />
+    <Content Include="THEMA\scss\_components\_variables.scss" />
+    <Content Include="THEMA\scss\_custom-variables\_bootstrap-extended.scss" />
+    <Content Include="THEMA\scss\_custom-variables\_components.scss" />
+    <Content Include="THEMA\scss\_custom-variables\_libs.scss" />
+    <Content Include="THEMA\scss\_custom-variables\_pages.scss" />
+    <Content Include="THEMA\scss\_custom-variables\_support.scss" />
+    <Content Include="THEMA\scss\_theme\_common.scss" />
+    <Content Include="THEMA\scss\_theme\_theme.scss" />
+    <Content Include="THEMA\yarn.lock" />
+    <Content Include="Views\PersonalAngabens\Create.cshtml" />
+    <Content Include="Views\PersonalAngabens\Delete.cshtml" />
+    <Content Include="Views\PersonalAngabens\Edit.cshtml" />
+    <Content Include="Views\PersonalAngabens\Index.cshtml" />
+    <Content Include="Views\PersonalAngabens\PersonalCard.cshtml" />
+    <Content Include="Views\PersonalProjektes\Index.cshtml" />
+    <Content Include="Views\PersonalProjektes\Create.cshtml" />
+    <Content Include="Views\PersonalProjektes\Edit.cshtml" />
+    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\PersonalAngabens\Details.cshtml" />
+    <Content Include="Views\PersonalProjektes\Details.cshtml" />
+    <Content Include="Views\KundenDatens\Create.cshtml" />
+    <Content Include="Views\KundenDatens\Delete.cshtml" />
+    <Content Include="Views\KundenDatens\Details.cshtml" />
+    <Content Include="Views\KundenDatens\Edit.cshtml" />
+    <Content Include="Views\KundenDatens\Index.cshtml" />
+    <Content Include="Views\PersonalProjektes\Delete.cshtml" />
+    <Content Include="Views\LiveSupport\LiveSupport.cshtml" />
+    <Content Include="Views\Security\Login.cshtml" />
+    <Content Include="Views\MeinProfil\ChangePassword.cshtml" />
+    <Content Include="Views\MeinProfil\Edit.cshtml" />
+    <Content Include="Views\MeinProfil\Index.cshtml" />
+    <Content Include="Views\LiveSupport\TreeView.cshtml" />
+    <Content Include="Views\Security\VerifyCode.cshtml" />
+    <Content Include="Views\Berichts\Create.cshtml" />
+    <Content Include="Views\Berichts\Delete.cshtml" />
+    <Content Include="Views\Berichts\Details.cshtml" />
+    <Content Include="Views\Berichts\Edit.cshtml" />
+    <Content Include="Views\Berichts\Index.cshtml" />
+    <Content Include="Views\View.cshtml" />
+    <Content Include="Views\KundenDatens\Import.cshtml" />
+    <Content Include="Views\PersonalProjektes\Import.cshtml" />
+    <Content Include="Views\LiveSupport\Vista.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Bericht_Dokumentation\" />
+    <Folder Include="Images\" />
+    <Folder Include="Logos\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\KundenRestApi\" />
+    <Folder Include="Views\Testlogo\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.rtl.min.css.map" />
+    <Content Include="Content\bootstrap.rtl.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.rtl.css.map" />
+    <Content Include="Content\bootstrap-utilities.min.css.map" />
+    <Content Include="Content\bootstrap-utilities.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.rtl.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.min.css.map" />
+    <Content Include="Content\bootstrap-grid.rtl.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="packages.config" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.esm.min.js.map" />
+    <Content Include="Scripts\bootstrap.esm.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.7.0.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202501241531071_UpdateDatabase.resx">
+      <DependentUpon>202501241531071_UpdateDatabase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202503141045371_FixTableMigration.resx">
+      <DependentUpon>202503141045371_FixTableMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505160837278_FixModelChanges.resx">
+      <DependentUpon>202505160837278_FixModelChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505160840033_UpdateAnsprechpartnerToString.resx">
+      <DependentUpon>202505160840033_UpdateAnsprechpartnerToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505160905275_AddMultipleAnsprechpartnerFields.resx">
+      <DependentUpon>202505160905275_AddMultipleAnsprechpartnerFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505220711365_AnsprechpartnerRefactor.resx">
+      <DependentUpon>202505220711365_AnsprechpartnerRefactor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505230733090_UpdatePersonalProjekteModel.resx">
+      <DependentUpon>202505230733090_UpdatePersonalProjekteModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505230944275_ModelGuncelleme.resx">
+      <DependentUpon>202505230944275_ModelGuncelleme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202506111214572_UpdatePersonalProjektModel.resx">
+      <DependentUpon>202506111214572_UpdatePersonalProjektModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507230932564_AddLockoutFields.resx">
+      <DependentUpon>202507230932564_AddLockoutFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507280638489_ModelUpdate.resx">
+      <DependentUpon>202507280638489_ModelUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202508110726241_AddFailedLoginCount.resx">
+      <DependentUpon>202508110726241_AddFailedLoginCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202510311422283_AddBerichtAndRelations.resx">
+      <DependentUpon>202510311422283_AddBerichtAndRelations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202511050917152_AddedKundenDatenRelationship.resx">
+      <DependentUpon>202511050917152_AddedKundenDatenRelationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202511051454341_PersonalProjekte_KundenDatenID_Ekleme.resx">
+      <DependentUpon>202511051454341_PersonalProjekte_KundenDatenID_Ekleme.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202511051553309_Bericht_FK_Attrs.resx">
+      <DependentUpon>202511051553309_Bericht_FK_Attrs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202511071301536_BerichtForeignKeyFix.resx">
+      <DependentUpon>202511071301536_BerichtForeignKeyFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202511190928384_UpdateBerichtModel.resx">
+      <DependentUpon>202511190928384_UpdateBerichtModel.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>54240</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44312/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Bu proje bu bilgisayarda olmayan NuGet paketlerine başvuru yapıyor. Bunları indirmek için NuGet Paket Geri Yükleme'yi kullanın. Daha fazla bilgi için, bkz. http://go.microsoft.com/fwlink/?LinkID=322105. Eksik dosya: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

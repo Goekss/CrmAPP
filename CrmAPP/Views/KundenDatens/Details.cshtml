@@ -1,0 +1,157 @@
+﻿@model CrmAPP.Models.Kunden.KundenDaten
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+<br />
+
+<style>
+    #logo {
+        max-width: 75px;
+        max-height: 75px !important;
+        border: 1px solid #cfcfcf;
+        border-radius: 10px;
+        margin-right: 30px;
+        margin-top: -25px;
+        box-shadow: 5px 6px 7px rgba(0, 0, 0, 0.3);
+        float: right !important;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <h5 class="card-header"> Überblick über die Kundenangeben</h5>
+
+            <div class="card-body">
+                <hr class="mt-6" style="width:100% ;margin-top:20px;margin-bottom:50px;color:darkgrey">
+
+
+                <div>
+                    <img id="logo" src="@Url.Content("~/Logos/"+ Model.Logo)" />
+                </div>
+
+                <div class="mb-3 col-md-6">
+                    <b class="form-label ">Unternehmen :</b>
+                    <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Unternehmen)</i>
+                </div>
+                <hr style="width:15%" />
+                <div class="mb-3 col-md-6">
+                    <b class="form-label">Vor-Nachname :</b>
+                    <i style="margin-left:20px;color:darkgray"> @Html.DisplayFor(model => model.Vorname) @Html.DisplayFor(model => model.Nachname)</i>
+                </div>
+                <hr style="width:22%" />
+                <div class="mb-3 col-md-6">
+                    <i class="bx bx-envelope"></i>  <b class="form-label ">E-mail :</b>
+                    <i style="margin-left: 20px;"> <a href="mailto:@Model.Email" style="color: darkgray; text-decoration: underline">@Html.DisplayFor(model => model.Email)</a></i>
+                </div>
+                <hr style="width:30%" />
+                <div class="mb-3 col-md-6">
+                    <i class="bx bx-mobile-alt"></i> <b class="form-label ">Telefon :</b>
+                    <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.TelefonMobil)</i>
+                </div>
+                <hr style="width:40%" />
+                <div class="mb-3 col-md-6">
+                    <i class="bx bx-phone-call"></i> <b class="form-label ">Telefon :</b>
+                    <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.TelefonHaus)</i>
+                </div>
+                <hr style="width:50%" />
+                <div class="mb-3 col-md-6">
+                    <b class="form-label ">Projekt/Auftrag :</b>
+                    <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.ProjektAuftrag)</i>
+                </div>
+                <hr style="width:60%" />
+                <div class="mb-3 col-md-6">
+                    <i class='bx bx-world' style="color:blue"></i> <b class="form-label ">Website :</b>
+                    <i style="margin-left: 20px; "><a href="@Model.Website" target="_blank" style="text-decoration: underline; color: darkgray">@Html.DisplayFor(model => model.Website)</a></i>
+
+                </div>
+                <hr style="width:70%" />
+                <div class="mb-3 col-md-6">
+                    @{
+                        var urlmaps = "https://www.google.com/maps/search/?api=1&query=" + HttpUtility.UrlEncode(Model.Adresse);
+                    }
+                    <i class='bx bx-map' style="color:red"></i> <b class="form-label ">Adresse :</b>
+                    <i style="margin-left: 20px; color: darkgray">
+                        <a href="@urlmaps" target="_blank" style=" text-decoration: underline;color:darkgray">@Model.Adresse</a>
+                    </i>
+                    <small style="margin-left:5px;color:darkgray"> ( Hauptsitz )</small>
+                </div>
+                <hr style="width:80%" />
+
+                <i>Kontaktpersonen</i>
+
+                <div class="accordion accordion-popout mt-3 w-75" id="accordionPopout">
+                    @if (Model.AnsprechpartnerList != null && Model.AnsprechpartnerList.Any())
+                    {
+                        int partnerIndex = 1;
+                        foreach (var partner in Model.AnsprechpartnerList)
+                        {
+                            string collapseId = "collapsePartner" + partnerIndex;
+                            string headingId = "headingPartner" + partnerIndex;
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="@headingId">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                                        <b>Ansprechpartner*in @partnerIndex</b>
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse">
+                                    <div class="accordion-body" style="margin-left:30px">
+                                        <label class="mb-3 mt-2 "><u style="color:cadetblue"> <b>@(partner.Name)</b> </u></label>
+                                        <br />
+                                        <span>
+                                            <i class="bx bx-phone-call" style="color: #28a745; margin-right: 14px"></i>:
+                                            <a href="tel:@partner.Tel">@partner.Tel </a>
+                                        </span>
+                                        <br />
+                                        <span>
+                                            <i class="bx bx-envelope" style="color: #ff4d4f; margin-right: 14px"></i>:
+                                            <a href="mailto:@partner.Mail">@partner.Mail</a>
+                                        </span>
+                                        <br />
+                                        @{
+                                            var url = "https://www.google.com/maps/search/?api=1&query=" + HttpUtility.UrlEncode(partner.Filiale);
+                                        }
+                                        <span>
+                                            <i class="bx bx-building-house" style="color: lightslategray; margin-right: 14px"></i>:
+
+                                            <a href="@url" target="_blank" style=" text-decoration: underline">@partner.Filiale</a>
+                                        </span>
+                                        <small style="color:red !important" class="text-muted">(Filiale)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            partnerIndex++;
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning mt-2 w-50">
+                            Es gibt noch keinen Ansprechpartner für diesen Kunden.
+                        </div>
+                    }
+                </div>
+                <hr style="width:90%" />
+                <div class="mb-3 col-md-6">
+                    <b class="form-label ">Hinweise :</b>
+                    <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Hinweise)</i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr />
+
+<div>
+    <div class="mt-0">
+        <a href="/KundenDatens/Index/" class="btn btn-sm btn-secondary">
+            <i class='bx bx-chevron-left' style="margin-left:-10px"></i> Zurück zur Liste
+        </a>
+    </div>
+</div>

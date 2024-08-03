@@ -1,0 +1,164 @@
+﻿@model CrmAPP.Models.Projekt.Bericht
+
+@{
+    ViewBag.Title = "Bericht löschen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4><i class="fas fa-trash-alt me-2"></i> Bericht löschen</h4>
+<div class="container col-md-12 mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger ">
+            <h5> Bericht-IdNr: <b class="text-dark m-2 mt-4" style="font-size:20px">@Model.BerichtId</b></h5>
+        </div>
+
+        <div class="card-body">
+            <p class="text-danger lead mt-3">
+                Bist du sicher, dass du diesen Bericht dauerhaft löschen möchtest?
+            </p>
+
+            <dl class="row p-3">
+
+                <dt class="col-sm-4">Kunde</dt>
+                <dd class="col-sm-8">
+                    <b>
+                        @if (Model.Kunde != null)
+                        {
+                            @(string.IsNullOrEmpty(Model.Kunde.Unternehmen)
+           ? $"{Model.Kunde.Vorname} {Model.Kunde.Nachname}"
+           : Model.Kunde.Unternehmen)
+                        }
+                        else
+                        {
+                            <span class="text-muted">--</span>
+                        }
+                    </b>
+                </dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Projekt.Projektname)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Projekt.Projektname)</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Titel)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Titel)</dd>
+
+                <dt class="col-sm-4">Datei Type</dt>
+                <dd class="col-sm-8">
+                    @if (!string.IsNullOrWhiteSpace(Model.DateiPfad))
+                    {
+                        <a href="@Url.Action("Download", "Berichts", new { id = Model.BerichtId })" target="_blank">
+                            <i class="fas fa-file-download bx bx-cloud-download"></i> Herunterladen
+                        </a>
+                        <span class="ms-2 text-muted">.@Model.DateiTuru</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Keine Datei</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Version)</dt>
+                <dd class="col-sm-8">@Model.Version</dd>
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.HochgeladenAm)</dt>
+                <dd class="col-sm-8 text-info">
+                    @if (Model.HochgeladenAm.HasValue)
+                    {
+                        @Model.HochgeladenAm.Value.ToString("dd.MM.yyyy HH:mm")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Unbekannt</span>
+                    }
+                </dd>
+
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.BearbeitetAm)</dt>
+                <dd class="col-sm-8 text-warning">
+                    @(Model.BearbeitetAm.HasValue ? Model.BearbeitetAm.Value.ToString("dd.MM.yyyy HH:mm") : "-")
+                </dd>
+
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.BearbeitetVonId)</dt>
+                <dd class="col-sm-8">
+                    @if (Model.BearbeitetVon != null)
+                    {
+                        @Model.BearbeitetVon.Vorname @Model.BearbeitetVon.Nachname
+                    }
+                    else
+                    {
+                        <span class="text-muted">Unbekannt</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Es wird gelöscht von</dt>
+                <dd class="col-sm-8">
+                    @if (Model.GeloschtVon != null)
+                    {
+                        @Model.GeloschtVon.Vorname @Model.GeloschtVon.Nachname
+                    }
+                    else
+                    {
+                        <span class="text-muted">Unbekannt</span>
+                    }
+                </dd>
+
+
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.BearbeitetVonId)</dt>
+                <dd class="col-sm-8">
+                    @if (Model.BearbeitetVon != null)
+                    {
+                        @Model.BearbeitetVon.Vorname @Model.BearbeitetVon.Nachname
+                    }
+                    else
+                    {
+                        <span class="text-muted">Unbekannt</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Es wird gelöscht von</dt>
+                <dd class="col-sm-8">
+                    @if (ViewBag.CurrentUser != null)
+                    {
+                        <span class="text-danger fw-bold">
+                            @ViewBag.CurrentUser.Vorname @ViewBag.CurrentUser.Nachname (ID-No: @ViewBag.CurrentUser.PersonalDatenID)
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Unbekannt</span>
+                    }
+                </dd>
+
+
+                <!-- Silinecek objenin görseli -->
+                <dt class="col-sm-4">Objekt Bild</dt>
+                <dd class="col-sm-8">
+                    @if (Model.BerichtId!=0)
+                    {
+                        <img src="@Url.Content($"~/Bericht_Dokumentation/{Model.BerichtId}.jpg")" class="img-fluid" style="max-height: 200px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Kein Bild verfügbar</span>
+                    }
+                </dd>
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash bx bx-trash"></i> Löschen
+                    </button>
+                    
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mt-5">
+        <hr />
+        @Html.ActionLink("Zurück zur Liste", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+
+</div>

@@ -1,0 +1,134 @@
+﻿@model CrmAPP.Models.Personal.PersonalAngaben
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #img {
+        width: 160px;
+        height: 160px !important;
+        border-radius: 10px;
+        margin-left: 20px;
+        margin-top: 30px;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+    }
+</style>
+<h2>Details</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <small class="card-header">Überblick über das Profil</small>
+            <!-- Account -->
+            <div class="card-body">
+
+                <!--HIER KOMMT PROFILBILD-->
+                <div>
+                    <img id="img" src="@Url.Content("~/Images/"+ Model.Bild )" alt="Alternate Text" />
+                </div>
+
+                <hr class="mt-6"style="width:85% ;margin-left:20px;margin-top:20px;color:darkgrey">
+                <div class="card-body">
+                    <form id="formAccountSettings">
+                        <div class="col">
+
+                            <div class="mb-3 col-md-6">
+                                <b class="form-label">Vor-Nachname :</b>
+                                <i style="margin-left:20px;color:darkgray"> @Html.DisplayFor(model => model.Vorname) @Html.DisplayFor(model => model.Nachname)</i>
+                            </div>
+                            <hr style="width:20%" />
+                            <div class="mb-3 col-md-6">
+                                <b class="form-label ">E-mail :</b>
+                                <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Email)</i>
+                            </div>
+                            <hr style="width:25%" />
+                            <div class="mb-3 col-md-6">
+                                <b class="form-label" for="phoneNumber">Rufnummer :</b>
+                                <i style="margin-left: 20px; color: darkgray">  @Html.DisplayFor(model => model.RufNummer)</i>
+                            </div>
+                            <hr style="width:30%" />
+                            <div class="mb-3 col-md-6">
+                                <b for="state" class="form-label">Abteilung :</b>
+                                <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Abteilung)</i>
+                            </div>
+                            <hr style="width:35%" />
+                            <div class="mb-3 col-md-6">
+                                <b for="state" class="form-label">Rolle :</b>
+                                <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Rol)</i>
+                            </div>
+                            <hr style="width:40%" />
+                            <div class="mb-3 col-md-6">
+                                <b for="state" class="form-label">Aufgaben :</b>
+                                <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Aufgaben)</i>
+                            </div>
+                            <hr style="width:45%" />
+                            <div class="mb-3 col-md-6">
+                                <b for="state" class="form-label">Berechtigung :</b>
+                                <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Berechtigung)</i>
+                            </div>
+                            <hr style="width:50%" />
+                            <div class="mb-3 col-md-6">
+                                <b for="state" class="form-label">Hinweis :</b>
+                                <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Hinweise)</i>
+                            </div>
+
+                        </div>
+
+                        <div style="max-width:50%!important">
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="alert alert-success align-content-center">
+                                    @TempData["Message"]
+                                </div>
+                            }
+                        </div>
+                      
+
+
+                    </form>
+                    <div class="float-end">
+                        @if (Model.IsLockedOut)
+                        {
+
+
+                            <span class="badge bg-danger mb-3">
+                                <small style="gap:10px!important">Gesperrt seit </small>
+                                <b style="margin-left:6px;margin-right:6px;color:black;">
+                                    @(Model.LockoutTime?.ToString("dd.MM.yyyy | HH:mm"))
+                                </b>
+
+                            </span>
+
+                            if (User.IsInRole("Admin"))
+                            {
+                                using (Html.BeginForm("Unlock", "PersonalAngabens", FormMethod.Post, new { onsubmit = "return confirm('Sind Sie sicher, dass Sie die Sperre für diesen Benutzer aufheben möchten?');" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("id", Model.PersonalDatenID)
+                                    <button type="submit" class="btn btn-outline-warning btn-sm float-end">Entsperren</button>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-success float-end">
+                                Aktiv
+                            </span>
+                        }
+                    </div>
+                   
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="mt-2">
+        <a href="/PersonalAngabens/Index" type="submit" class="btn btn-secondary" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Zurück zur Liste </a>
+    </div>
+</div>
+

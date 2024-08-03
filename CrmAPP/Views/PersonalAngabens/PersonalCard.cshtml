@@ -1,0 +1,73 @@
+﻿@model IEnumerable<CrmAPP.Models.Personal.PersonalAngaben>
+
+@{
+    ViewBag.Title = "PersonalCard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<br />
+<br />
+<h2>Kontakt-Karte</h2>
+
+
+<hr />
+<br />
+
+<section class="content">
+    <!-- Default box -->
+    <div class="card card-solid">
+        <div class="card-body pb-0" style="border-radius:8px!important">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-10 col-sm-6 col-md-4 d-flex align-items-stretch flex-column" style="margin-bottom: 25px !important;">
+                        <div class="card bg-light d-flex flex-fill">
+                            <div class="card-header text-muted border-bottom-0">
+
+                                <b>@item.Abteilung</b>
+                                <hr />
+                                <small>@item.Berechtigung</small>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="row">
+                                    <div class="col-6" style="padding-top:20px!important">
+                                        <h2 class="lead"><b>@item.Vorname @item.Nachname</b></h2>
+                                        <ul class="ml-4 mb-0 mt-3 fa-ul text-muted" style="margin-top:50px!important">
+                                            <li class="small"style="color:green"><span class="fa-li" ><i class="bx bx-envelope" style="color:#e43e3e"></i></span> : @item.Email</li>
+                                            <li class="small"style="color:green"><span class="fa-li"><i class="bx bx-mobile-alt" style="color:black"></i></span> : @item.RufNummer</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-6 text-end d-flex justify-content-sm-end align-items-xl-center" style="margin-bottom:60px!important;margin-top:-52px!important " >
+                                        @if (!string.IsNullOrEmpty(item.Bild))
+                                        {
+                                            <img src="@Url.Content("~/Images/" + item.Bild)" alt="Bild" class="rounded card-img" style="max-width: 105px; max-height: 105px;  box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);border-radius:8px!important" />
+                                        }
+                                        else
+                                        {
+                                            <span>Kein Bild</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer" style="background-color:#f7f7f7;margin-top:40px!important">
+                                <div class="text-lg-start">
+                                    <a href="mailto:@item.Email" class="btn btn-sm btn-primary" style="border-radius:5px!important" data-toggle="tooltip" title="E-Mail">
+                                        <i class="bx bx-envelope" ></i> E-Mail
+                                    </a>
+                                    <a href="tel:@item.RufNummer" class="btn btn-sm btn-primary"  data-toggle="tooltip" title="Anrufen">
+                                        <i class="bx bx-phone-call"></i> Anruf
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+

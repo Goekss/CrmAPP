@@ -1,0 +1,447 @@
+﻿@model IEnumerable<CrmAPP.Models.Projekt.PersonalProjekte>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Alle Eigenschaften von CSS und JS werden von dieser Adresse abgerufen.-->
+<!--ich habe beim Erstellen dieser Datatable und ihrer Eigenschaften Beispielcodes von dieser Seite entnommen!
+
+    Quelle ==> https://cdn.datatables.net/
+    -->
+
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/jszip-3.1.3/pdfmake-0.1.27/dt-1.10.15/b-1.3.1/b-html5-1.3.1/b-print-1.3.1/r-2.1.1/rg-1.0.0/datatables.min.css" />
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/jszip-3.1.3/pdfmake-0.1.27/dt-1.10.15/b-1.3.1/b-html5-1.3.1/b-print-1.3.1/r-2.1.1/rg-1.0.0/datatables.min.js"></script>
+
+<!-- pdfmake ve vfs_fonts  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src='https://unpkg.com/boxicons@latest/dist/boxicons.js'></script>
+
+
+
+
+
+<style>
+    #h5 {
+        color: cadetblue;
+        padding-bottom: 20px !important;
+        margin-top: -10px !important;
+        margin-left: -30px !important;
+    }
+
+    #sm { /*Überblick über die laufenden Projekte*/
+        margin-top: 10px !important;
+        max-width: 100% !important;
+        padding-right: 25px !important;
+        text-align: right;
+        color: darkcyan !important;
+    }
+
+
+
+    #projektliste_info { /*_TOTAL_ Eintrag von _START_ bis _END_ werden angezeigt.*/
+        margin-left: 10px !important;
+        padding-top: 50px !important;
+        opacity: 0.5 !important;
+        font-size: 10px !important;
+    }
+
+    #projektliste_filter { /*Search:Div*/
+        padding-right: 0px !important;
+        font-size: 10px !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter input { /*Search:Suchleiste*/
+        width: auto !important;
+        height: 20px !important;
+        border-radius: 10px !important;
+    }
+
+    .pagination { /*buttons Vorherige -Nächste*/
+        padding-right: 20px !important;
+        padding-bottom: 10px !important;
+        font-size: 12px !important;
+        filter: drop-shadow( 4px 2px 4px rgba(0,0,0,0.3)) !important; /*Der Schatten ist nach links angelehnt.*/
+    }
+
+    .dt-buttons .buttons-print, .dt-buttons .buttons-copy, .dt-buttons .buttons-excel, .dt-buttons .buttons-pdf { /*PDF-EXCEL-DRUCKEN btn-group*/
+        background-color: cadetblue; /*- Hintergrundfarbe */
+        color: white; /* Textfarbe */
+        opacity: 0.8 !important;
+        font-size:15px!important;
+    }
+
+    .page-item.active .page-link, .page-item.active .page-link:hover, .page-item.active .page-link:focus, .pagination li.active > a:not(.page-link), .pagination li.active > a:not(.page-link):hover, .pagination li.active > a:not(.page-link):focus { /* vorherige [1-2]btn nächste*/
+        background-color: cadetblue !important;
+    }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
+        background-color: orange !important;
+        margin-left: 14px !important;
+        margin-top: 10px !important;
+    }
+
+
+    .btn-group { /*Excel-PDF-Drucken*/
+        padding-top: 25px !important;
+        padding-bottom: 30px !important;
+        padding-left: 10px !important;
+        filter: drop-shadow( 4px 4px 8px rgba(0,0,0,0.3)) !important; /*Der Schatten ist nach links angelehnt.*/
+    }
+
+    thead {
+        background-color: #2c5e77 !important;
+        padding-top: 20px !important;
+        text-align: right !important;
+    }
+
+    th {
+        color: white !important;
+        text-align: center !important;
+    }
+
+    td {
+        text-align: center !important;
+    }
+
+    table.dataTable tbody td:nth-child(1) {
+        /*Ein-Ausblenden + button */
+        text-align: left !important;
+    }
+
+    table.dataTable tbody td {
+        vertical-align: middle; /* Dikey ortalama */
+        text-align: center;
+        padding: 10px; /* Hücre içi boşluk */
+        font-size: 10px !important;
+    }
+
+    #projektliste {
+        table-layout: fixed !important;
+    }
+
+    /*CardBody*/
+    .card {
+        filter: drop-shadow( 4px 4px 8px rgba(0,0,0,0.3)) !important; /*Der Schatten ist nach links angelehnt.*/
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #ffffff /* Mavi renk */
+    }
+
+
+
+    @@media (max-width: 1112px) {
+    .avatar-group  {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        padding: 6px !important;
+       
+    }
+
+    .avatar-group .avatar {
+        margin: 4px !important;
+    }
+
+    .avatar-group .avatar img {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+
+}
+</style>
+
+
+
+
+<div class="card " >
+
+    <div class="card-header d-flex justify-content-between align-items-center" style="background-color:#90909031 !important">
+        <h5 id="h5" class="card-header"><b>PROJEKTGALERIE</b></h5>
+        @* --- YENİ EKLENEN İKONLU BUTON --- *@
+        @{
+            var userRoles = User.IsInRole("Admin") || User.IsInRole("Moderator");
+        }
+
+        @if (userRoles)
+        {
+            <a href="@Url.Action("Import")" class="btn btn-success">
+                <i class='bx bxs-file-import'></i> von Excel importieren
+            </a>
+        }
+    </div>
+    <small id="sm" class="text-muted float-end" style="opacity:0.5; font-size:9px;float:right!important"> Überblick über die laufenden Projekte</small>
+
+    <div class="card-body">
+        <div class="table-responsive overflow-auto">
+            <table id="projektliste" class="table table-hover table-borderless " style="font-size:5px !important; ">
+                <thead class="table table-borderless " style="min-width: 900px; ">
+                    <tr style="text-align:center !important" cellspacing="40">
+                        <th>↓</th>
+                        <th>Projekt</th>
+                        <th>Unternehmen</th>
+                        <th>Priorität</th>
+                        <th> % Rank</th>
+                        <th>End-datum</th>
+                        <th>Beauftragten</th>
+                        <th>Fertigstellen</th>
+                        <th>Aktion</th>
+                        <th>Inhalt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+                                <b style="font-size:10px;margin-right:10px">@item.Projektname</b>
+                            </td>
+                            @*<td><span class="badge bg-label-secondary me-3">@item.Startdatum</span></td>*@
+                            <td>
+                                <div style="display: block;">
+                                    @foreach (var x in item.KundenDatens)
+                                    {
+                                        <div style=" padding: 1px !important; display: flex; align-items: center;">
+                                            <img src="@Url.Content("~/Logos/" + x.Logo)" title="@x.Unternehmen" class="rounded" style="max-width: 40px; max-height: 40px;min-width:40px!important;min-height:40px!important; margin-right: 5px;">
+                                            <span style="flex-grow: 1; text-align: center; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">@x.Unternehmen</span>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                            @functions {
+                                public string GetPrioritätText(string value)
+                                {
+                                    switch (value)
+                                    {
+                                        case "prio-h":
+                                        case "high":
+                                            return "⭐⭐⭐";
+                                        case "prio-m":
+                                        case "middle":
+                                            return "⭐⭐";
+                                        case "prio-l":
+                                        case "low":
+                                            return "⭐";
+                                        default:
+                                            return "Priorität";
+                                    }
+                                }
+                            }
+                            <td>
+                                @if (item.Priorität == "prio-l" || item.Priorität == "low")
+                                {
+                                    
+                                        @GetPrioritätText(item.Priorität)
+                                    
+                                }
+                                else if (item.Priorität == "prio-m" || item.Priorität == "middle")
+                                {
+                                    
+                                        @GetPrioritätText(item.Priorität)
+                                   
+                                }
+                                else if (item.Priorität == "prio-h" || item.Priorität == "high")
+                                {
+                                    
+                                        @GetPrioritätText(item.Priorität)
+                                    
+                                }
+                               
+                            </td>
+                            <td>
+                                <div class="progress" style="margin-bottom:0;max-width:90%;height:11px">
+                                    <div class="progress-bar"
+                                         role="progressbar"
+                                         style="background-color:orange;color:rgb(65, 65, 65);font-size:11px;width:@item.ProjektStatus%;"
+                                         aria-valuenow="@item.ProjektStatus"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        @item.ProjektStatus%
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:darkgreen !important">
+                                @if (item.Enddatum.HasValue)
+                                {
+                                    @item.Enddatum.Value.ToString("dd.MM.yyyy") <!-- Wird im Format Tag-Monat-Jahr angezeigt -->
+                                }
+                                else
+                                {
+                                    <span style="color:red !important">kein Enddatum</span>
+                                }
+                            </td>
+                            <td class="table-responsive-sm">
+                                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center" @*style="background-color: white;max-width:90%!important;border-radius:12px!important;"*@>
+                                    @foreach (var y in item.PersonalAngabens)
+                                    {
+                                        <li class="avatar avatar-xs pull-up" title="@y.Vorname @y.Nachname">
+                                            <img src="@Url.Content("~/Images/"+ y.Bild)" class="rounded-circle" alt="Avatar" title="@y.Vorname @y.Nachname " >
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                @if (item.ProjektStatus != 100)
+                                {
+                                    <span class="badge bg-label-danger me-3" style="width:90px!important"><i style="font-size:15px!important">x</i></span>
+                                }
+                                else if (item.ProjektStatus < 100)
+                                {
+                                    <!-- Wenn der Projektstatus kleiner als 100 ist, wird das rote Symbol wieder angezeigt. -->
+                                    <span class="badge bg-label-danger me-3" style="width:90px!important"><i style="font-size:15px!important">x</i></span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-success me-3" style="width:90px!important"><i style="font-size:15px!important;color:green !important">✓ </i></span>
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu " style="border-radius: 10px !important; box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.2);">
+                                        <a class="dropdown-item" href="/PersonalProjektes/Edit/@item.PerProjID"><i class="bx bx-edit-alt me-1" style="color:darkorange"></i> Bearbeiten</a>
+                                        <a class="dropdown-item" href="/PersonalProjektes/Beenden/@item.PerProjID"
+                                           @if (item.ProjektStatus != 100) { @: onclick="event.preventDefault(); var audio = new Audio('/THEMA/klang_datei/error-sound2.mp3'); audio.play(); { setTimeout(function () { alert('\n 🛑  Vorsicht    \n \n Beachten Sie darauf;\n\n Das Projekt kann nur abgeschlossen werden,\n wenn es zu 100% erreicht hat.  '); }, 500); };"
+                                           }>
+                                            <i class="bx bx-check-double me-1" style="color:#0eeb10"></i> Abschließen
+                                        </a>
+                                        <a class="dropdown-item" href="/PersonalProjektes/Details/@item.PerProjID"><i class="bx bx-message-square-detail" style="color:#1656fe;margin-right:8px!important"></i> Details </a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.Erklärung</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!--  pdfmake- und vfs_fonts-Dateien  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+
+
+<!--Dieser Skript-Code wurde von Chat-GPT bearbeitet!-->
+<script>
+    $('#projektliste').DataTable({
+        language: {
+            info: "_TOTAL_ Eintrag von _START_ bis _END_ werden angezeigt.",
+            infoEmpty: "Keine Einträge vorhanden.",
+            loadingRecords: "Einträge werden geladen.",
+            zeroRecords: "Tabelle ist leer.",
+            search: "Durchsuchen : ",
+            infoFiltered: "(gefiltert aus insgesamt _MAX_ Einträgen)",
+            buttons: {
+                copyTitle: "In die Zwischenablage kopiert",
+                copySuccess: "%d Zeilen wurden in die Zwischenablage kopiert",
+                copy: "Kopieren ",
+                print: "Drucken ",
+                pdf: "PDF"
+            },
+            paginate: {
+                first: "Erste",
+                previous: "« Vorherige",
+                next: "Nächste » ",
+                last: "Letzte"
+            }
+        },
+        initComplete: function () {
+            $('#projektliste_filter input').css('box-shadow', '1px 1px 0.5px 0px rgba(0, 0, 0, 0.1)');
+        },
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: '<i class="icon-base bx bx-copy me-1 ms-2 "></i> ',
+                titleAttr: 'Kopieren'
+            },
+            {
+                extend: 'excel',
+                text: '<i class="icon-base bx bxs-file-export me-1 ms-1"></i> ',
+                titleAttr: 'Excel'
+            },
+            {
+                extend: 'print',
+                text: '<i class="icon-base bx bx-printer me-1 ms-1"></i> ',
+                titleAttr: 'Drucken'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="icon-base bx bxs-file-pdf me-2 ms-1"></i> ',
+                titleAttr: 'PDF'
+            }
+
+        ],
+        responsive: true,
+    });
+</script>
+
+
+<script>
+    $(document).ready(function () { // es zeigt Mitarbeiter-Name in aller Seite an.
+        $('[data-bs-toggle="tooltip"]').tooltip(); // İlk yüklemede
+    });
+
+    // Sayfa geçişi veya tablo güncellemesinde tetiklenmesi gereken event
+    $(document).on('draw.dt', function () {
+        $('[data-bs-toggle="tooltip"]').tooltip(); // Yeniden başlat
+    });
+
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+        const status = bar.getAttribute('aria-valuenow');
+        bar.style.width = `${status}%`;
+    });
+
+</script>
+<script>
+    // Sayfa yüklendikten sonra çalışacak olan fonksiyon
+    window.addEventListener('load', function () {
+        updateProgressBars(); // Sayfa yüklendikten sonra çalıştırılacak fonksiyon
+    });
+
+    // Sayfa geçişinde çubuğu güncelle
+    function updateProgressBars() {
+        // .progress-bar sınıfındaki tüm elemanları seç ve her birini işle
+        document.querySelectorAll('.progress-bar').forEach(function (bar) {
+            var status = bar.getAttribute('aria-valuenow');
+            if (status) {
+                bar.style.width = status + '%';  // Genişliği status ile güncelle
+                bar.textContent = status + '%';  // Yüzdeyi metin olarak göster
+            }
+        });
+    }
+
+    // AJAX işleminden sonra sayfa içeriği güncellendiğinde
+    // Sayfalandırma ya da içerik değişimi sonrasında çalışacak
+    $(document).on('ajaxComplete', function () {
+        updateProgressBars();  // AJAX işlemi tamamlandığında çalıştırılır
+    });
+
+    // Eğer sayfalandırma linkleri varsa, linklerin AJAX ile yüklenmesini sağlamak için
+    // jQuery'nin $(document).on ile sayfa yüklemeleri sırasında updateProgressBars()'ı çağırabilirsiniz.
+    $(document).on('click', '.pagination a', function (e) {
+        e.preventDefault();  // Sayfa yenilenmesini engelle
+        var url = $(this).attr('href');  // Tıklanan sayfa linkini al
+        $.get(url, function (data) {
+            $('#content').html(data);  // Sayfanın içeriğini güncelle (örneğin, #content ID'li eleman)
+            updateProgressBars();  // İçerik yüklendikten sonra ilerleme çubuklarını güncelle
+        });
+    });
+</script>
+
+
+

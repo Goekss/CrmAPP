@@ -1,0 +1,825 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+      data-assets-path="~/THEMA/assets/" data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title> CRM Demo X </title>
+    <title>@ViewBag.Title ++++</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/THEMA/assets/img/favicon/earth.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+          rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="~/THEMA/assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/THEMA/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/THEMA/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/THEMA/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="~/THEMA/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="~/THEMA/assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="~/THEMA/assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="~/THEMA/assets/js/config.js"></script>
+    <!--<link rel="stylesheet" href="~/Content/datatables.css" />-->
+    <!--<link rel="stylesheet" href="~/Content/style.css" />-->
+    <style>
+        .bg-menu-theme .menu-link:hover {
+            background-color: #eeeeee !important;
+            color: black !important;
+        }
+
+        .menu-item .menu-link {
+            text-decoration: none !important; /* Varsayılan */
+        }
+
+            .menu-item .menu-link:hover,
+            .menu-item .menu-link:focus,
+            .menu-item.active .menu-link {
+                text-decoration: underline; /* Alt çizgiyi göster */
+            }
+
+        .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
+            color: white;
+            background-color: #8fbbbd !important;
+        }
+
+        .bg-menu-theme .menu-inner > .menu-item.active:before {
+            background: cadetblue !important;
+            height: 47px !important;
+        }
+        /* GENERELL SCROLLBAR */
+        .layout-menu::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        .layout-menu::-webkit-scrollbar-thumb {
+            background-color: #888;
+            opacity: 0.8;
+            border-radius: 4px;
+        }
+
+        .layout-menu::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        .menu-link {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap; /* İçeriği tek satırda kısıtlar */
+        }
+
+        .menu-inner {
+            word-wrap: break-word; /* Taşan kelimeleri böler */
+        }
+
+
+        /* === SEARCH === */
+        /*.navbar-nav {
+            position: relative;*/ /* Arama alanını çevreleyen kapsayıcı */
+        /*}*/
+
+        #autocomplete-list {
+            position: absolute; /* Kapsayıcıya göre konumlandır */
+            background-color: white;
+            border: none;
+            border-radius: 15px;
+            width: 33%; /* Input genişliğiyle aynı */
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+            z-index: 999; /* Üst katmanda görünsün */
+            top: 100%; /* Input alanının tam altına hizala */
+            left: 0; /* Input alanının soluna hizala */
+        }
+
+            #autocomplete-list li {
+                padding: 8px 16px;
+                cursor: pointer;
+                font-size: 12px;
+                color: dimgray;
+                font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            }
+
+                #autocomplete-list li:hover {
+                    background: #ffffff;
+                    background: linear-gradient(261deg,rgba(255, 255, 255, 1) 0%, rgba(130, 130, 130, 1) 100%, rgba(0, 0, 0, 1) 100%);
+                    color: white;
+                }
+
+
+
+
+        /* === RESPONSIVE === */
+
+        @@media (max-width: 769px) {
+            .dropdown-menu {
+                position: absolute !important;
+                right: 0 !important; /* Sağ köşeye yapıştır */
+                left: auto !important; /* Solu sıfırla */
+                max-width: 90vw; /* Ekranın %90'ı kadar genişlik */
+                min-width: unset !important; /* Bootstrap varsayılanını iptal et */
+                white-space: normal !important; /* Yazı taşmasın */
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                word-break: break-word;
+                box-sizing: border-box;
+                z-index: 9999;
+            }
+        }
+
+        /* Dropdown'un dışına taşmaması ve sola doğru genişlemesi için */
+        .my-dropdown-menu {
+            position: absolute !important;
+            right: 0 !important; /* SAĞA sabitle */
+            left: -100px !important; /* SOLU sıfırla */
+            max-width: 90vw; /* Ekran genişliğinin %90’ı kadar */
+            min-width: unset !important; /* Bootstrap’in sabit min-width’ini iptal et */
+            white-space: normal !important; /* Yazılar alt satıra geçebilsin */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            box-sizing: border-box;
+            z-index: 9999;
+            padding: 0.75rem 1rem;
+        }
+
+        /* Dropdown kapsayıcısının pozisyonu göreli olmalı */
+        .dropdown {
+            position: relative;
+        }
+        /* 1) 576px ve Altı (En geniş mobil) */
+        @@media (max-width: 576px) {
+            .layout-menu {
+                width: 48vw !important;
+                min-width: 140px !important;
+                max-width: 90vw !important;
+                padding-left: 6px !important;
+                padding-right: 6px !important;
+                overflow-x: auto; /* Taşmayı önler */
+            }
+
+            .menu-link,
+            .menu-inner .menu-link {
+                font-size: 14px !important;
+                padding: 10px 8px !important;
+            }
+
+            .menu-item .menu-link > i,
+            .menu-item .menu-link > .menu-icon {
+                font-size: 14px !important;
+                margin-right: 8px !important;
+            }
+
+            .menu-inner {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+
+        /* 2) 530px ve Altı */
+        @@media (max-width: 530px) {
+            .layout-menu {
+                z-index: 1202 !important;
+                position: fixed !important;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: auto !important;
+                min-width: 120px !important;
+                max-width: 80vw !important;
+                background: #fff !important;
+                overflow-y: auto; /* Dikey taşmayı engeller */
+            }
+
+            .layout-navbar {
+                z-index: 1000 !important;
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
+
+            .layout-overlay {
+                z-index: 1201 !important;
+            }
+
+            .menu-link,
+            .menu-inner .menu-link {
+                font-size: 13px !important;
+                padding: 8px 6px !important;
+            }
+
+            .menu-item .menu-link > i,
+            .menu-item .menu-link > .menu-icon {
+                font-size: 13px !important;
+                margin-right: 7px !important;
+            }
+        }
+
+        /* 3) 500px ve Altı (En küçük mobil) */
+        @@media (max-width: 500px) {
+            .layout-menu {
+                width: auto !important;
+                min-width: 100px !important;
+                max-width: 100vw !important;
+                padding-left: 4px !important;
+                padding-right: 4px !important;
+                background: #fff !important;
+                z-index: 1202 !important;
+                overflow-x: hidden; /* Yatay taşmayı engeller */
+            }
+
+            .menu-link,
+            .menu-inner .menu-link {
+                font-size: 13px !important;
+                padding: 7px 3px !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+            }
+
+            .menu-item .menu-link > i,
+            .menu-item .menu-link > .menu-icon {
+                font-size: 13px !important;
+                margin-right: 7px !important;
+            }
+
+            .menu-inner {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+        }
+    </style>
+
+
+
+
+</head>
+
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+
+
+        <!-- Layout wrapper -->
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container" style="background-color:whitesmoke">
+                <!-- Menu -->
+
+                <aside class="layout-menu menu-vertical menu bg-menu-theme " style="max-height: 100vh; overflow-y: auto; overflow-x: hidden;">
+
+                    <div>
+                        <img src="~/THEMA/assets/img/elements/Crm1.jpg" width="260" height="150"
+                             style="padding:3px 3px 3px 2px;opacity:80%; border-radius:10px" />
+
+                        <h5 style="text-align:center;margin-top:40px;margin-bottom:-10px; color:cadetblue"> CRM  </h5>
+
+                        <hr style="color:cadetblue;border:ridge; border-radius:2px;border-width:1px" />
+
+                    </div>
+                    <i style="font-size:8px; margin-top:-15px;color:gray;text-align:center">
+                        Projekt 2024° Verison Demo
+                        X
+                    </i>
+                    <br />
+                    <!--Vertical-SideBar-->
+                    <ul class="menu-inner">
+
+                        <!-- Dashboard -->
+                        <li id="dsb" class="menu-item active  ">
+                            <a href="/Dashboard/Index" class="menu-link">
+
+                                <i class='bx bxs-layout' style="margin-right: 10px !important; font-size: 19px; color: snow"></i>
+                                <div data-i18n="Analytics">  <b style="padding-left:20px !important;font-size:17px">Dashboard</b></div>
+                            </a>
+                        </li>
+
+
+                        <li class="menu-header ">
+                            <span class="menu-header-text"> <b>Personal </b> </span>
+                        </li>
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                        {
+                            <li class="menu-item ">
+                                <a href="/PersonalAngabens/Index/" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bxs-user-rectangle"></i>
+                                    <div data-i18n="Basic"> Person &amp; List</div>
+                                </a>
+                            </li>
+
+
+                            <li class="menu-item ps--active-y ">
+                                <a href="/PersonalAngabens/Create/" class="menu-link">
+                                    <i class="menu-icon tf-icons bx bx-user-plus"></i>
+                                    <div data-i18n="Basic">Person anlegen</div>
+                                </a>
+
+                            </li>
+                            @*<li class="menu-item ps--active-y ">
+                <a href="#" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-shield-x"></i>
+                    <div data-i18n="Basic">Blockierter Benutzer</div>
+                </a>
+
+            </li>*@
+                            @*<li class="menu-item ps--focus">
+                <a href="/PersonalAngabens/Blockierte Benutzer" class="meunu-link">
+                    <i class="menu-icon tf-icons fa fa-unlock-alt"></i>
+                    <div data-i18n="Basic">Blockierter Benutzer</div>
+                </a>
+            </li>*@
+                        }
+                        <li class="menu-item ps--active-y">
+                            <a href="/PersonalAngabens/PersonalCard/" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-id-card"></i>
+                                <div data-i18n="Misc">Kontakt &amp;  Cards</div>
+                            </a>
+
+                        </li>
+
+
+                        <!-- Kundenbereich  -->
+                        <li class="menu-header small text-uppercase">
+                            <span class="menu-header-text"> <b>Kunden </b></span>
+                        </li>
+
+
+                        <li class="menu-item ps--active-y  ">
+                            <a href="/KundenDatens/Index/" class="menu-link ">
+                                <i class="menu-icon tf-icons bx bxs-user"></i>
+                                <div data-i18n="Basic">Kunde &amp; List  </div>
+
+                            </a>
+
+                        </li>
+                        <li class="menu-item ps--active-y ">
+                            <a href="/KundenDatens/Create/" class="menu-link ">
+                                <i class="menu-icon tf-icons bx bxs-user-plus"></i>
+                                <div data-i18n="Basic">Neue Kunden   </div>
+                            </a>
+                        </li>
+
+                        <!-- Projekte -->
+                        <li class="menu-header small text-uppercase">
+                            <span class="menu-header-text"> <b>Projekte</b></span>
+                        </li>
+
+                        <li class="menu-item  ps--active-y ">
+                            <a href="/PersonalProjektes/Index/" class="menu-link">
+                                <i class="menu-icon tf-icons bx bxs-briefcase-alt-2"></i>
+                                <div data-i18n="Basic">Projekt &amp; List </div>
+                            </a>
+
+                        </li>
+
+                        <li class="menu-item ps--active-y ">
+                            <a href="/PersonalProjektes/Create/" class="menu-link ">
+                                <i class="menu-icon tf-icons bx bx-bookmark-alt-plus"></i>
+                                <div data-i18n="Basic">Neue Projekte  </div>
+                            </a>
+                        </li>
+
+                        <li class="menu-item ps--active-y">
+                            <a href="/Berichts/Index/" class="menu-link " onclick="toggleMenu(event, this)">
+                                <i class="menu-icon tf-icons bx bx-task"></i>
+                                <div data-i18n="Basic" style="display: inline;">Berichte &amp; Doku </div>
+                                <i class="arrow-icon bx bx-chevron-right" style="float: right;"></i>
+                            </a>
+                            <ul class="menu-sub" style="display: none; margin-left: 20px;">
+                                <li class="menu-item">
+                                    <a href="/Berichts/Index/" class="menu-link">
+                                        <div class="text-truncate" data-i18n="Notifications">alle Berichte</div>
+                                    </a>
+                                </li>
+                                @*<li class="menu-item">
+                    <a href="/Berichts/Create/" class="menu-link">
+                        <div class="text-truncate" data-i18n="Account">Anlegen</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/Berichts/Edit/" class="menu-link">
+                        <div class="text-truncate" data-i18n="Notifications">Bearbeiten</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="/Berichts/Delete/" class="menu-link">
+                        <div class="text-truncate" data-i18n="Connections">Löschen</div>
+                    </a>
+                </li>*@
+                            </ul>
+                        </li>
+
+
+
+
+                        <!-- Support -->
+                        <li class="menu-header small text-uppercase"><span class="menu-header-text">Sonstige</span></li>
+                        <li class="menu-item">
+                            <a href="/LiveSupport/LiveSupport/"
+                               target="_blank" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-support"></i>
+                                <div data-i18n="Support">Support</div>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                        {
+                            <li class="menu-item">
+
+                                <a href="/LiveSupport/Vista"@*http://localhost:3000*@
+                                   target="_blank" class="menu-link">
+                                    <i class="menu-icon tf-icons" style="margin-right:10px"><img src="~/THEMA/assets/img/elements/FVS.png" width="25" height="17" /></i>
+                                    <div data-i18n="Support"> <b><u>Vista</u></b> </div>
+                                </a>
+                            </li>
+
+
+
+                        }
+
+
+                        <li class="menu-item">
+                            <a href="/LiveSupport/TreeView/" class="menu-link ">
+                                <i class='menu-icon tf-icons bx bx-sitemap'></i>
+                                <div data-i18n="Basic"> Site Map </div>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </aside>
+
+
+                <!-- Layout container -->
+                <div class=" layout-page sticky  top-100 pt-2  mb-5   ease-in-out  z-99 left-0 right-0  ">
+                    <!-- Navbar -->
+                    <div class="">
+                        <nav class="layout-navbar  container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme "
+                             id="layout-navbar">
+                            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                                <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                                    <i class="bx bx-menu bx-sm"></i>
+                                </a>
+                            </div>
+
+
+                            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                                <!-- Search -->
+                                <div class="navbar-nav align-items-center ">
+                                    <div class="nav-item d-flex align-items-center">
+                                        <i class="bx bx-search fs-4 lh-0 "></i>
+
+                                        <input type="text" id="search-input" class="form-control border-0  shadow-none" placeholder="Durchsuchen..."
+                                               aria-label="Search..." autocomplete="off" />
+                                    </div>
+                                    <!-- Öneri listesi -->
+                                    <ul id="autocomplete-list" class="list-group " style="display: none;">
+                                        <!-- Dinamik olarak öneriler buraya eklenecek -->
+                                    </ul>
+                                </div>
+
+
+                                <!-- Benutzer bereich -->
+
+                                <ul class="navbar-nav flex-row align-items-center ms-auto text-wrap" style="max-width: 250px!important; word-wrap: break-word !important; white-space: normal !important; min-width: unset !important">
+                                    <!-- Place this tag where you want the button to render. -->
+
+                                    <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                                           data-bs-toggle="dropdown">
+                                            <div class="avatar avatar-online">
+
+                                                <img src="@Url.Content(Session[$"benutzerBild_{User.Identity.Name}"] as string ?? "~/Images/default-avatar.png")"
+                                                     class="w-px-40 h-auto rounded-circle" />
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+
+                                            <li>
+                                                <a class="dropdown-item" href="/MeinProfil/Index/">
+                                                    <div class="d-flex">
+                                                        <div class="flex-shrink-0 me-3">
+                                                            <div class="avatar avatar-online">
+                                                                <img src="@Url.Content(Session[$"benutzerBild_{User.Identity.Name}"] as string ?? "~/Images/default-avatar.png")"
+                                                                     class="w-px-40 h-auto rounded-circle" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1 ">
+                                                            <span class="fw-semibold d-block">@Session[$"benutzerVorName_{User.Identity.Name}"]  @Session[$"benutzerNachName_{User.Identity.Name}"] </span>
+                                                            <small class="text-muted ">@Session[$"benutzerAbteilung_{User.Identity.Name}"] </small>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <div class="dropdown-divider "></div>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item " href="/MeinProfil/Index/">
+                                                    <i class="bx bx-user me-2"></i>
+
+                                                    <small class="align-middle text-bg-info">Mein Profil</small>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <span class="dropdown-item">
+                                                    <i class='bx bxs-briefcase me-2'></i>
+                                                    <small class="text-muted">  @Session[$"benutzerBerechtigung_{User.Identity.Name}"] </small>
+
+                                                </span>
+                                            </li>
+                                            @{
+                                                var rol = Session[$"benutzerRol_{User.Identity.Name}"] as string;
+
+
+                                            }
+                                            @if (rol == "Admin" || rol == "Moderator")
+                                            {
+                                                <li class="text-lg-center">
+
+                                                    <span class="dropdown-item dropdown-center"><small class="text-muted " style="color:red !important;font-size:10px">@Session[$"benutzerRol_{User.Identity.Name}"]</small></span>
+
+                                                </li>
+                                            }
+
+
+                                            <li>
+                                                <div class="dropdown-divider"></div>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="/Security/Logout" onclick="logout()">
+                                                    <i class="bx bx-power-off me-2" style="color:red; font-size:20px; padding-left:10px"></i>
+                                                    <span class="text-lg-center"><b style="padding-left:7px">Abmelden</b></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+
+                    <main class="container-xxl flex-grow-1 container-p-y">
+                        @RenderBody()
+
+                    </main>
+                    <!-- / Navbar -->
+                    <!-- Content wrapper -->
+                    <div class="">
+
+                        <!-- Footer -->
+                        <footer class="content-footer footer bg-footer-theme  " style=" margin-bottom: -20px !important; ">
+
+                            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column pb-0">
+
+                                <div class=" mt-lg-2 " style="font-size:9px; ">
+
+                                    @*<script>document.write(new Date().getFullYear());</script>*@
+                                    <p>&copy; 2024 - CRM | Version <b>Demo X Br2024.1.0.0</b></p>
+                                </div>
+                                <div>
+
+                                    <a href="mailto:ongb@gmx.de" class="footer-link me-4" target="_blank">
+                                        <i class="tf-icon tf-icons bx bx-envelope" style="color: #ff4343"></i>
+                                    </a>
+
+
+                                    <a href="https://www.linkedin.com/in/onur-g%C3%B6khan-bicer-b011b1380/"
+                                       target="_blank" title="Linkedin/Onur Gökhan Bicer" class="footer-link me-4">
+                                        <i class="tf-icon tf-icons bx bxl-linkedin-square" style="color: #0077B5"></i>
+                                    </a>
+
+
+                                    <a href="https://www.xing.com" target="_blank" class="footer-link me-4" title="Xing">
+                                        <i class="icon-[ion--logo-xing]" style="color: cadetblue "><b>X</b>ing</i>
+                                    </a>
+
+                                    <a href="https://www.facebook.com/OnurGoekhanBicer" target="_blank" class="footer-link me-4">
+                                        <i class="tf-icon tf-icons bx bxl-facebook-square"
+                                           style="color:rgb(24,119,242)"></i>
+                                    </a>
+                                    
+                                    <a href="https://x.com/yokhannn" target="_blank" class="footer-link me-4">
+                                        <i class="tf-icon tf-icons bx bxl-twitter"
+                                           style="color:rgb(24,119,242)"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </footer>
+                        <!-- / Footer -->
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <!-- / Layout wrapper -->
+        <!-- Core JS -->
+        <!-- build:js assets/vendor/js/core.js -->
+        <script src="~/THEMA/assets/vendor/libs/jquery/jquery.js"></script>
+        <script src="~/THEMA/assets/vendor/libs/popper/popper.js"></script>
+        <script src="~/THEMA/assets/vendor/js/bootstrap.js"></script>
+        <script src="~/THEMA/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+        <script src="~/THEMA/assets/vendor/js/menu.js"></script>
+        <!-- endbuild -->
+        <!-- Vendors JS -->
+        <script src="~/THEMA/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+        <!-- Main JS -->
+        <script src="~/THEMA/assets/js/main.js"></script>
+
+        <!-- Page JS -->
+        <script src="~/THEMA/assets/js/dashboards-analytics.js"></script>
+
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+    }
+
+
+
+
+    <script>
+        function logout() {
+            // Tarayıcıda bulunan oturumu (session veya cookie) temizle
+            // Bu kısmı uygulamanızın backend yapısına göre uyarla.
+
+            // Örneğin, eğer session kullanıyorsanız:
+            // localStorage.clear(); // Veya sessionStorage.clear();
+            // Veya cookie'yi temizleyebilirsiniz:
+            // document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+            // Sonrasında kullanıcıyı login sayfasına yönlendir.
+            window.location.href = "https://localhost:44312/THEMA/html/auth-login-basic.html";  // Çıkış yapıldığında yönlendirmek istediğiniz sayfa
+        }
+
+
+    </script>
+
+    <script>
+        function toggleMenu(event, element) {
+            event.preventDefault();
+            const parentItem = element.closest(".menu-item");
+            const submenu = parentItem.querySelector(".menu-sub");
+            const arrowIcon = parentItem.querySelector(".arrow-icon");
+
+            // Aç/Kapa işlemi
+            if (submenu.style.display === "none" || submenu.style.display === "") {
+                submenu.style.display = "block";
+                arrowIcon.classList.remove("bx-chevron-right");
+                arrowIcon.classList.add("bx-chevron-down");
+            } else {
+                submenu.style.display = "none";
+                arrowIcon.classList.remove("bx-chevron-down");
+                arrowIcon.classList.add("bx-chevron-right");
+            }
+        }
+    </script>
+
+    <script>
+    // Kullanıcı rolü sunucu tarafından kontrol edilip JavaScript'e aktarılıyor
+    const userRole = '@Session[$"benutzerRol_{User.Identity.Name}"]';
+    </script>
+
+    <script>
+
+        const sidebarLinks = {
+            'Dashboard': { url: '/Dashboard/Index/', icon: 'bx bxs-dashboard' },
+            'Team & List': { url: '/PersonalAngabens/Index/', icon: 'bx bxs-user-rectangle' },
+            'Person anlegen': { url: '/PersonalAngabens/Create/', icon: 'bx bx-user-plus' },
+            'Kontakt & Cards': { url: '/PersonalAngabens/PersonalCard/', icon: 'bx bx-id-card' },
+            'Kunden & Liste': { url: '/KundenDatens/Index/', icon: 'bx bxs-group' },
+            'Neue Kunden': { url: '/KundenDatens/Create/', icon: 'bx bxs-user-plus' },
+            'Projekte & List': { url: '/PersonalProjektes/Index/', icon: 'bx bxs-briefcase-alt-2' },
+            'Neue Projekte': { url: '/PersonalProjektes/Create/', icon: 'bx bx-bookmark-alt-plus' },
+            'Support': { url: '/LiveSupport/LiveSupport/', icon: 'bx bx-support' },
+            'Site Map': { url: '/LiveSupport/TreeView/', icon: 'bx bx-map' },
+            // VISTA bağlantısını sadece Admin ve Moderator rollerine görünür yap
+            ...(userRole === 'Admin' || userRole === 'Moderator' ? {
+                'Vista': {
+                    url: 'http://localhost:3000',
+                    icon: 'bx bx-link-external',
+                }
+            } : {})
+        };
+
+
+
+
+        const input = document.getElementById('search-input');
+        const autocompleteList = document.getElementById('autocomplete-list');
+
+        // Kullanıcı yazmaya başladığında önerileri göster
+        input.addEventListener('input', function () {
+            const query = input.value.trim().toLowerCase();
+            autocompleteList.innerHTML = ''; // Listeyi temizle
+            autocompleteList.style.display = 'none';
+
+            if (query) {
+                const matchingItems = Object.keys(sidebarLinks).filter(item => item.toLowerCase().includes(query));
+                if (matchingItems.length > 0) {
+                    autocompleteList.style.display = 'block'; // Listeyi göster
+                    matchingItems.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('list-group-item');
+                        listItem.style.display = 'flex';
+                        listItem.style.alignItems = 'center';
+                        listItem.style.gap = '10px';
+
+                        // İkon ekle
+                        const iconElement = document.createElement('i');
+                        iconElement.className = `tf-icon tf-icons ${sidebarLinks[item].icon}`;
+                        iconElement.style.color = 'dimgray'; // İkon rengi
+                        listItem.appendChild(iconElement);
+
+                        // Yazıyı ekle
+                        const textElement = document.createElement('span');
+                        textElement.textContent = item;
+                        listItem.appendChild(textElement);
+
+                        // Tıklama olayını ekle
+                        listItem.addEventListener('click', function () {
+                            input.value = item; // Tıklanan öneriyi input alanına yaz
+                            autocompleteList.style.display = 'none'; // Listeyi gizle
+
+                            // Eğer Vista ise yeni sekmede aç
+                            if (item === 'Vista') {
+                                window.open(sidebarLinks[item].url, '_blank');
+                            } else {
+                                // Diğerleri için mevcut sekmede yönlendir
+                                window.location.href = sidebarLinks[item].url;
+                            }
+                        });
+
+                        autocompleteList.appendChild(listItem);
+                    });
+                }
+            }
+        });
+
+        // Enter tuşuyla arama yap
+        input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                const query = input.value.trim();
+                if (sidebarLinks[query]) {
+                    // Enter tuşuyla Vista kontrolü
+                    if (query === 'Vista') {
+                        window.open(sidebarLinks[query].url, '_blank');
+                    } else {
+                        window.location.href = sidebarLinks[query].url;
+                    }
+                } else {
+                    alert('Kein Ergebnis gefunden! Bitte geben Sie einen gültigen Suchbegriff ein.');
+                }
+                autocompleteList.style.display = 'none'; // Listeyi gizle
+            }
+        });
+
+        // Öneriler dışındaki bir yere tıklanınca listeyi gizle
+        document.addEventListener('click', function (event) {
+            if (!autocompleteList.contains(event.target) && event.target !== input) {
+                autocompleteList.style.display = 'none';
+            }
+        });
+
+
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+
+
+</html>
+

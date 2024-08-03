@@ -1,0 +1,929 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/apexcharts.js"></script>
+<script src="~/Scripts/chart.js"></script>
+<script src="~/Scripts/highdiagram.js"></script>
+<script src="~/Scripts/hcharts-3d.js"></script>
+
+
+
+
+<style>
+    .b1, .b2, .b3 {
+        cursor: pointer; /* Imleç işareti - Cursor-Symbol */
+        margin-top: 10px; /* Üst boşluk - Obere Rand */
+        background-color: whitesmoke; /* Beyazımsı arka plan rengi - Rauchweiß Hintergrundfarbe */
+        padding: 10px; /* İç boşluk - Innenabstand */
+        border-radius: 10px; /* Kenar yuvarlatma - Randradius */
+        text-align: center; /* Metin hizalama - Textausrichtung */
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4); /* Kutu gölgesi - Box-Schatten */
+        transition: transform 0.9s; /* Geçiş süresi - Übergangsdauer */
+        text-decoration: none; /* Metin dekorasyonu - Textdekoration */
+        height: 50px; /* Yükseklik - Höhe */
+        display: flex; /* Esnek kutu modeli - Flexbox-Modell */
+        align-items: center; /* Öğeleri ortalama - Elemente zentrieren */
+    }
+
+        .b1:hover, .b2:hover, .b3:hover {
+            background-color: white; /* Hover arka plan rengi - Hintergrundfarbe bei Hover */
+        }
+
+    .icon {
+        margin-bottom: 25px; /* Alt boşluk - Unterer Rand */
+        margin-top: 30px; /* Üst boşluk - Obere Rand */
+        float: right; /* Sağ tarafa hizalama - Rechts ausrichten */
+        color: gray; /* Renk - Farbe */
+        font-size: 1px; /* Yazı boyutu - Schriftgröße */
+        transition: color 1s, font-size 1s; /* Renk ve yazı boyutu geçişi - Übergang von Farbe und Schriftgröße */
+    }
+
+        .icon:hover {
+            color: cadetblue; /* Hover renk - Farbe bei Hover */
+            font-size: 15px; /* Hover yazı boyutu - Schriftgröße bei Hover */
+        }
+
+    .iconCont {
+        float: right; /* Sağ tarafa hizalama - Rechts ausrichten */
+        display: flex; /* Esnek kutu modeli - Flexbox-Modell */
+        margin-right: 30px; /* Sağ boşluk - Rechter Rand */
+        gap: 10px; /* Boşluk - Abstand */
+        padding-bottom: 20px; /* Alt boşluk - Unterer Rand */
+    }
+
+    .uhrkalender {
+        text-align: start; /* Metin hizalama - Textausrichtung */
+        margin-top: 50px; /* Üst boşluk - Oberer Rand */
+        margin-left: 30px; /* Sol boşluk - Linker Rand */
+        width: 96%; /* Genişlik - Breite */
+    }
+
+    #kalender {
+        background-color: red; /* Arka plan rengi - Hintergrundfarbe */
+        margin-left: 550px; /* Sol boşluk - Linker Rand */
+        height: 50px; /* Yükseklik - Höhe */
+        justify-content: right; /* Sağa hizalama - Rechts ausrichten */
+    }
+
+    #fullDiv {
+        margin: 0; /* Boşluk yok - Kein Rand */
+        left: 0; /* Sol hizalama - Links ausrichten */
+        top: 0; /* Üst hizalama - Oben ausrichten */
+        bottom: 0; /* Alt hizalama - Unten ausrichten */
+        overflow: hidden; /* Taşmayı gizle - Überlauf verbergen */
+    }
+
+        #fullDiv ul {
+            margin: 0px; /* Boşluk yok - Kein Rand */
+            padding: 0px; /* Dolgu yok - Kein Polster */
+        }
+
+        #fullDiv li {
+            float: left; /* Sol hizalama - Links ausrichten */
+            display: block; /* Blok eleman - Blockelement */
+            width: 14.2857%; /* Genişlik - Breite */
+            text-align: center; /* Metin hizalama - Textausrichtung */
+            list-style-type: none; /* Liste stili yok - Keine Listenart */
+        }
+
+            #fullDiv li:nth-child(n+1):nth-child(-n+7) {
+                font-weight: 900; /* Yazı kalınlığı - Schriftstärke */
+                color: #e67e22; /* Renk - Farbe */
+            }
+
+            #fullDiv li:nth-child(n+39), #fullDiv li:nth-child(n+8):nth-child(-n+16) {
+                font-weight: 900; /* Yazı kalınlığı - Schriftstärke */
+                color: rgba(0,0,0,.3); /* Renk - Farbe */
+            }
+
+            #fullDiv li:hover:nth-child(n+8):nth-child(-n+38), #fullDiv li:nth-child(17) {
+                border-radius: 5px; /* Kenar yuvarlatma - Randradius */
+                background-color: #1abc9c; /* Arka plan rengi - Hintergrundfarbe */
+                color: #ecf0f1; /* Renk - Farbe */
+            }
+
+    .calendar {
+        display: flex; /* Esnek kutu modeli - Flexbox-Modell */
+        flex-direction: column; /* Kolon yönlendirme - Spaltenausrichtung */
+        width: 100%; /* Genişlik - Breite */
+        height: 100%; /* Yükseklik - Höhe */
+        color: black; /* Renk - Farbe */
+        font-size: 10px; /* Yazı boyutu - Schriftgröße */
+    }
+
+    .calendar-header {
+        padding: 5px; /* Dolgu - Polster */
+        text-align: center; /* Metin hizalama - Textausrichtung */
+        background-color: #d5d5d5; /* Arka plan rengi - Hintergrundfarbe */
+        border-radius: 10px 10px 0 0; /* Kenar yuvarlatma - Randradius */
+    }
+
+    .calendar-controls {
+        display: flex; /* Esnek kutu modeli - Flexbox-Modell */
+        justify-content: center; /* Ortaya hizalama - Zentrieren */
+        padding: 20px 0; /* Dolgu - Polster */
+        gap: 10px; /* Boşluk - Abstand */
+    }
+
+    .calendar-weekdays {
+        display: grid; /* Izgara modeli - Rastermodell */
+        grid-template-columns: repeat(7, 1fr); /* 7 sütun - 7 Spalten */
+        text-align: center; /* Metin hizalama - Textausrichtung */
+        padding: 5px 0; /* Dolgu - Polster */
+        margin-bottom: 5px; /* Alt boşluk - Unterer Rand */
+        color: orange; /* Renk - Farbe */
+    }
+
+    .calendar-days {
+        display: grid; /* Izgara modeli - Rastermodell */
+        grid-template-columns: repeat(7, 1fr); /* 7 sütun - 7 Spalten */
+        gap: 3px; /* Boşluk - Abstand */
+        padding-top: 4px; /* Üst dolgu - Oberes Polster */
+        overflow: hidden; /* Taşmayı gizle - Überlauf verbergen */
+    }
+
+        .calendar-days div {
+            display: flex; /* Esnek kutu modeli - Flexbox-Modell */
+            align-items: center; /* Öğeleri ortalama - Elemente zentrieren */
+            justify-content: center; /* Ortaya hizalama - Zentrieren */
+            margin-top: 2px; /* Üst boşluk - Oberer Rand */
+            height: 15px; /* Yükseklik - Höhe */
+            padding: 1px; /* Dolgu - Polster */
+        }
+
+    .prev-month-day, .next-month-day {
+        color: lightgray; /* Renk - Farbe */
+    }
+
+    .current-day {
+        font-weight: bold; /* Yazı kalınlığı - Schriftstärke */
+        height: 30px; /* Yükseklik - Höhe */
+        margin-left: 10px; /* Sol boşluk - Linker Rand */
+        margin-bottom: 10px; /* Alt boşluk - Unterer Rand */
+        background-color: orange; /* Arka plan rengi - Hintergrundfarbe */
+        border-radius: 10px; /* Kenar yuvarlatma - Randradius */
+        color: black; /* Renk - Farbe */
+    }
+
+    #month-year {
+        color: rgba(95, 158, 160,2); /* Renk - Farbe */
+    }
+
+    #container1 {
+        height: 400px; /* Yükseklik - Höhe */
+        border-radius: 10px !important; /* Kenar yuvarlatma - Randradius */
+    }
+
+    .highcharts-figure, .highcharts-data-table table {
+        min-width: 310px; /* Minimum genişlik - Mindestbreite */
+        max-width: 882px !important; /* Maksimum genişlik - Maximalbreite */
+        margin-left: 25px !important; /* Sol boşluk - Linker Rand */
+        margin-top: -20px !important; /* Üst boşluk - Oberer Rand */
+    }
+
+    #sliders {
+        margin: 0.3rem 10px; /* Boşluk - Abstand */
+    }
+
+        #sliders td input[type="range"] {
+            display: inline; /* Çizgi içi model - Inline-Modell */
+        }
+
+        #sliders td {
+            padding-right: 1em; /* Sağ dolgu - Rechtes Polster */
+            white-space: nowrap; /* Boşlukları koru - Kein Zeilenumbruch */
+        }
+
+    .highcharts-description {
+        margin: 0.3rem 10px; /* Boşluk - Abstand */
+    }
+
+    #alpha, #beta, #depth {
+        width: 100%; /* Genişlik - Breite */
+        height: 10px; /* Yükseklik - Höhe */
+        background-color: lightgray !important; /* Arka plan rengi - Hintergrundfarbe */
+        border-radius: 5px; /* Kenar yuvarlatma - Randradius */
+        -webkit-appearance: none; /* Tarayıcı stili - Browser-Stil */
+        appearance: none; /* Görünüm - Aussehen */
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Tarayıcı stili - Browser-Stil */
+        appearance: none; /* Görünüm - Aussehen */
+        width: 10px; /* Genişlik - Breite */
+        height: 10px; /* Yükseklik - Höhe */
+        border-radius: 50%; /* Kenar yuvarlatma - Randradius */
+        background-color: cadetblue; /* Arka plan rengi - Hintergrundfarbe */
+        border: none; /* Kenar yok - Kein Rand */
+        cursor: pointer; /* İmleç işareti - Cursor-Symbol */
+    }
+</style>
+
+
+
+
+<!--3 Buttons oben rechts-->
+<div class="iconCont">
+    <div class="b1">
+        <a href="/PersonalAngabens/PersonalCard/" class="icon">
+            <span class="bx bxs-id-card"></span> Personal
+
+        </a>
+    </div>
+    <div class="b2">
+        <a href="/KundenDatens/Index" class="icon">
+            <span class="bx bxs-user"></span> Kunden
+
+        </a>
+    </div>
+    <div class="b3">
+        <a href="/PersonalProjektes/Index" class="icon">
+            <span class="bx bx bx-task"></span> Projekte
+
+        </a>
+    </div>
+
+</div>
+
+
+<!--vom Recht - nach Links Schreibabrutschen-->
+
+<div class="ticker-wrap" style="width: 80%; padding-left: 100%; float: right; overflow: hidden; color: gray; bottom: 0; z-index: 1000;">
+    <div class="ticker-track" style="display: table-row; white-space: nowrap; animation: scroll-left 60s linear infinite;">
+        <span style="display: inline-block; margin-right: 20px; font-size: 10px; font-weight: bold;">
+            <b>XYZ GmbH </b> |  Crm Basis  Vers.:<i class="text-muted"> Demo X</i>
+        </span>
+    </div>
+
+    <style>
+        @@keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-750%);
+            }
+        }
+
+        .ticker-wrap {
+            position: relative;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-repeat: no-repeat;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            mask-repeat: no-repeat;
+            mask-size: 100% 100%;
+        }
+
+        /* Küçük ekranlar için animasyonu override et */
+@@media (max-width: 768px) {
+    @@keyframes scroll-left {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-350%);
+        }
+    }
+}
+    </style>
+</div>
+
+
+
+<!-- Uhr/Kalender -->
+@*<div class="uhrkalender" style="margin-top:1px!important">
+        <i class='bx bx-time-five' style='color:orangered'></i> / <i class='bx bx-calendar' style='color:black'></i>
+
+        <div id="clock" style="font-size:20px ">
+
+        </div>
+
+        <div id="date">
+
+        </div>
+
+        <hr style="color:lightgray;width:100%" />
+
+
+    </div>*@
+
+
+<!-- Content -->
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row ">
+            <div class="col-lg-8 mb-4 order-0">
+                <div class="card">
+                    <div class="d-flex align-items-end row">
+                        <div class="col-sm-7">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">Willkommen beim Crm-Portal   🔑  </h5>
+
+                                <p class="mb-4">
+                                    Auf dem Crm-Protal befindet sich aktuell <span class="fw-bold" style="color:black"><b style="font-size:20px">- @ViewBag.ProjektZahlen -</b></span> Projekte. Bitte klicken Sie auf den Button, um weitere Details zu sehen
+                                </p>
+
+                                <a href="/PersonalProjektes/Index" class="btn btn-sm btn-outline-primary">Projekte ansehen</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-5 text-center text-sm-left">
+                            <div class="card-body pb-0 px-0 px-md-4">
+                                <img src="~/THEMA/assets/img/illustrations/man-with-laptop-light.png" height="169" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 order-1">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="~/THEMA/assets/img/icons/unicons/chart-success.png" alt="chart success" class="rounded">
+                                    </div>
+                                </div>
+                                <span class="fw-semibold  d-block mb-1">Abgeschlossene Projekte</span>
+                                <h3></h3>
+                                <small class="badge bg-label-success rounded-5 "><i class="bx bx-check"></i> @ViewBag.FertigteProjektZahlen Projekte</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="~/THEMA/assets/img/icons/unicons/hohe1.png" alt="Credit Card" class="rounded">
+                                    </div>
+                                </div>
+                                <span class="fw-semibold  d-block mb-1">Hohepriorisierte Projekte</span>
+                                <h3></h3>
+                                <small class="badge bg-label-danger rounded-5"><i class="bx bx-chevrons-up"></i> @ViewBag.high Projekte </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <!-- MAIN GRAFIK-->
+            <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
+                <div id="idcard" class="card" style="background-color:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                    <div class="row row-bordered g-0">
+                        <div class="col-md-9">
+                            <small style="font-size:10px;margin-left:16px;display:block;margin-top:12px;">
+                                <u style="color:cadetblue;">
+                                    <b>CRM-Diagram</b>
+                                </u>
+                            </small>
+                            <div class="card-body" style="padding-top:90px;padding-bottom:20px;">
+                                <canvas id="myBarChart" width="400" height="350"></canvas>
+                            </div>
+                            <small style="font-size:10px;margin-left:16px;display:block;margin-bottom:14px;line-height:1.3;">
+                                <u><em style="color:red;">Hinweis</em></u>: Die farbigen Markierungen neben dem Diagramm entsprechen die Balken im Diagramm.
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card-body" style="padding:0;display:flex;align-items:center;justify-content:center;height:100%;">
+                                <div style="display:flex;flex-direction:column;gap:16px; align-items:flex-start; padding-top:36px;">
+                                    <i class='bx bxs-square-rounded' style="color:#ffea05; width:18px; height:18px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:middle;"></i>
+                                    <span style="font-size:11px; color:darkgray; margin-left:2px;">Alle Projekte</span>
+                                    <i class='bx bxs-square-rounded' style="color:rgba(113,221,55,0.9); width:18px; height:18px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:middle;"></i>
+                                    <span style="font-size:11px; color:darkgray; margin-left:2px;">Abgeschlossene</span>
+                                    <i class='bx bxs-square-rounded' style="color:rgba(75,192,192,0.7); width:18px; height:18px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:middle;"></i>
+                                    <span style="font-size:11px; color:darkgray; margin-left:2px;">Laufende</span>
+                                    <i class='bx bxs-square-rounded' style="color:rgba(255,62,29,0.7); width:18px; height:18px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:middle;"></i>
+                                    <span style="font-size:11px; color:darkgray; margin-left:2px;">Hohe</span>
+                                    <i class='bx bxs-square-rounded' style="color:rgba(255,171,0,0.8); width:18px; height:18px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:middle;"></i>
+                                    <span style="font-size:11px; color:darkgray; margin-left:2px;">Mittlere</span>
+                                    <i class='bx bxs-square-rounded' style="color:rgba(105,108,255,0.9); width:18px; height:18px; border-radius:4px; display:inline-block; margin-right:8px; vertical-align:middle;"></i>
+                                    <span style="font-size:11px; color:darkgray; margin-left:2px;">Geringe</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/ Kleine Karte -->
+            <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
+                <div class="row">
+                    <div class="col-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="~/THEMA/assets/img/icons/unicons/mittlere.png" alt="#" class="rounded rotate-90">
+                                    </div>
+                                </div>
+                                <span class="fw-semibold  d-block mb-1">Mittlerepriorisierte Projekte</span>
+                                <h3> </h3>
+                                <small class="badge bg-label-warning rounded-5 "><i class="bx bx-chevrons-up bx-rotate-270 "></i>@ViewBag.middle Projekte</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title d-flex align-items-start justify-content-between">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="~/THEMA/assets/img/icons/unicons/cc-primary.png" alt="#" class="rounded">
+                                    </div>
+                                </div>
+                                <span class="fw-semibold  d-block mb-1">Geringepriorisierte Projekte</span>
+                                <h3></h3>
+                                <small class="badge bg-label-primary rounded-5 "><i class="bx bx-chevrons-up bx-rotate-180"></i>@ViewBag.low Projekte</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Groß Kalender-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <!-- Başlık kısmı (Profile Report yerine yeni içerik) -->
+                            <div class="">
+                                <!-- Takvim / Die Kalender -->
+                                <div class="calendar ">
+                                    <!-- Takvim başlığı: Ay ve yıl seçicileri / zur Wählen (Monat-Jahr) für Kalender -->
+                                    <div class="calendar-header d-flex align-items-center justify-content-between">
+                                        <i id="prev-month-btn"><i class='bx bx-caret-left' style="color:cadetblue"></i></i>
+                                        <b id="month-year"></b>
+                                        <i id="next-month-btn"><i class='bx bx-caret-right' style="color:cadetblue"></i></i>
+                                    </div>
+
+                                    @*Takvim kontrolleri: Ay ve yıl dropdown menüleri- Dropdown Menu für Monat-Jahr*@
+                                    <div class="calendar-controls">
+                                        <select id="year-select" style="color:gray"></select>
+                                        <select id="month-select" style="color:gray">
+                                            <option value="0">Januar</option>
+                                            <option value="1">Februar</option>
+                                            <option value="2">März</option>
+                                            <option value="3">April</option>
+                                            <option value="4">Mai</option>
+                                            <option value="5">Juni</option>
+                                            <option value="6">Juli</option>
+                                            <option value="7">August</option>
+                                            <option value="8">September</option>
+                                            <option value="9">Oktober</option>
+                                            <option value="10">November</option>
+                                            <option value="11">Dezember</option>
+                                        </select>
+                                    </div>
+
+                                    @*Haftanın günleri gösterimi / Die Tage der Woche*@
+
+                                    <div class="calendar-weekdays">
+                                        <div>Mo</div>
+                                        <div>Di</div>
+                                        <div>Mi</div>
+                                        <div>Do</div>
+                                        <div>Fr</div>
+                                        <div style="background-color: lightgray !important; color: orangered;border-radius:5px 0 0 5px;">Sa</div>
+                                        <div style="background-color: lightgray !important; color: orangered;border-radius: 0 5px 5px 0;">So</div>
+                                    </div>
+                                    <hr style="max-width:68%;margin-top:-8px" />
+                                    <!-- Günlerin listeleneceği alan/ Bereich, das sich die Tage auflisten -->
+                                    <div class="calendar-days" id="calendar-days"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--Die Abbildung wurde von https://www.highcharts.com/demo/highcharts/3d-column-interactive aufgenommen und angepasst-->
+<!-- 3D Grafik/ Chart-->
+<!--<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+<figure id="fgrs" class="highcharts-figure ">
+
+    <div id="container1">
+
+
+    </div>
+    <table id="sliders">
+
+        <tr>
+            <td><b>Alpha Winkel</b> </td>
+            <td><input id="alpha" type="range" min="0" max="45" value="15"></td>
+            <td><span id="alpha-value"></span> α</td>
+        </tr>
+        <tr>
+            <td><b>Beta Winkel</b> </td>
+            <td><input id="beta" type="range" min="-45" max="45" value="15"></td>
+            <td><span id="beta-value"></span> β</td>
+        </tr>
+        <tr>
+            <td><b>Tiefe</b></td>
+            <td><input id="depth" type="range" min="20" max="100" value="50"></td>
+            <td><span id="depth-value"></span></td>
+        </tr>
+    </table>
+</figure>
+<!--
+    Die JAVASCRIPT-CODEN WURDEN VON GITHUB-COPILOT (80%) und VON MIR (20%) PROGRAMMIERT.
+
+    Alle Code-Blöcke hier wurden nach dem Dashboart-Ansicht ausgerichtet und angepasst
+-->
+<!--Realzeit Uhr-->
+<script>
+    function updateClock() {
+        const now = new Date(); // Şu anki tarih ve saat
+
+        // Stunden, Minuten und Sekunden
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        // Tage der Woche
+        const days = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+        const day = days[now.getDay()]; // Tag der Woche
+
+        // Tarih formatı- Datum Format
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        const date = now.toLocaleDateString('de-DE', options); // De- Format
+
+        // Zeit- und Datumsformate
+        const timeString = `${hours}:${minutes}:${seconds}`; // Uhr-format: HH:MM:SS
+        const dateString = `${date}, ${day}`; // Datum und Tage
+
+        // Zeit- und Datumsfelder aktualisieren
+        document.getElementById('clock').textContent = timeString; // Uhr
+        document.getElementById('date').textContent = dateString; // Datum
+    }
+
+    setInterval(updateClock, 1000); // Aktualisiere die Uhr jede Sekunde!
+    updateClock(); // Beim ersten Laden der Seite die Zeit anzeigen
+
+
+</script>
+
+
+
+<!-- Grafik CHARTS-->
+<script>
+
+    // Bar Chart (Çubuk Grafik)
+    const ctx = document.getElementById('myBarChart').getContext('2d'); // Grafik canvas'ı seçiliyor // Grafik-Canvas wird ausgewählt
+    const myBarChart = new Chart(ctx, {
+    type: 'bar',// Grafik türü bar (çubuk). // Grafiktyp bar (Stab).
+    data: {
+        labels: ['Alle Projekte', 'Abgeschlossene', 'Laufende', 'Hohe', 'Mittlere', 'Geringe'],
+        datasets: [{
+            label: ' Projekte: @ViewBag.ProjektZahlen',
+            data: [@ViewBag.ProjektZahlen, @ViewBag.FertigteProjektZahlen, @ViewBag.Laufendeprojekte, @ViewBag.High, @ViewBag.Middle, @ViewBag.Low], // Grafik veri seti // Grafik-Datensatz
+            backgroundColor: [
+                'rgba(245, 227, 29, 0.6)', // Tüm Projeler Rengi // Alle Projekte Farbe
+                'rgba(113, 221, 55, 0.4)', // Tamamlanan Projeler Rengi // Abgeschlossene Farbe
+                'rgba(75, 192, 192, 0.4)', // Devam Eden Projeler Rengi // Laufende Farbe
+                'rgba(255, 62, 29, 0.4)', // Yüksek Öncelikli Projeler Rengi // Hohe Farbe
+                'rgba(255, 171, 0, 0.4)', // Orta Öncelikli Projeler Rengi // Mittlere Farbe
+                'rgba(105, 108, 255, 0.4)' // Düşük Öncelikli Projeler Rengi // Geringe Farbe
+            ],
+            borderColor: [
+                'rgba(155, 166, 165, 0.6)', // Tüm Projeler Rengi // Alle Projekte Farbe
+                'rgba(113, 221, 55, 0.6)', // Tamamlanan Projeler Rengi // Abgeschlossene Farbe
+                'rgba(95, 158, 160, 0.6)', // Devam Eden Projeler Rengi // Laufende Farbe
+                'rgba(255, 62, 29, 0.6)', // Yüksek Öncelikli Projeler Rengi // Hohe Farbe
+                'rgba(255, 171, 0, 0.6)', // Orta Öncelikli Projeler Rengi // Mittlere Farbe
+                'rgba(105, 108, 255, 0.6)' // Düşük Öncelikli Projeler Rengi // Geringe Farbe
+            ],
+            borderWidth: 0.9, // Kenar Çizgisi Kalınlığı // Rand-Breite
+            borderRadius: 3,  // Çubuk Köşe Yarıçapı // Stab-Eckenradius
+            barThickness: 55,  // Çubuk Genişliği // Stab-Breite
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                grid: {
+                    display: true,// X ekseninin grid çizgileri görünsün // X-Achse Gitterlinien anzeigen
+                    color: 'rgba(200, 200, 200, 0.5)', // Çizgi rengi // Linienfarbe
+                    lineWidth: 1, // Çizgi kalınlığı // Linienbreite
+                },
+                ticks: {
+                    stepSize: 1  // X eksenindeki her bir adımın aralığı // Jeder Schritt auf der X-Achse
+                }
+            },
+            y: {
+                grid: {
+                    display: true,  // Y ekseninin grid çizgileri görünsün // Y-Achse Gitterlinien anzeigen
+                    drawBorder: true, // Y ekseninin sınır çizgisi çizilsin // Y-Achse Begrenzungslinie zeichnen
+                    color: 'rgba(200, 200, 200, 0.5)', // Grid Çizgi rengi // Gitterlinienfarbe
+                    lineWidth: 1, // Grid Çizgi kalınlığı // Gitterlinienbreite
+                },
+                ticks: {
+                    stepSize: 0.2 // Her bir Y ekseni arasındaki adım aralığı // Jeder Schritt auf der Y-Achse
+                },
+                beginAtZero: true // Y ekseni sıfırdan başlasın // Y-Achse bei Null beginnen
+            }
+        },
+        responsive: true,  // Grafik boyutlandırma responsive (mobil uyumlu) // Grafikgröße responsiv (mobilfreundlich)
+
+        maintainAspectRatio: false, // Ekran küçüldüğünde oranı korumadan boyutlandırma // Anpassung ohne Seitenverhältnis
+        onHover: (event, chartElement) => { // Hover efekti // Hover-Effekt
+            if (chartElement.length) { // Eğer üzerine gelinen bir element varsa // Wenn ein Element gehovt wird
+                const index = chartElement[0].index; // Hover yapılan çubuğun index numarasını al // Index des gehovten Stabs erhalten
+                const datasetIndex = chartElement[0].datasetIndex; // Hangi dataset'e ait olduğunu al // Zu welchem Datensatz es gehört
+                myBarChart.data.datasets[datasetIndex].backgroundColor = myBarChart.data.datasets[datasetIndex].backgroundColor.map((color, i) =>
+                    i === index ? color : 'rgba(200, 200, 200, 0.1)' // Hover olmayan elemanları gri yap // Nicht gehovte Elemente grau machen
+                );
+                myBarChart.update(); // Grafiği güncelle // Grafik aktualisieren
+
+            } else {// Eğer hover yapılmıyorsa, tüm çubukları eski renklerine döndür // Wenn nicht gehovt, alle Stäbe in alte Farben zurücksetzen
+                myBarChart.data.datasets[0].backgroundColor = [
+                    'rgba(245, 227, 29, 0.6)', // Tüm Projeler Rengi // Alle Projekte Farbe
+                    'rgba(113, 221, 55, 0.4)', // Tamamlanan Projeler Rengi // Abgeschlossene Farbe
+                    'rgba(75, 192, 192, 0.4)', // Devam Eden Projeler Rengi // Laufende Farbe
+                    'rgba(255, 62, 29, 0.4)', // Yüksek Öncelikli Projeler Rengi // Hohe Farbe
+                    'rgba(255, 171, 0, 0.4)', // Orta Öncelikli Projeler Rengi // Mittlere Farbe
+                    'rgba(105, 108, 255, 0.4)' // Düşük Öncelikli Projeler Rengi // Geringe Farbe
+                ];
+                myBarChart.update(); // Grafiği güncelle // Grafik aktualisieren
+            }
+        }
+    }
+});
+
+   // Burada Apex yeniden boyutlandırılır // Hier wird das Apex wieder skaliert
+   window.addEventListener('resize', () => {
+    myBarChart.resize();
+    myBarChart.update(); // Verileri ve çubukları yeniden ölçeklendir // Daten und Stäbe neu skalieren
+});
+</script>
+
+
+
+<!--Groß Kalender-->
+<script>
+    // Takvimde geçerli ay ve yılı tutan değişkenler // Variablen, die den aktuellen Monat und das Jahr im Kalender speichern
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    // Takvimi render etme işlevi // Funktion zum Rendern des Kalenders
+    function renderCalendar(year = currentYear, month = currentMonth) {
+        const calendarDays = document.getElementById('calendar-days');
+        const monthYear = document.getElementById('month-year');
+
+        // Günlerin bilgilerini al // Informationen zu den Tagen holen
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+        const daysInMonth = lastDayOfMonth.getDate();
+        const firstWeekday = firstDayOfMonth.getDay(); // 0 (Pazar) - 6 (Cumartesi) // 0 (Sonntag) - 6 (Samstag)
+
+        // Önceki ve sonraki ay bilgileri // Informationen über den vorherigen und nächsten Monat
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+        // Ay ve yıl başlığını ayarla // Monat und Jahr im Header setzen
+        monthYear.textContent = new Date(year, month).toLocaleDateString("de-DE", {
+            year: "numeric",
+            month: "long"
+        });
+
+        // Takvim günlerini temizle // Kalendertage löschen
+        calendarDays.innerHTML = "";
+
+        // İlk günün hafta içi dizini (Pazar'ı haftanın sonu kabul ederek ayarlıyoruz) // Wochentagsindex des ersten Tages (unter der Annahme, dass Sonntag das Ende der Woche ist)
+        const startDay = firstWeekday === 0 ? 6 : firstWeekday - 1;
+
+        // Önceki ayın günlerini ekle // Tage des vorherigen Monats hinzufügen
+        for (let i = startDay; i > 0; i--) {
+            const day = document.createElement('div');
+            day.classList.add('day', 'prev-month-day');
+            day.textContent = prevMonthLastDay - i + 1;
+            calendarDays.appendChild(day);
+        }
+
+        // Bu ayın günlerini ekle // Tage des aktuellen Monats hinzufügen
+        const today = new Date();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayCell = document.createElement('div');
+            dayCell.classList.add('day');
+            dayCell.textContent = day;
+
+            // Eğer gün bugünkü gün ise, sınıfa 'current-day' ekle // Wenn der Tag der heutige Tag ist, Klasse 'current-day' hinzufügen
+            if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                dayCell.classList.add('current-day');
+            }
+
+            calendarDays.appendChild(dayCell);
+        }
+
+        // Sonraki ayın günlerini ekle // Tage des nächsten Monats hinzufügen
+        const remainingCells = 42 - (startDay + daysInMonth); // Toplam 42 hücre olması için // Um insgesamt 42 Zellen zu haben
+        for (let i = 1; i <= remainingCells; i++) {
+            const day = document.createElement('div');
+            day.classList.add('day', 'next-month-day');
+            day.textContent = i;
+            calendarDays.appendChild(day);
+        }
+    }
+
+    // Yıl ve ay seçeneklerini güncelleme // Aktualisierung der Jahres- und Monatsauswahl
+    function updateSelectors() {
+        const yearSelect = document.getElementById('year-select');
+        const monthSelect = document.getElementById('month-select');
+
+        // Yıl seçeneklerini doldur (2000'den 2200'e kadar) // Füllen Sie die Jahresauswahl (von 2000 bis 2200)
+        for (let year = 2000; year <= 2200; year++) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+        }
+
+        // Geçerli yılı ve ayı seçili olarak ayarla // Aktuelles Jahr und aktuellen Monat als ausgewählt setzen
+        yearSelect.value = currentYear;
+        monthSelect.value = currentMonth;
+
+        // Yıl ve ay seçimleri değiştiğinde takvimi güncelle // Kalender aktualisieren, wenn Jahres- oder Monatsauswahl geändert wird
+        yearSelect.addEventListener('change', function () {
+            currentYear = parseInt(this.value);
+            renderCalendar(currentYear, currentMonth);
+        });
+
+        monthSelect.addEventListener('change', function () {
+            currentMonth = parseInt(this.value);
+            renderCalendar(currentYear, currentMonth);
+        });
+    }
+
+    // Ayı ileri veya geri almak için düğme işlevleri // Schaltflächenfunktionen zum Vor- oder Zurückstellen des Monats
+    document.getElementById('prev-month-btn').addEventListener('click', function () {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        document.getElementById('year-select').value = currentYear;
+        document.getElementById('month-select').value = currentMonth;
+        renderCalendar(currentYear, currentMonth);
+    });
+
+    document.getElementById('next-month-btn').addEventListener('click', function () {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        document.getElementById('year-select').value = currentYear;
+        document.getElementById('month-select').value = currentMonth;
+        renderCalendar(currentYear, currentMonth);
+    });
+
+    // Sayfa yüklendiğinde takvimi oluştur ve yıl/ay seçeneklerini güncelle // Beim Laden der Seite Kalender erstellen und Jahres-/Monatsauswahl aktualisieren
+    document.addEventListener('DOMContentLoaded', function () {
+        updateSelectors();
+        renderCalendar();
+    });
+
+</script>
+
+<!--3D Chart/Grafik-->
+@*<script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Highcharts kütüphanesinin yüklü olup olmadığını kontrol ediyoruz // Überprüfen, ob die Highcharts-Bibliothek geladen ist
+                if (typeof Highcharts !== "undefined") {
+
+                    // Grafik için veri etiketleri (x eksenindeki etiketler) // Datenetiketten für das Diagramm (x-Achse)
+                    const dataLabels = ['Alle Projekte', 'Abgeschlossene', 'Laufende', 'Hohe', 'Mittlere', 'Geringe'];
+
+                    // Grafikte gösterilecek veriler (y eksenindeki değerler) // Daten, die im Diagramm angezeigt werden (y-Achse)
+                    const dataValues = [
+                        @ViewBag.ProjektZahlen ?? 0,       // Toplam projeler // Gesamtprojekte
+                        @ViewBag.FertigteProjektZahlen ?? 0, // Tamamlanmış projeler // Abgeschlossene Projekte
+                        @ViewBag.Laufendeprojekte ?? 0, // Devam eden projeler // Laufende Projekte
+                        @ViewBag.HoherPrioritat ?? 0,   // Yüksek öncelikli projeler // Projekte mit hoher Priorität
+                        @ViewBag.MittlerePrioritat ?? 0, // Orta öncelikli projeler // Projekte mit mittlerer Priorität
+                        @ViewBag.GeringePrioritat ?? 0   // Düşük öncelikli projeler // Projekte mit niedriger Priorität
+                    ];
+
+                    // Debug amaçlı veri değerlerini konsola yazdırıyoruz // Datenwerte zu Debugging-Zwecken in der Konsole ausgeben
+                    console.log("Data values:", dataValues);
+
+                    // Etiketleri ve veri değerlerini birleştirerek grafikte kullanılacak veri dizisini oluşturuyoruz // Erstellen des Datenarrays für das Diagramm durch Kombinieren von Etiketten und Werten
+                    const chartData = dataLabels.map((label, index) => ({
+                        name: label,      // Veri etiketi // Datenetikett
+                        y: dataValues[index] || 0, // Veri değeri // Datenwert
+                        color: getColorForIndex(index) // Renk ataması // Farbzuteilung
+                    }));
+
+                    // Renkleri dinamik olarak belirlemek için fonksiyon // Funktion zur dynamischen Bestimmung der Farben
+                    function getColorForIndex(index) {
+                        const colors = [
+                            'rgba(245, 227, 29, 0.9)',   // Alle Projekte
+                            'rgba(113, 221, 55, 0.5)',   // Abgeschlossene
+                            'rgba(75, 192, 192, 0.5)',   // Laufende
+                            'rgba(255, 62, 29, 0.5)',    // Hohe
+                            'rgba(255, 171, 0, 0.5)',    // Mittlere
+                            'rgba(105, 108, 255, 0.5)'   // Geringe
+                        ];
+                        return colors[index] || 'rgba(0, 0, 0, 0.4)'; // Varsayılan renk // Standardfarbe
+                    }
+
+                    // Highcharts ile 3D sütun grafiğini oluşturuyoruz // Erstellen eines 3D-Säulendiagramms mit Highcharts
+                    const chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'container1', // Grafiğin render edileceği HTML elemanının id'si // ID des HTML-Elements, in dem das Diagramm gerendert wird
+                            type: 'column', // Grafik türü: sütun (column) // Diagrammtyp: Säule (column)
+                            backgroundColor: 'rgb(255,255,255, 0.9)',
+                            options3d: {
+                                enabled: true, // 3D özelliklerini etkinleştiriyoruz // 3D-Optionen aktivieren
+                                alpha: 15, // Grafiğin x eksenine göre eğilme açısı (görüş açısı) // Neigungswinkel des Diagramms zur x-Achse (Blickwinkel)
+                                beta: 15,  // Grafiğin y eksenine göre eğilme açısı (görüş açısı) // Neigungswinkel des Diagramms zur y-Achse (Blickwinkel)
+                                depth: 50, // Grafik derinliği // Diagrammtiefe
+                                viewDistance: 25 // Grafiğe olan mesafe // Abstand zum Diagramm
+                            }
+                        },
+                        // x ekseninde kategorik veriler kullanıyoruz // Kategorische Daten auf der x-Achse verwenden
+                        xAxis: {
+                            type: 'category',
+                            gridLineColor: '#828282',
+
+                        },
+                        // y eksenini gizliyoruz, sadece değerler gösterilecek // Die y-Achse ausblenden, nur Werte anzeigen
+                        yAxis: {
+                            gridLineColor: '#828282',
+                            title: {
+                                enabled: false
+                            }
+                        },
+                        // Tooltip (baloncuk) bilgilerini özelleştiriyoruz // Tooltip-Informationen anpassen
+                        tooltip: {
+                            headerFormat: '<b>{point.key}</b><br>', // Başlık formatı // Kopfzeilenformat
+                            pointFormat: 'Anzahl: {point.y}' // Değer formatı // Werteformat
+                        },
+                        // Grafiğin başlığını belirliyoruz // Den Titel des Diagramms festlegen
+                        title: {
+                            text: 'CRM-Grafik 3D',
+                             style: {
+                                 color: 'cadetblue',
+                                 fontWeight:'500',
+                                 fontSize: '13px',
+                            }
+
+                        },
+                        // Grafik legend'ını (açıklama kısmı) gizliyoruz // Die Legende des Diagramms ausblenden
+                        legend: {
+                            enabled: false
+                        },
+                        // Grafik için çubuk seçeneklerini özelleştiriyoruz // Balkenoptionen für das Diagramm anpassen
+                        plotOptions: {
+                            column: {
+                                depth: 45, // Her çubuğun derinliği (grafiğin derinliğinden bağımsız) // Tiefe jeder Säule (unabhängig von der Diagrammtiefe)
+                                pointWidth: 45, // Çubuğun genişliği, çubukların kalınlığını kontrol eder // Säulenbreite, kontrolliert die Dicke der Balken
+                                groupPadding: 0.1, // Çubuklar arasındaki boşluk // Abstand zwischen den Säulen
+                                pointPadding: 0.1  // Çubuğun kenarındaki boşluk // Abstand an den Rändern der Säule
+                            }
+                        },
+                        credits: {
+                            enabled: false // Highcharts logosunu gizliyoruz // Highcharts-Logo ausblenden
+                        },
+                        // Verileri belirliyoruz // Daten festlegen
+                        series: [{
+                            data: chartData, // Grafikte kullanılacak veri // Daten, die im Diagramm verwendet werden
+                            colorByPoint: false // Renkleri elle atadık, otomatik renkleme yapmıyoruz // Farben manuell zugewiesen, keine automatische Farbgebung
+                        }]
+                    });
+
+                    // 3D seçeneklerinin değerlerini göstermek için bir fonksiyon // Funktion zur Anzeige der 3D-Optionswerte
+                    function showValues() {
+                        document.getElementById('alpha-value').innerHTML = chart.options.chart.options3d.alpha;
+                        document.getElementById('beta-value').innerHTML = chart.options.chart.options3d.beta;
+                        document.getElementById('depth-value').innerHTML = chart.options.chart.options3d.depth;
+                    }
+
+                    // Slider'lara etkileşim ekliyoruz. Bu slider'lar 3D özelliklerin ayarlanmasını sağlar.
+                    // Interaktion mit den Slidern hinzufügen. Diese Slider ermöglichen die Einstellung der 3D-Optionen.
+                    document.querySelectorAll('#sliders input').forEach(input => input.addEventListener('input', e => {
+                        // Slider'dan gelen değeri kullanarak grafiğin 3D özelliklerini güncelliyoruz // 3D-Optionen des Diagramms mit dem Wert des Sliders aktualisieren
+                        chart.options.chart.options3d[e.target.id] = parseFloat(e.target.value);
+                        showValues(); // Güncellenmiş değerleri göster // Aktualisierte Werte anzeigen
+                        chart.redraw(false); // Grafik yeniden çiziliyor // Diagramm neu zeichnen
+                    }));
+
+                    // İlk gösterim için 3D seçeneklerinin değerlerini gösteriyoruz // 3D-Optionswerte für die erste Anzeige anzeigen
+                    showValues();
+                } else {
+                    console.error("Highcharts is not loaded."); // Highcharts yüklü değilse hata mesajı gösteriyoruz // Fehlermeldung anzeigen, wenn Highcharts nicht geladen ist
+                }
+            });
+    </script>*@
+

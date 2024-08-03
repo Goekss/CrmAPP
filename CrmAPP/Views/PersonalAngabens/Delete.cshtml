@@ -1,0 +1,124 @@
+﻿@model CrmAPP.Models.Personal.PersonalAngaben
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    #btndlt:hover {
+        background-color: gray !important;
+        color: orange !important;
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    }
+    #img {
+        width: 160px;
+        height: 160px !important;
+        border-radius: 10px;
+        margin-left: 20px;
+        margin-top: 30px;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
+<br />
+<h2>
+    Delete
+    <span class="menu-icon tf-icon bx bx-error" style="inline-size:20px; font-size:35px; color:darkorange;margin-top:-10px"></span>
+</h2>
+
+<p style="font-size:10px"><b style="color: red; font-weight:bold"> ACHTUNG! </b> <i style="color:black"> Sind Sie sicher, dass Sie dies löschen wollen ?</i> </p>
+<br />
+
+
+
+<div>
+
+    <h4>Mitarbeiter*in ; <b> @Html.DisplayFor(model => model.Vorname)</b><b> @Html.DisplayFor(model => model.Nachname)</b></h4>
+    <hr style="color:red" />
+    <br />
+    <div>
+
+
+        <img id="img" src="@Url.Content("~/Images/"+ Model.Bild )" alt="Alternate Text" class="rounded card-img" style="max-width: 140px; max-height: 140px; " />
+
+    </div>
+    <br />
+    <div class="col">
+
+        <div class="mb-3 col-md-6">
+            <b class="form-label">Vor-Nachname :</b>
+            <i style="margin-left:20px;color:darkgray"> @Html.DisplayFor(model => model.Vorname) @Html.DisplayFor(model => model.Nachname)</i>
+        </div>
+        <hr style="width:20%" />
+        <div class="mb-3 col-md-6">
+            <b class="form-label ">E-mail :</b>
+            <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Email)</i>
+        </div>
+        <hr style="width:25%" />
+        <div class="mb-3 col-md-6">
+            <b class="form-label" for="phoneNumber">Rufnummer :</b>
+            <i style="margin-left: 20px; color: darkgray">  @Html.DisplayFor(model => model.RufNummer)</i>
+        </div>
+        <hr style="width:30%" />
+        <div class="mb-3 col-md-6">
+            <b for="state" class="form-label">Abteilung :</b>
+            <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Abteilung)</i>
+        </div>
+        <hr style="width:35%" />
+        <div class="mb-3 col-md-6">
+            <b for="state" class="form-label">Aufgaben :</b>
+            <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Aufgaben)</i>
+        </div>
+        <hr style="width:40%" />
+        <div class="mb-3 col-md-6">
+            <b for="state" class="form-label">Berechtigung :</b>
+            <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Berechtigung)</i>
+        </div>
+        <hr style="width:45%" />
+        <div class="mb-3 col-md-6">
+            <b for="state" class="form-label">Hinweis :</b>
+            <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Hinweise)</i>
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <br />
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+
+        <div class="form-actions no-color">
+            <button id="btndlt" type="submit" class="btn btn-default" style="border:1px solid gray;font-size:12px; border-radius:5px; padding:5px; padding-right:18px; background-color:black; color:white;" onclick="return confirmDelete()">
+                <i class="bx bx-error-alt" style="margin-left:9px ;margin-right:7px;color:red"></i>
+                Löschen
+            </button>
+        </div>
+
+    }
+
+</div>
+<hr style="color:red" />
+<div>
+    <div class="mt-2">
+        <a href="/PersonalAngabens/Index" type="submit" class="btn btn-secondary" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Zurück zur Liste </a>
+    </div>
+</div>
+
+<audio id="errorSound" src="/THEMA/klang_datei/error-sound2.mp3" preload="auto"></audio>
+<script>
+    // Path to the error sound file
+    const errorSoundPath = '/THEMA/klang_datei/error-sound2.mp3';
+
+    function confirmDelete() {
+        var errorSound = document.getElementById("errorSound");
+        errorSound.currentTime = 0; // Baştan başlat
+        errorSound.play();
+        return confirm("\n ACHTUNG ❗ \n \nDiese Person und alle zugehörigen Daten werden dauerhaft gelöscht! Bitte bestätigen Sie den Löschvorgang❗\n");
+    }
+</script>

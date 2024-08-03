@@ -1,0 +1,208 @@
+﻿@model CrmAPP.Models.Projekt.PersonalProjekte
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<style>
+    /* Personal Listen Container */
+    .personnel-list {
+        display: flex; /* Flexbox Layout, ordnet die Elemente horizontal / Flexbox düzeni, öğeleri yatayda sıralar */
+        flex-wrap: wrap; /* Erlaubt es, dass die Elemente umgebrochen werden / Öğeleri sarar (wrap) */
+        gap: 10px; /* Der Abstand zwischen den Elementen beträgt 10px / Öğeler arasında 10px boşluk bırakır */
+        padding-left: 40px !important; /* Setzt 40px Padding auf der linken Seite / Sol tarafta 40px boşluk bırakır */
+        cursor: zoom-in; /* Zeigt einen Zoom-in-Cursor an, wenn der Mauszeiger über das Element geht / Fare üzerine gelindiğinde yakınlaştırma işareti gösterir */
+    }
+
+    /* Jedes Personen-Element */
+    .person-item {
+        margin-top: 10px !important; /* Fügt oben 10px Abstand hinzu / Üst margin'i 10px yapar */
+        display: flex; /* Ordnet die Elemente mit Flexbox horizontal an / Öğeleri flexbox ile yatayda hizalar */
+        align-items: center; /* Zentriert die Elemente vertikal / Öğeleri dikeyde ortalar */
+        color: dimgray; /* Setzt die Textfarbe auf dimgray / Yazı rengini koyu gri yapar */
+        gap: 10px; /* Der Abstand zwischen Bild und Name beträgt 10px / Resim ile isim arasındaki boşluğu 10px yapar */
+        padding: 10px; /* Fügt innen 10px Padding hinzu / İçeride 10px padding bırakır */
+        position: relative; /* Setzt die Position des Elements auf relativ / Öğenin konumunu göreli yapar */
+        transition: all 0.3s ease; /* Fügt eine Übergangsanimation von 0.3 Sekunden hinzu / Tüm özelliklerde 0.3 saniyelik geçiş animasyonu ekler */
+        flex: 1 1 250px; /* Stellt sicher, dass das Element eine min. Breite von 250px hat und flex. ist / Öğeyi flexbox ile esnek yapar ve min. genişliği 250px olarak ayarlar */
+        max-width: 250px; /* Maximale Breite des Elements auf 250px setzen / Öğenin maksimum genişliğini 250px olarak sınırlar */
+        box-sizing: border-box; /* Berücksichtigt Padding und Border bei der Größenberechnung / Border ve padding'i öğenin genişliği hesaplamasına dahil eder */
+    }
+
+        /* Bildgröße */
+        .person-item img {
+            width: 60px !important; /* Setzt die Breite des Bildes auf 50px / Resmin genişliğini 50px yapar */
+            height: 60px !important; /* Setzt die Höhe des Bildes auf 50px / Resmin yüksekliğini 50px yapar */
+            object-fit: cover; /* Stellt sicher, dass das Bild das Containerverhältnis behält / Resmi orantılı olarak keser ve kapsar */
+            border-radius: 10px !important; /* Macht die Ecken des Bildes abgerundet / Resme 10px yuvarlak köşe verir */
+            transition: all 1.5s ease; /* Fügt eine Übergangsanimation von 1.5 Sekunden hinzu / Resmin tüm özelliklerinde 1.5 saniyelik geçiş animasyonu ekler */
+        }
+</style>
+
+
+
+<br />
+<h2>
+    Delete
+    <span class="menu-icon tf-icon bx bx-error" style="inline-size:20px; font-size:35px; color:darkorange;margin-top:-10px"></span>
+
+</h2>
+
+<p style="font-size:11px"><b style="color: red; font-weight:bold"> ACHTUNG! </b> <i style="color:black"> Sind Sie sicher, dass Sie dieses vorliegende Projekt löschen wollen ?</i> </p>
+<p>
+    <i style="color:red">
+        Bitte beachten Sie darauf, dass nach dem Löschen kein Zugriff mehr auf die relevanten Daten möglich ist, da die dauerhaft entfernt werden.
+    </i>
+</p>
+<br />
+<div>
+    <h4> Das Projekt ; <b> @Html.DisplayFor(model => model.Projektname)</b> </h4>
+    <hr style="color:red" />
+
+    <div>
+        <div>
+            <b class="form-label">Kunden & Unternehmen :</b>
+            @foreach (var x in Model.KundenDatens)
+            {
+
+                <img src="@Url.Content("~/Logos/" + x.Logo)" class="rounded" style="max-width: 35px; max-height: 35px; margin-left: 15px; box-shadow: 5px 6px 7px rgba(0, 0, 0, 0.3);">
+
+                <span style="color: black; margin-left: 10px; ">  @x.Unternehmen</span>
+
+            }
+        </div>
+        <hr style="width:15%" />
+       
+        <div class="col">
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Projektname :</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Projektname)</i>
+                @if (Model.Projektname == null)
+                {
+                    <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+                }
+            </div>
+            <hr style="width:20%" />
+
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Inhalt :</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Erklärung)</i>
+                @if (Model.Erklärung == null)
+                {
+                    <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+                }
+            </div>
+            <hr style="width:25%" />
+
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Start-Datum :</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Startdatum)</i>
+            </div>
+            <hr style="width:30%" />
+
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Priorität :</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Priorität)</i>
+            </div>
+            <hr style="width:35%" />
+
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Abschluss in %:</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.ProjektStatus)</i>
+            </div>
+            <hr style="width:40%" />
+
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Enddatum :</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Enddatum)</i>
+                @if (Model.Enddatum == null)
+                {
+                    <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+                }
+            </div>
+            <hr style="width:45%" />
+
+            <div class="mb-3 col-md-6">
+                <b class="form-label">Fertigstellen :</b>
+                <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Fertigstellen)</i>
+                @if (Model.Fertigstellen == true)
+                {
+                    <i class='bx bx-check' style="font-size:23px;margin-left:8px;margin-top:-8px ;color:#00ff21"></i>
+
+                }
+                else
+                {
+
+                    <i class='bx bxs-error-circle' style="margin-left: 10px;margin-top:-4px ;color:orange"></i>
+                    <i style="margin-left:5px">(in Bearbeitung)</i>
+                }
+            </div>
+        </div>
+
+        <hr style="width: 55%!important" />
+
+        <div class="mb-4 col-md-6">
+            <b class="form-label" style="float:inline-start;padding-bottom:50px!important"> Zuständige : </b>
+
+            @if (Model.PersonalAngabens != null && Model.PersonalAngabens.Any())
+            {
+                <div class="personnel-list">
+                    @foreach (var y in Model.PersonalAngabens)
+                    {
+                        <div class="person-item">
+                            <img id="img" src="@Url.Content("~/Images/"+y.Bild)" class="rounded-circle img-thumbnail" />
+                            <span>@y.Vorname @y.Nachname</span>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <button id="btndlt" type="submit" class="btn btn-default" style="margin-top:-25px;float:right;font-size:12px; border-radius:5px; padding:5px; padding-right:18px; background-color:black; color:white;" onclick="return confirmDelete();">
+                <i class='bx bxs-trash-alt bx-flashing' style="animation-duration:3s;margin-top:-6px;font-size:20px;margin-right:10px;margin-left:10px;color:red"></i>
+                <b style="font-size:15px">Löschen </b>
+
+            </button>
+        </div>
+
+
+    }
+</div>
+<hr style="color:red" />
+
+
+
+
+<div>
+    <div class="mt-2">
+        <button onclick="location.href='@Url.Action("Details", "PersonalProjektes", new { id = Model.PerProjID })'" class="btn btn-secondary" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Abbrechen</button>
+    </div>
+</div>
+
+
+<audio id="errorSound" src="/THEMA/klang_datei/error-sound2.mp3" preload="auto"></audio>
+<script>
+    function confirmDelete() {
+        var errorSound = document.getElementById("errorSound");
+        errorSound.currentTime = 0; // Baştan başlat
+        errorSound.play();
+        return confirm("\n ACHTUNG ❗ \n \nDiese Kunde & Firma und alle zugehörigen Daten werden dauerhaft gelöscht! Bitte bestätigen Sie den Löschvorgang❗\n");
+    }
+</script>
+

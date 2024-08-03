@@ -1,0 +1,420 @@
+﻿@model CrmAPP.Models.Projekt.PersonalProjekte
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var ansprechpartnerList = ViewBag.AnsprechpartnerList as List<CrmAPP.Models.Kunden.Ansprechpartner>;
+    var selectedAnsprechpartnerIds = ViewBag.SelectedAnsprechpartnerIds as List<int> ?? new List<int>();
+    var selectedPersonalIds = ViewBag.SelectedPersonalIds as List<int> ?? new List<int>();
+}
+
+@*<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />*@
+@*<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>*@
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+
+<style>
+    .my-custom-card {
+        background-color: #d7d7d7;
+        color: dimgray;
+        font-size: 15px !important;
+    }
+
+    .input-group-text {
+        background-color: #e9ecef; /* Açık gri */
+        border: 1px solid #ced4da;
+        /* ...diğer stiller */
+    }
+</style>
+
+
+<link href="~/Content/select2.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/select2.min.js"></script>
+
+
+
+
+@using (Html.BeginForm("Create", "PersonalProjektes", FormMethod.Post, new { id = "projektForm", @class = "needs-validation", novalidate = "novalidate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="col-xl ">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Neues Projekt Anlegen</h5>
+                <hr />
+                <br />
+                <br />
+
+
+                <!-- === Projekt Infos === -->
+                <div class="mb-4 col-md-4">
+                    <label class="form-label" for="basic-default-fullname">Projekt Titel</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class='bx bx-briefcase'></i></span>
+                        @Html.TextBoxFor(m => m.Projektname, new { @class = "form-control", style = "width:40%!important", maxlength = "30", @required = "required" })
+
+                    </div>
+                   
+                </div>
+
+
+
+                <!-- === Projektbeschreibung === -->
+                <div class="mb-4 col-md-4">
+                    <label class="form-label">Beschreibung</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class='bx bx-folder-open'></i></span>
+                        @Html.TextBoxFor(m => m.Erklärung, new { @class = "form-control", style = "width:40%!important", maxlength = "50", @required = "required" })
+                    </div>
+                </div>
+
+
+                <!-- === Priorität === -->
+                <div class="mb-4 col-md-4">
+                    <label class="form-label">Setzen Sie Priorität fürs Projekt!</label>
+                    <div class="input-group ">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class='bx bx-directions'></i></span>
+                        @Html.DropDownListFor(m => m.Priorität, new SelectList(new[] {
+                            new { Value = "", Text = "Priorität" },
+                            new { Value = "high", Text = " » Prio-H (⭐⭐⭐) & dringend erforderlich " },
+                            new { Value = "middle", Text = " » Prio-M (⭐⭐) & zeitnach bearbeiten" },
+                            new { Value = "low", Text = " » Prio- L (⭐) & niedrig-optional" }
+                        }, "Value", "Text", Model.Priorität), new { @class = "form-control", required = "required" })
+                    </div>
+                </div>
+
+
+                <!-- Kunden aussuchen -->
+                <div class="mb-4 col-md-4">
+                    <label class="form-label" for="kundenDropdown">Firma & Kunde</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class='bx bx-group'></i>  -  <i class='bx bx-building-house'></i></span>
+                        @Html.DropDownList("SelectedKundenId", (SelectList)ViewBag.KundenDatenID, "-Kunde & Firma auswählen-", new { @class = "form-control", id = "kundenDropdown", required = "required" })
+                    </div>
+
+                </div>
+
+                <!--Ansprechpartner-->
+
+                <div id="selectedAnsprechpartnerCards" class="mb-4 col-md-4 mt-0"></div>
+                <div class="col-md-4">
+                    <small class="mb-0 text-muted">Ansprechpartner</small>
+                    <select id="ansprechpartnerDropdown" name="SelectedAnsprechpartnerIds" class="form-select" multiple>
+                        @if (ansprechpartnerList != null)
+                        {
+                            foreach (var ap in ansprechpartnerList)
+                            {
+                                <option value="@ap.Id"
+                                        @(selectedAnsprechpartnerIds.Contains(ap.Id) ? "selected" : "")
+                                        data-tel="@ap.Tel"
+                                        data-mail="@ap.Mail"
+                                        data-filiale="@ap.Filiale">
+                                    @ap.Name
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div id="hiddenSelectedAnsprechpartnerInputs"></div>
+                <div class="mb-1 col-md-4" style="width:35%!important"><small class="text-muted col" style="max-width:40%!important">Um mehrere Kontaktpersonen hinzuzufügen, halten Sie bitte die <kbd>STRG</kbd>-Taste gedrückt.</small></div>
+                <br />
+                <br />
+
+                <!--Mitarbeiter (Person Einbeziehen) -->
+                <h4 class="mt-1">Person Einbeziehen</h4>
+                <div class=" col-md-4" style="width:40%!important">
+                    <i style="color: red;font-size:11px">Hinweis: </i>
+                    <small class="text-muted" style="font-size:10px !important;padding-right:10px; max-width:40%!important">Wenn Sie mehr als eine Person zu einem Projekt hinzufügen möchten,  klicken Sie aufs " + " Symbol</small>
+                </div>
+                <hr style="width:40% !important;margin-top:0px" />
+
+                <div class="mb-4  col-md-5" style="display: flex; align-items: center; gap: 10px;">
+
+                    <div class="input-group">
+                        <span class="input-group-text"><i class='bx bx-user-circle'></i></span>
+
+                        <select id="personalDropdown" class="form-select col-md-4 col-4">
+                            <option value="" selected>- Person auswählen -</option>
+                            @foreach (var item in (SelectList)ViewBag.PersonalDatenID)
+                            {
+                                <option value="@item.Value" @(selectedPersonalIds.Contains(Convert.ToInt32(item.Value)) ? "disabled style='display:none'" : "")>@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="button" id="addPersonalBtn" class="btn btn-success ">
+                        <i class="bx bx-plus"></i>
+                    </button>
+                </div>
+                <div id="selectedPersonalCards" class="col g-2 mt-2 mb-3"></div>
+                <div id="hiddenSelectedPersonalInputs">
+                    @foreach (var pid in selectedPersonalIds)
+                    {
+                        <input type="hidden" name="SelectedPersonalIds" value="@pid" />
+                    }
+                </div>
+
+            </div>
+            <br />
+        </div>
+    </div>
+    <div>
+        <i style="font-size:9px">Neues Projekt</i>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-sm btn-warning" style="color:black !important "><i class='bx bx-add-to-queue'></i>Erstellen</button>
+    </div>
+    <hr />
+}
+<div>
+    <div class="mt-0">
+        <a href="/PersonalProjektes/Index" class="btn btn-sm btn-secondary">
+            <i class='bx bx-chevron-left' style="margin-left:-10px"></i> Zurück zur Liste
+        </a>
+    </div>
+</div>
+
+<audio id="errorSound" src="~/THEMA/klang_datei/error-sound2.mp3"></audio>
+
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        // Hata sesini çal
+                        var errorSound = document.getElementById('errorSound');
+                        if (errorSound) {
+                            errorSound.currentTime = 0;
+                            errorSound.play();
+                            alert("Bitte füllen Sie alle Felder aus !");
+                        }
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
+<script>
+    // ==== ANSPRECHPARTNER ====
+    function updateAnsprechpartnerCards() {
+        const dropdown = document.getElementById('ansprechpartnerDropdown');
+        const cardsDiv = document.getElementById('selectedAnsprechpartnerCards');
+        const hiddenInputsDiv = document.getElementById('hiddenSelectedAnsprechpartnerInputs');
+        cardsDiv.innerHTML = '';
+        hiddenInputsDiv.innerHTML = '';
+
+        Array.from(dropdown.selectedOptions).forEach(opt => {
+            if (opt.value) {
+                const name = opt.textContent || '';
+                const tel = opt.getAttribute('data-tel') || '';
+                const mail = opt.getAttribute('data-mail') || '';
+                const filiale = opt.getAttribute('data-filiale') || '';
+
+                const card = document.createElement('div');
+                card.className = '';
+                card.innerHTML = `
+              <div class="card shadow-sm p-2 mb-2 fixed-card" style="background:#ececec;">
+                   <div class="row g-1 align-items-center">
+                      <div class="col ml-5">
+                          <div class="mb-3 mt-1" style=" margin-left:7px;"><u><b>${name}</b></u></div>
+                              <div class="small mb-2 d-flex">
+                                  <i class="bx bx-phone-call" style="color: #28a745; margin-right:10px; margin-left:10px; flex-shrink: 0;"></i>
+                                  <div style="flex: 1; min-width: 0; word-wrap: break-word;">${tel}</div>
+                              </div>
+                             <div class="small mb-2 d-flex">
+                                  <i class="bx bx-envelope" style="color: #ff4d4f; margin-right:10px; margin-left:10px; flex-shrink: 0;"></i>
+                                  <div style="flex: 1; min-width: 0; word-wrap: break-word;">${mail}</div>
+                             </div>
+                             <div class="small mb-2 d-flex">
+                                  <i class="bx bx-map" style="color: #0d6efd; margin-right:10px; margin-left:10px; flex-shrink: 0;"></i>
+                                  <div style="flex: 1; min-width: 0; word-wrap: break-word;">${filiale}</div>
+                             </div>
+                          </div>
+                          <div class="col-auto  align-items-start">
+                                <button type="button" class="btn-close" aria-label="Remove" onclick="removeAnsprechpartnerCardByValue('${opt.value}')"></button>
+                         </div>
+                     </div>
+                   </div>
+                </div>
+                `;
+                cardsDiv.appendChild(card);
+
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'SelectedAnsprechpartnerIds';
+                hiddenInput.value = opt.value;
+                hiddenInputsDiv.appendChild(hiddenInput);
+            }
+        });
+
+        Array.from(dropdown.options).forEach(opt => {
+            opt.style.display = opt.selected ? 'none' : '';
+        });
+    }
+
+    function removeAnsprechpartnerCardByValue(val) {
+        $('#ansprechpartnerDropdown option[value="' + val + '"]').prop('selected', false).show();
+        updateAnsprechpartnerCards();
+    }
+
+    $('#ansprechpartnerDropdown').on('change', function () {
+        updateAnsprechpartnerCards();
+    });
+
+    $('#kundenDropdown').change(function () {
+        var kundenId = $(this).val();
+        var dropdown = $('#ansprechpartnerDropdown');
+        dropdown.empty();
+
+        if (kundenId) {
+            $.ajax({
+                url: '/PersonalProjektes/GetAnsprechpartnerByKunde',
+                type: 'GET',
+                data: { kundenId: kundenId },
+                success: function (data) {
+                    if (data.length > 0) {
+                        $.each(data, function (i, item) {
+                            dropdown.append('<option value="' + item.Id + '"' +
+                                ' data-tel="' + (item.Tel || '') + '"' +
+                                ' data-mail="' + (item.Mail || '') + '"' +
+                                ' data-filiale="' + (item.Filiale || '') + '">' +
+                                item.Name +
+                                '</option>');
+                        });
+                    } else {
+                        dropdown.append('<option value="">Keine Ansprechpartner gefunden</option>');
+                    }
+                    updateAnsprechpartnerCards();
+                },
+                error: function () {
+                    alert('Fehler beim Laden der Ansprechpartner');
+                }
+            });
+        } else {
+            $('#ansprechpartnerDropdown').empty();
+            updateAnsprechpartnerCards();
+        }
+    });
+
+    // --PERSONAL--
+    $(document).ready(function () {
+        updateAnsprechpartnerCards();
+        $('#ansprechpartnerDropdown').select2({
+            placeholder: "-- Ansprechpartner auswählen --"
+        });
+        // Seçili personelleri kart olarak göster
+        selectedPersonalIds.forEach(function (pid) {
+            var name = $('#personalDropdown option[value="' + pid + '"]').text();
+            if (name) addPersonalCard(pid, name);
+        });
+        updatePersonalDropdown();
+    });
+
+
+
+    // -- Personal DropDown: Seçilen kişi diğer dropdownlarda görünmesin--
+    function updatePersonalDropdown() {
+        const selectedIds = [];
+        $('#hiddenSelectedPersonalInputs input').each(function () {
+            selectedIds.push($(this).val());
+        });
+        $('#personalDropdown option').each(function () {
+            if (!$(this).val()) return;
+            if (selectedIds.includes($(this).val())) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
+    }
+
+
+    //   ======= PERSONAL WAHL =======
+    function addPersonalCard(personId, personName) {
+        if ($('#hiddenSelectedPersonalInputs input[value="' + personId + '"]').length > 0)
+            return; // Aynı kişiyi tekrar ekleme
+
+        //==Personal DIV=
+        const card = document.createElement('div');
+        card.className = 'col-3 col-md-3';
+        card.innerHTML = `
+            <div class="card my-custom-card shadow-sm p-1 mb-2">
+                <div class="row g-1 align-items-center">
+                    <div class="col">
+                        <div class="mb-1 mt-1"><b style="margin-left:10px">${personName}</b></div>
+                    </div>
+                    <div  class="col-auto d-flex align-items-start " >
+                        <button type="button" class="btn-close" onclick="removePersonalCardByValue('${personId}')">
+
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        `;
+        document.getElementById('selectedPersonalCards').appendChild(card);
+
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'SelectedPersonalIds';
+        hiddenInput.value = personId;
+        document.getElementById('hiddenSelectedPersonalInputs').appendChild(hiddenInput);
+
+        updatePersonalDropdown();
+    }
+
+    function removePersonalCardByValue(val) {
+        $('#hiddenSelectedPersonalInputs input[value="' + val + '"]').remove();
+        $('#selectedPersonalCards .card').filter(function () {
+            return $(this).find('.btn-close').attr('onclick').includes(val);
+        }).parent().remove();
+        updatePersonalDropdown();
+    }
+
+    $('#addPersonalBtn').click(function () {
+        const dropdown = $('#personalDropdown');
+        const personId = dropdown.val();
+        const personName = dropdown.find('option:selected').text();
+        if (personId) {
+            addPersonalCard(personId, personName);
+            dropdown.val('');
+        }
+    });
+</script>
+<script>
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('.needs-validation');
+
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+
+                        // Sesli uyarı
+                        var errorSound = document.getElementById('errorSound');
+                        if (errorSound) {
+                            errorSound.currentTime = 0;
+                            errorSound.play();
+                        }
+
+                        // Ekranda alert ver
+                        alert("⚠️ Bitte füllen Sie alle Pflichtfelder korrekt aus!");
+
+                        form.classList.add('was-validated');
+                        return false;
+                    }
+                }, false);
+            });
+    })();
+</script>

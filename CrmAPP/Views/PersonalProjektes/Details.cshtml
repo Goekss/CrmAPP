@@ -1,0 +1,347 @@
+﻿@model CrmAPP.Models.Projekt.PersonalProjekte
+
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+<br />
+<br />
+<h2>Projekt Details <i class="bx bxs-detail"></i></h2>
+
+<hr />
+<br />
+
+<style>
+
+
+    /* Personal Listen Container */
+    .personnel-list {
+        display: flex; /* Flexbox Layout, ordnet die Elemente horizontal / Flexbox düzeni, öğeleri yatayda sıralar */
+        flex-wrap: wrap; /* Erlaubt es, dass die Elemente umgebrochen werden / Öğeleri sarar (wrap) */
+        gap: 20px; /* Der Abstand zwischen den Elementen beträgt 10px / Öğeler arasında 10px boşluk bırakır */
+        padding-left: 40px !important; /* Setzt 40px Padding auf der linken Seite / Sol tarafta 40px boşluk bırakır */
+        cursor: zoom-in; /* Zeigt einen Zoom-in-Cursor an, wenn der Mauszeiger über das Element geht / Fare üzerine gelindiğinde yakınlaştırma işareti gösterir */
+    }
+
+    /* Jedes Personen-Element */
+    .person-item {
+        margin-top: 10px !important; /* Fügt oben 10px Abstand hinzu / Üst margin'i 10px yapar */
+        display: flex; /* Ordnet die Elemente mit Flexbox horizontal an / Öğeleri flexbox ile yatayda hizalar */
+        align-items: center; /* Zentriert die Elemente vertikal / Öğeleri dikeyde ortalar */
+        color: dimgray; /* Setzt die Textfarbe auf dimgray / Yazı rengini koyu gri yapar */
+        gap: 10px; /* Der Abstand zwischen Bild und Name beträgt 10px / Resim ile isim arasındaki boşluğu 10px yapar */
+        padding: 10px; /* Fügt innen 10px Padding hinzu / İçeride 10px padding bırakır */
+        position: relative; /* Setzt die Position des Elements auf relativ / Öğenin konumunu göreli yapar */
+        transition: all 0.3s ease; /* Fügt eine Übergangsanimation von 0.3 Sekunden hinzu / Tüm özelliklerde 0.3 saniyelik geçiş animasyonu ekler */
+        flex: 1 1 250px; /* Stellt sicher, dass das Element eine min. Breite von 250px hat und flex. ist / Öğeyi flexbox ile esnek yapar ve min. genişliği 250px olarak ayarlar */
+        max-width: 350px; /* Maximale Breite des Elements auf 250px setzen / Öğenin maksimum genişliğini 250px olarak sınırlar */
+        box-sizing: border-box; /* Berücksichtigt Padding und Border bei der Größenberechnung / Border ve padding'i öğenin genişliği hesaplamasına dahil eder */
+    }
+
+        /* Bildgröße */
+        .person-item img {
+            width: 60px !important; /* Setzt die Breite des Bildes auf 50px / Resmin genişliğini 50px yapar */
+            height: 60px !important; /* Setzt die Höhe des Bildes auf 50px / Resmin yüksekliğini 50px yapar */
+            object-fit: cover; /* Stellt sicher, dass das Bild das Containerverhältnis behält / Resmi orantılı olarak keser ve kapsar */
+            border-radius: 10px !important; /* Macht die Ecken des Bildes abgerundet / Resme 10px yuvarlak köşe verir */
+            transition: all 1.5s ease; /* Fügt eine Übergangsanimation von 1.5 Sekunden hinzu / Resmin tüm özelliklerinde 1.5 saniyelik geçiş animasyonu ekler */
+        }
+
+        /* Hover Effects - Bildgröße wächst bei Hover */
+        .person-item:hover img {
+            transform: scale(1.3); /* Vergrößert das Bild bei Hover mit transform / Resmi büyütmek için transform kullanır, boyut değişimi ile layout kayması engellenir */
+            transition: transform 1.5s ease; /* Übergang für die Transform-Eigenschaft / Resmin büyüme animasyonunu 1.5 saniye ile geçiş yapar */
+            width: 60px !important;
+            height: 60px !important;
+            margin-right: 10px;
+        }
+
+        /* Schriftgröße des Namens wächst bei Hover */
+        .person-item:hover span {
+            font-size: 1rem; /* Vergrößert die Schriftgröße des Namens bei Hover / İsmin font boyutunu hover durumunda 1.2rem yaparak büyütür */
+            transition: transform 1.5s ease;
+            color: black !important;
+        }
+
+    /* Media Query: Wenn die Bildschirmgröße unter 900px fällt */
+    @@media (max-width: 900px) {
+        .personnel-list {
+            flex-wrap: wrap; /* Stellt sicher, dass die Elemente weiterhin umgebrochen werden / Öğeleri sarmasına (wrap) izin verir */
+            padding-left: 0 !important; /* Setzt das Padding auf der linken Seite auf 0 / Sol taraftaki padding'i sıfırlar */
+            gap: 20px; /* Vergrößert den Abstand zwischen den Elementen auf 20px / Öğeler arasındaki boşluğu 20px yapar */
+        }
+
+        .person-item {
+            max-width: 45%; /* Setzt die maximale Breite der Elemente auf 45%, wenn der Bildschirm kleiner als 900px ist / Ekran 900px altına düştüğünde öğelerin genişliği %45 olur */
+        }
+    }
+
+    /* Media Query: Wenn die Bildschirmgröße unter 700px fällt */
+    @@media (max-width: 700px) {
+        .personnel-list {
+            flex-wrap: wrap; /* Stellt sicher, dass die Elemente weiterhin umgebrochen werden / Öğeleri sarmasına (wrap) izin verir */
+            gap: 15px; /* Verkleinert den Abstand zwischen den Elementen auf 15px / Öğeler arasındaki boşluğu biraz daha küçültür */
+        }
+
+        .person-item {
+            max-width: 100%; /* Setzt die maximale Breite der Elemente auf 100%, wenn der Bildschirm sehr klein ist / Ekran çok küçükse her öğe tam genişlik alacak */
+        }
+    }
+
+    #lgsimg {
+        max-width: 100px;
+        max-height: auto;
+        min-width: 100px;
+        min-height: auto;
+        margin-left: 15px;
+        box-shadow: 5px 6px 7px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
+
+
+
+
+
+<div class="">
+
+    <div class="mt-5 ">
+        <b class="form-label">Kunden & Unternehmen :</b>
+        @foreach (var kunde in Model.KundenDatens)
+        {
+            <div class="mt-4 mb-2">
+                <img id="lgsimg" src="@Url.Content("~/Logos/" + kunde.Logo)" class="rounded">
+                <b style="color: black; margin-left: 15px;">@kunde.Unternehmen</b>
+
+                <hr style="width:7%" />
+                <div class="accordion accordion-popout mt-3 w-75" id="accordionPopout">
+                    @if (Model.Ansprechpartner != null && Model.Ansprechpartner.Any(a => a.KundenDatenID == kunde.KundenDatenID))
+                    {
+                        var index = 0;
+                        foreach (var partner in Model.Ansprechpartner.Where(a => a.KundenDatenID == kunde.KundenDatenID))
+                        {
+                            string collapseId = "collapsePartner" + index + "_" + kunde.KundenDatenID;
+                            string headingId = "headingPartner" + index + "_" + kunde.KundenDatenID;
+
+                            <div class="accordion-item w-50">
+                                <h2 class="accordion " id="@headingId">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId" style="background-color:#eaeaea">
+                                        Kontaktperson - @(index + 1)
+                                    </button>
+                                </h2>
+
+                                <div id="@collapseId" class="accordion-collapse collapse " aria-labelledby="@headingId">
+                                    <div class="accordion-body" style="margin-left:30px;">
+                                        <label class="mb-3 mt-2 "><u style="color:cadetblue"> <b>@(partner.Name)</b> </u></label>
+                                        <br />
+                                        <span>
+                                            <i class="bx bx-phone-call" style="color: #28a745; margin-right: 14px"></i>:
+                                            <a href="tel:@partner.Tel">@partner.Tel </a>
+                                        </span>
+                                        <br />
+                                        <span>
+                                            <i class="bx bx-envelope" style="color: #ff4d4f; margin-right: 14px"></i>:
+                                            <a href="mailto:@partner.Mail">@partner.Mail</a>
+                                        </span>
+                                        <br />
+                                        @{
+                                            var url = "https://www.google.com/maps/search/?api=1&query=" + HttpUtility.UrlEncode(partner.Filiale);
+                                        }
+                                        <span>
+                                            <i class="bx bx-building-house" style="color: lightslategray; margin-right: 14px"></i>:
+
+                                            <a href="@url" target="_blank" style=" text-decoration: underline">@partner.Filiale</a>
+                                        </span>
+                                        <small style="color:red !important" class="text-muted">(Filiale)</small>
+                                    </div>
+                                </div>
+                            </div>
+                            index++;
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning mt-2 w-25">
+                            Es wurden keine Kontaktpersonen ausgewählt!
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <hr style="width:15%" />
+    <div class="mb-3 col-md-6">
+        <b class="form-label">Projektname : </b>
+        <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Projektname)  </i>
+        @if (Model.Projektname == null)
+        {
+            <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+        }
+
+
+
+    </div>
+
+    <hr style="width:20%" />
+
+    <div class="mb-3 col-md-6">
+        <b class="form-label">Erklärung :</b>
+        <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Erklärung)</i>
+        @if (Model.Erklärung == null)
+        {
+            <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+        }
+    </div>
+    <hr style="width:25%" />
+
+    <div class="mb-3 col-md-6">
+        <b class="form-label">Startdatum :</b>
+        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Startdatum)</i>
+        @if (Model.Startdatum == null)
+        {
+            <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+        }
+    </div>
+    <hr style="width:30%" />
+
+    <div class="mb-3 col-md-6">
+        <b class="form-label">Priorität :</b>
+        <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Priorität)</i>
+        @if (Model.Priorität == null)
+        {
+            <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+        }
+    </div>
+    <hr style="width:35%" />
+
+    <div class="mb-3 col-md-6">
+        <b class="form-label">ProjektStatus in % :</b>
+        <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.ProjektStatus) %</i>
+
+    </div>
+    <hr style="width:40%" />
+
+    <div class="mb-3 col-md-6">
+        <b class="form-label">Enddatum :</b>
+        <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Enddatum)</i>
+        @if (Model.Enddatum == null)
+        {
+            <i style="margin-left: 20px; color: darkgray">keine Angabe</i>
+        }
+    </div>
+    <hr style="width:45%" />
+
+    <div class="mb-3 col-md-6">
+        <b class="form-label">Fertigstellen :</b>
+        <i style="margin-left: 20px; color: darkgray">@Html.DisplayFor(model => model.Fertigstellen)</i>
+        @if (Model.Fertigstellen == true)
+        {
+            <i class='bx bx-check' style="font-size:23px;margin-left:8px;margin-top:-8px ;color:#00ff21"></i>
+
+        }
+        else
+        {
+
+            <i class='bx bxs-error-circle' style="margin-left: 10px;margin-top:-4px ;color:orange"></i>
+            <i style="margin-left:5px">(in Bearbeitung)</i>
+        }
+    </div>
+
+    <hr style="width: 50%!important" />
+    
+    <div class="mb-4 col-md-8">
+        <b class="form-label" style="float:inline-start;padding-bottom:50px!important"> Zuständige : </b>
+        <div class="personnel-list pt-3">
+            @if (Model.PersonalAngabens != null && Model.PersonalAngabens.Any())
+            {
+                foreach (var y in Model.PersonalAngabens)
+                {
+                    var displayName = $"{y.Vorname} {y.Nachname}";
+                    var abteilung = y.Abteilung ?? ""; // Eğer Model'de rol/pozisyon varsa, yoksa "" döner.
+                    var imgSrc = !string.IsNullOrEmpty(y.Bild)
+                        ? Url.Content("~/Images/" + y.Bild)
+                        : Url.Content("~/Images/default_avatar.png"); // varsayılan avatar
+
+                    <div class="person-item" title="@displayName@(string.IsNullOrEmpty(abteilung) ? "" : $" - {abteilung}")">
+                        <img id="img" src="@imgSrc" class="rounded-circle img-thumbnail"
+                             alt="@displayName's Bild"
+                             onerror="this.onerror=null;this.src='@Url.Content("~/Images/default_avatar.png")';" />
+                        <span>
+                            <b>@displayName</b>
+                            @if (!string.IsNullOrEmpty(abteilung))
+                            {
+                                <span class="badge bg-warning text-dark" style="font-size:10px;margin-left:6px">@abteilung</span>
+                            }
+                        </span>
+                    </div>
+                }
+            }
+            else
+            {
+                <span class="text-danger"> Es wurde keine verantwortliche Person ernannt !</span>
+            }
+        </div>
+    </div>
+
+    @*<div class="mb-4 col-md-6">
+            <b class="form-label" style="float:inline-start;padding-bottom:50px!important"> Zuständige : </b>
+
+
+            <div class="personnel-list" >
+                @foreach (var y in Model.PersonalAngabens)
+                {
+                    <div class="person-item">
+
+                        <img id="img" src="@Url.Content("~/Images/"+y.Bild)" class="rounded-circle img-thumbnail" />
+                        <span>@y.Vorname @y.Nachname</span>
+
+
+                    </div>
+
+
+                }
+            </div>
+
+        </div>*@
+
+
+
+</div>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Moderator")) 
+{<div>
+        <i style="float:right;font-size:10px;margin-right:5px;"> Klicken Sie, um zur Löschseite zu gelangen.</i>
+        <br />
+
+        <div class="mt-lg-5" style=" display:inherit">
+
+            <button onclick="location.href='@Url.Action("Delete", "PersonalProjektes", new { id = Model.PerProjID })'" style=" cursor: pointer; float: right; border: 1px solid gray; font-size: 9px; border-radius: 5px; padding: 5px; padding-right: 18px; background-color:black;color:white ">
+                <i class='bx bxs-chevrons-right bx-burst' style='color:#f50404;animation-duration:4s'></i>
+                <b style="margin-left:5px">Löschen</b>
+
+            </button>
+
+        </div>
+
+
+
+    </div>}
+
+
+
+
+<br />
+<br />
+
+
+<hr />
+<div class="footer">
+    
+    <div class="">
+        <a href="/PersonalProjektes/Index" type="submit" class="btn btn-secondary" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Zurück zur Liste </a>
+    </div>
+</div>

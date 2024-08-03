@@ -1,0 +1,396 @@
+﻿@model CrmAPP.ViewModels.KundenCreateViewModel
+
+@{
+    ViewBag.Title = "Neue Kunden";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    #btnadd {
+        display: inline-block;
+        font-size: 14px;
+        color: dimgray !important;
+        background: linear-gradient(to right, orange 0%, white 100%);
+        background-size: 200% 100%;
+        background-position: right bottom;
+        border: 1px solid white !important;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.4s ease-in-out;
+    }
+
+        #btnadd:hover {
+            border: 1px solid #b7b7b7 !important;
+            background-position: left bottom;
+            color: black !important;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+</style>
+
+<h2>Neue Kunden</h2>
+<br />
+<br />
+
+@using (Html.BeginForm("Create", "KundenDatens", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card mb-6 content-wrapper">
+        <div class="card-body container-xxl flex-grow-1 container-p-y">
+            <div class="row mb-6 gy-6">
+                <div class="col-xl">
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <h5>Neue Kunden anlegen</h5>
+                            <hr /><br /><br />
+
+                            <!-- Firma -->
+                            <div class="mb-6">
+                                @Html.LabelFor(m => m.Kunde.Unternehmen, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-building'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.Unternehmen, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Unternehmen, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- Vorname -->
+                            <div class="form-group">
+                                <b>Vorname</b><span style="font-size:9px!important;color:red">*</span>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-user'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.Vorname, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Vorname, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- Nachname -->
+                            <div class="form-group">
+                                <b>Nachname</b><span style="font-size:9px!important;color:red">*</span>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-user-pin'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.Nachname, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Nachname, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- Logo -->
+                            <div class="mb-3 col-md-5">
+                                @Html.LabelFor(m => m.Kunde.Logo, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-image"></i></span>
+                                    <input type="file" name="Symbol" class="form-control" accept="image/*" />
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Kunde.Logo, "", new { @class = "text-danger" })
+                            </div>
+                            <div id="logoPreview" class="mb-3"></div>
+                            <br />
+                         
+                            <!-- Email -->
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Kunde.Email, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-envelope'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.Email, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- TelefonMobil -->
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Kunde.TelefonMobil, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-mobile'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.TelefonMobil, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.TelefonMobil, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <!-- TelefonHaus -->
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Kunde.TelefonHaus, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-phone-call'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.TelefonHaus, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.TelefonHaus, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <!-- ProjektAuftrag -->
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Kunde.ProjektAuftrag, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-briefcase'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.ProjektAuftrag, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.ProjektAuftrag, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <!-- Website -->
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Kunde.Website, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-world'></i></span>
+                                        @Html.EditorFor(m => m.Kunde.Website, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Website, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <!-- Adresse -->
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Kunde.Adresse, htmlAttributes: new { @class = "control-label col-md-5" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-building-house' style="color: #6c757d;"></i><small class="text-muted">(Hauptsitz)</small></span>
+                                        @Html.EditorFor(m => m.Kunde.Adresse, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Adresse, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+
+                            <!--Ansprechpartner -->
+                            <b>Kontaktpersonen</b> <small class="text-muted">(Optional)</small>
+
+                            <hr class="mt-1" />
+
+                            <div class="accordion accordion-popout mt-2 w-100 " id="accordionPopout">
+
+                                <div class="accordion-item ">
+                                    <h2 class="accordion-header mt-3 mb-2" id="headingOne">
+                                        <button class="accordion-button collapsed mb-4 " type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                            <b class="mt-2"> Ansprechpartnern*innen </b>
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse">
+                                        <div id="ansprechpartner-list" class="accordion-body" style="margin-left:30px">
+                                            @for (int i = 0; i < Model.AnsprechpartnerList.Count; i++)
+                                            {
+                                                <div class="ansprechpartner-item form-group row">
+                                                    <div class="col-md-5">
+                                                        <div class="form-group ">
+                                                            <div class="input-group">
+                                                                <span class="input-group-text"><i class='bx bx-user' style="color:dimgray"></i></span>
+                                                                @Html.TextBoxFor(m => m.AnsprechpartnerList[i].Name, new { @class = "form-control", placeholder = "Vor-Nachname" })
+                                                            </div>
+                                                            @Html.ValidationMessageFor(m => m.AnsprechpartnerList[i].Name, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text"><i class='bx bx-phone-call' style="color: #28a745;"></i></span>
+                                                                @Html.TextBoxFor(m => m.AnsprechpartnerList[i].Tel, new { @class = "form-control", placeholder = "Telefon" })
+                                                            </div>
+                                                            @Html.ValidationMessageFor(m => m.AnsprechpartnerList[i].Tel, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" style="color: #ff4d4f;"><i class="bx bx-envelope"></i></span>
+                                                                @Html.TextBoxFor(m => m.AnsprechpartnerList[i].Mail, new { @class = "form-control", placeholder = "Email" })
+                                                            </div>
+                                                            @Html.ValidationMessageFor(m => m.AnsprechpartnerList[i].Mail)
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5 ">
+                                                        <div class="form-group">
+
+                                                            <div class="input-group">
+                                                                <span class="input-group-text" style="color: #0d6efd"><i class="bx bx-map"></i></span>
+                                                                @Html.TextBoxFor(m => m.AnsprechpartnerList[i].Filiale, new { @class = "form-control", placeholder = "Filiale/Location" })
+                                                            </div>
+                                                            @Html.ValidationMessageFor(m => m.AnsprechpartnerList[i].Filiale)
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- für Ansprechpartner-capselle-Bereich Warnungsmesagge-->
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <div class="alert alert-danger" style="max-width:60%">
+                                    <ul>
+                                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                        {
+                                            <li>@error.ErrorMessage</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
+                            <button type="button" id="remove-ansprechpartner" class="btn-sm btn-outline-danger small mb-3 mt-2 ms-2" style="float:inline-end">x </button>
+                            <button type="button" id="add-ansprechpartner" class="btn-sm btn-outline-success small mb-3 mt-2 ms-3" style="float:inline-end">+ </button>
+                            <br />
+
+                            <br />
+
+                            <hr class="mb-0" />
+                            <small class="mt-0" style="float:right;font-size:11px"> @Html.ValidationSummary(true, "", new { @class = "text-danger" })  </small>
+
+
+
+                            <!-- Hinweise -->
+                            <div class="form-group mt-4">
+                                @Html.LabelFor(m => m.Kunde.Hinweise, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class='bx bx-notepad'></i></span>
+                                        @Html.TextAreaFor(m => m.Kunde.Hinweise, new { @class = "form-control", rows = "3", required = "required" })
+                                    </div>
+                                    @Html.ValidationMessageFor(m => m.Kunde.Hinweise, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br /><br />
+
+                            <div class="form-group">
+                                <button id="btnadd" type="submit" class="btn btn-sm btn-default" style="border:1px solid gray; border-radius:5px; padding:5px; padding-right:18px; background-color:#b2b2b2;">
+                                    <i class="bx bx-plus" style="margin-left:9px; margin-right:7px; color:black"></i><b>Anlegen</b>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<br />
+<hr />
+<div class="mt-0">
+    <a href="/KundenDatens/Index/" class="btn btn-sm btn-secondary">
+        <i class='bx bx-chevron-left' style="margin-left:-10px"></i> Zurück zur Liste
+    </a>
+</div>
+
+
+
+
+
+
+<audio id="errorSound" src="~/THEMA/klang_datei/error-sound2.mp3"></audio>
+
+
+@section scripts{
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+   $(function () {
+    // Sayfa ilk açıldığında kaç tane Ansprechpartner olduğunu sayıyoruz
+    var initialCount = $('.ansprechpartner-item').length;
+    var ansprechpartnerIndex = initialCount;
+
+    // + Ansprechpartner ekle
+    $('#add-ansprechpartner').click(function () {
+                    var html = `
+            <div class="ansprechpartner-item neu-ansprechpartner form-group row mt-5">
+                <div class="col-md-5">
+                    <div class="form-group ">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class='bx bx-user' style="color:dimgray"></i></span>
+                            <input type="text" name="AnsprechpartnerList[${ansprechpartnerIndex}].Name" class="form-control" placeholder="Vor-Nachname" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class='bx bx-phone-call' style="color: #28a745;"></i></span>
+                            <input type="text" name="AnsprechpartnerList[${ansprechpartnerIndex}].Tel" class="form-control" placeholder="Telefon" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text" style="color: #ff4d4f;"><i class="bx bx-envelope"></i></span>
+                            <input type="text" name="AnsprechpartnerList[${ansprechpartnerIndex}].Mail" class="form-control" placeholder="Email" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text" style="color: #0d6efd"><i class="bx bx-map"></i></span>
+                            <input type="text" name="AnsprechpartnerList[${ansprechpartnerIndex}].Filiale" class="form-control" placeholder="Filiale/Location" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        $('#ansprechpartner-list').append(html);
+        ansprechpartnerIndex++;
+    });
+
+    // x Ansprechpartner (son eklenen yeni kutuyu sil)
+    $('#remove-ansprechpartner').click(function () {
+        var $last = $('#ansprechpartner-list .neu-ansprechpartner').last();
+        if ($last.length) {
+            $last.remove();
+            ansprechpartnerIndex--;
+        } else {
+            errorSound.play();
+            alert('Nur die neu hinzugefügten Ansprechpartner*innen können gelöscht werden.');
+        }
+    });
+});
+
+        // Logo dosya önizlemesi
+        document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            const logoPreview = document.getElementById('logoPreview');
+            logoPreview.innerHTML = '';
+            if (file) {
+                const fileSizeInKB = (file.size / 1024).toFixed(2);
+                const fileSizeInMB = (fileSizeInKB / 1024).toFixed(2);
+                if (file.type === "image/jpeg" || file.type === "image/png") {
+                    const logoUrl = URL.createObjectURL(file);
+                    logoPreview.innerHTML = `<img src="${logoUrl}" alt="logo Preview" style="max-width: 200px; max-height: 200px; object-fit: cover; border-radius:10px"/>
+                        <p style="color:dimgray;font-size:11px;margin-top:10px"><i class='bx bx-image'></i>  ${fileSizeInKB} KB ,(${fileSizeInMB} MB)</p>`;
+                } else {
+                    errorSound.play();
+                    alert("Bitte laden Sie nur Bilddateien im JPEG- oder PNG-Format hoch!");
+                    event.target.value = '';
+                }
+            }
+        });
+    </script>
+}

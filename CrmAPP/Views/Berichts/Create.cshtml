@@ -1,0 +1,120 @@
+﻿@model CrmAPP.ViewModels.BerichtCreateEditViewModel
+@{
+    ViewBag.Title = "Neuer Bericht erstellen";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<!-- Başarı mesajı -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@using (Html.BeginForm("Create", "Berichts", FormMethod.Post, new { enctype = "multipart/form-data", id = "createBerichtForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Titel)
+        @Html.TextBoxFor(m => m.Titel, new { @class = "form-control", placeholder = "z.B. Fortschrittsbericht Oktober" })
+        @Html.ValidationMessageFor(m => m.Titel, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.KundenDatenId, "Kunde")
+            @Html.DropDownListFor(m => m.KundenDatenId, Model.KundenListe, "-- Bitte Kunde wählen --", new { @class = "form-control", id = "KundenDatenId" })
+            @Html.ValidationMessageFor(m => m.KundenDatenId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(m => m.PerProjID, "Projekt")
+            @Html.DropDownListFor(m => m.PerProjID, Model.ProjektListe, "-- Zuerst Kunde wählen --", new { @class = "form-control", id = "PerProjID", disabled = "disabled" })
+            @Html.ValidationMessageFor(m => m.PerProjID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Version)
+        @Html.TextBoxFor(m => m.Version, new { @class = "form-control", placeholder = "z.B. v1.0" })
+        @Html.ValidationMessageFor(m => m.Version, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Datei (PDF, DOCX, XLSX)")
+        <input type="file" name="Datei" id="Datei" class="form-control" />
+        @Html.ValidationMessage("Datei", "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Speichern
+        </button>
+        @Html.ActionLink("Abbrechen", "Index", null, new { @class = "btn btn-secondary ml-2" })
+    </div>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const kundenSelect = document.getElementById('KundenDatenId');
+            const projSelect = document.getElementById('PerProjID');
+
+            function resetProjectDropdown(message) {
+                projSelect.innerHTML = `<option value="">${message}</option>`;
+                projSelect.disabled = true;
+            }
+
+            function fetchProjekte() {
+                const kundenId = kundenSelect.value;
+
+                if (!kundenId) {
+                    resetProjectDropdown('-- Zuerst Kunde wählen --');
+                    return;
+                }
+
+                projSelect.innerHTML = '<option value="">Lade Projekte...</option>';
+                projSelect.disabled = true;
+
+                const url = `@Url.Action("GetProjekteByKunde", "Berichts")?kundenId=${encodeURIComponent(kundenId)}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success || !Array.isArray(data.data)) {
+                            resetProjectDropdown('-- Keine Projekte gefunden --');
+                            return;
+                        }
+
+                        projSelect.innerHTML = '<option value="">-- Projekt wählen --</option>';
+                        data.data.forEach(proj => {
+                            const option = document.createElement('option');
+                            option.value = proj.value;
+                            option.textContent = proj.text;
+                            projSelect.appendChild(option);
+                        });
+
+                        projSelect.disabled = false;
+
+                        // Validation sonrası seçili proje varsa set et
+                        const selectedId = '@(Model.PerProjID)';
+                        if (selectedId && selectedId !== '0') {
+                            projSelect.value = selectedId;
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Fehler beim Laden der Projekte:', err);
+                        resetProjectDropdown('-- Fehler beim Laden --');
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                fetchProjekte(); // Her durumda çalışsın
+            });
+
+            kundenSelect.addEventListener('change', fetchProjekte);
+        })();
+    </script>
+}

@@ -1,0 +1,274 @@
+﻿@model CrmAPP.ViewModels.BerichtCreateEditViewModel
+
+@{
+    ViewBag.Title = "Bericht bearbeiten";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+<br />
+<br />
+<h2> Bericht bearbeiten</h2>
+
+
+@using (Html.BeginForm("Edit", "Berichts", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.BerichtId)
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row card">
+        <div class="col-md-8 p-3">
+            <div class="form-group mb-3">
+                @Html.LabelFor(m => m.Titel, new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.Titel, new { @class = "form-control", placeholder = "z.B. Quartalsbericht Q4" })
+                @Html.ValidationMessageFor(m => m.Titel, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(m => m.KundenDatenId, "Kunde", new { @class = "form-label" })
+                        @Html.DropDownListFor(m => m.KundenDatenId, Model.KundenListe, "-- Bitte wählen --", new { @class = "form-control", id = "KundenDatenId" })
+                        @Html.ValidationMessageFor(m => m.KundenDatenId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(m => m.PerProjID, "Projekt", new { @class = "form-label" })
+                        @Html.DropDownListFor(m => m.PerProjID, Model.ProjektListe, "-- Bitte Kunde wählen --", new { @class = "form-control", id = "PerProjID" })
+                        @Html.ValidationMessageFor(m => m.PerProjID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(m => m.Version, new { @class = "form-label" })
+                        @Html.TextBoxFor(m => m.Version, new { @class = "form-control", placeholder = "z.B. v2.1" })
+                        @Html.ValidationMessageFor(m => m.Version, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <style>
+                            .dropzone-wrapper {
+                                border: 2px dashed #007bff;
+                                border-radius: 6px;
+                                padding: 20px;
+                                text-align: center;
+                                transition: background-color 0.3s;
+                                cursor: pointer;
+                            }
+
+                                .dropzone-wrapper:hover {
+                                    background-color: #f8f9fa;
+                                }
+
+                                .dropzone-wrapper.dragover {
+                                    background-color: #e2e6ea;
+                                }
+
+                            .dropzone-message {
+                                font-size: 1rem;
+                                color: #6c757d;
+                            }
+                        </style>
+
+                        <div class="form-group mb-3">
+                            @Html.Label("Neue Datei hochladen (optional)", new { @class = "form-label" })
+
+                            <div class="dropzone-wrapper" id="dropzone">
+                                <span class="dropzone-message">
+                                    <i class="fas fa-cloud-upload-alt fa-2x"></i><br />
+                                    Datei hierher ziehen oder klicken, um auszuwählen
+                                </span>
+                                <input type="file" name="Datei" id="Datei" class="form-control-file" style="opacity:0; position:absolute; left:0; top:0;  cursor:pointer;" />
+                            </div>
+
+                            @Html.ValidationMessage("Datei", "", new { @class = "text-danger" })
+                        </div>
+                        <!-- YÜKLENEN DOSYA BİLGİSİNİN GÖSTERİLECEĞİ YER -->
+                        <div >
+                            <p id="file-info-display" class="mt-2" style="background-color:lightgray"></p>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.BestehendeDateiPfad))
+                        {
+                            var extension = System.IO.Path.GetExtension(Model.BestehendeDateiPfad)?.ToLowerInvariant();
+                            var iconClass = "fas fa-file text-muted"; // Default ikon
+                            var iconColor = "text-muted";
+
+                            switch (extension)
+                            {
+                                case ".pdf":
+                                    iconClass = "fas fa-file-pdf";
+                                    iconColor = "text-danger";
+                                    break;
+                                case ".doc":
+                                case ".docx":
+                                    iconClass = "fas fa-file-word";
+                                    iconColor = "text-primary";
+                                    break;
+                                case ".xls":
+                                case ".xlsx":
+                                    iconClass = "fas fa-file-excel";
+                                    iconColor = "text-success";
+                                    break;
+                            }
+
+                            <p class="mt-4 alert alert-primary mt-2 ">
+                                <i class="@iconClass @iconColor fa-lg me-1"></i>
+                                <strong>Bestehende Datei:</strong>
+                                <a href="@Url.Action("Download", "Berichts", new { id = Model.BerichtId })" target="_blank" class="ms-2">
+                                    @System.IO.Path.GetFileName(Model.BestehendeDateiPfad)
+                                </a>
+                            </p>
+
+                            <div class="alert alert-danger mt-2" role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Wenn Sie eine neue Datei hochladen, wird die bestehende Datei dauerhaft gelöscht.
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <hr />
+
+
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save"></i> Änderungen speichern
+
+                </button>
+
+            </div>
+            <br />
+        </div>
+    </div>
+    <br />
+    @Html.ActionLink("Abbrechen", "Index", null, new { @class = "btn btn-secondary" })
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const kundenSelect = document.getElementById('KundenDatenId');
+            const projSelect = document.getElementById('PerProjID');
+
+            function resetProjectDropdown(message) {
+                projSelect.innerHTML = `<option value="">${message}</option>`;
+                projSelect.disabled = true;
+            }
+
+            function fetchProjekte() {
+                const kundenId = kundenSelect.value;
+
+                if (!kundenId) {
+                    resetProjectDropdown('-- Bitte Kunde wählen --');
+                    return;
+                }
+
+                const url = `@Url.Action("GetProjekteByKunde", "Berichts")?kundenId=${encodeURIComponent(kundenId)}`;
+                projSelect.innerHTML = '<option>Projekte werden geladen...</option>';
+                projSelect.disabled = true;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            resetProjectDropdown('-- Fehler beim Laden --');
+                            return;
+                        }
+
+                        projSelect.innerHTML = '<option value="">-- Projekt wählen --</option>';
+                        data.data.forEach(p => {
+                            const option = document.createElement('option');
+                            option.value = p.value;
+                            option.textContent = p.text;
+                            projSelect.appendChild(option);
+                        });
+
+                        projSelect.disabled = false;
+                        projSelect.value = '@Model.PerProjID';
+                    })
+                    .catch(() => {
+                        resetProjectDropdown('-- Fehler beim Laden --');
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                if (kundenSelect.value) {
+                    fetchProjekte();
+                } else {
+                    resetProjectDropdown('-- Bitte Kunde wählen --');
+                }
+            });
+
+            kundenSelect.addEventListener('change', fetchProjekte);
+        })();
+    </script>
+}
+
+
+<script>
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("Datei");
+
+    // Drag & drop davranışı
+    dropzone.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        dropzone.classList.add("dragover");
+    });
+
+    dropzone.addEventListener("dragleave", function () {
+        dropzone.classList.remove("dragover");
+    });
+
+    dropzone.addEventListener("drop", function (e) {
+        e.preventDefault();
+        dropzone.classList.remove("dragover");
+
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+        }
+    });
+
+    // Click ile dosya seçimini tetikleme (tekrar tekrar açılmasın)
+    dropzone.addEventListener("click", function () {
+        // Şu anda zaten input aktifse tekrar tetikleme
+        if (document.activeElement === fileInput) return;
+        fileInput.click();
+    });
+</script>
+
+
+<script>
+    // Sayfa yüklendikten sonra işlemi başlatmak için
+    document.addEventListener('DOMContentLoaded', function () {
+        // Dosya input elemanını alıyoruz
+        var fileInput = document.getElementById('Datei');
+
+        // Dosya seçildiğinde tetiklenen olay
+        fileInput.addEventListener('change', function (event) {
+            var file = event.target.files[0]; // İlk dosyayı alıyoruz
+
+            // Dosya seçildiyse
+            if (file) {
+                // Dosya bilgilerini hazırlıyoruz
+                var fileInfo = `<p><strong>Ausgewählte Datei:</strong> ${file.name}</p>
+                            <p><strong>Größe:</strong> ${(file.size / 1024).toFixed(2)} KB</p>`;
+
+                // Dosya bilgilerini #file-info-display alanına ekliyoruz
+                document.getElementById('file-info-display').innerHTML = fileInfo;
+            } else {
+                // Dosya seçilmediyse mesajı temizliyoruz
+                document.getElementById('file-info-display').innerHTML = '';
+            }
+        });
+    });
+
+</script>

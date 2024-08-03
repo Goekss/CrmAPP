@@ -1,0 +1,456 @@
+﻿@model CrmAPP.Models.Personal.PersonalAngaben
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .card-body {
+        box-sizing: border-box;
+    }
+
+    option[value="Admin"] {
+        color: red !important;
+    }
+
+    option[value="Moderator"] {
+        color: black;
+    }
+
+    option[value="Personal"] {
+        color: darkgreen;
+    }
+
+    .progress-bar {
+        transition: width 2s ease;
+    }
+
+        .progress-bar.weak {
+            background-color: red;
+        }
+
+        .progress-bar.medium {
+            background-color: #ffaa00;
+        }
+
+        .progress-bar.strong {
+            background-color: forestgreen;
+        }
+
+    #btnadd {
+        display: inline-block;
+        font-size: 14px;
+        color: dimgray !important;
+        background: linear-gradient(to right, orange 0%, orange 0%, white 100%, red );
+        background-size: 200% 100%;
+        background-position: right bottom;
+        border: 1px solid white !important;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: all 0.4s ease-in-out;
+    }
+
+        #btnadd:hover {
+            border: 1px solid #dddddd !important;
+            background-position: left bottom;
+            color: black !important;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+</style>
+
+@using (Html.BeginForm("Create", "PersonalAngabens", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="card ">
+        <div class="form-horizontal">
+            <br />
+            <h4 class="card-header mt-lg-5">Mitarbeiter*innen anlegen</h4>
+            <hr>
+            <br />
+
+            <div class="card-body">
+
+                <!-- Vorname -->
+                <div class="form-group  mt-lg-2">
+                    @Html.LabelFor(model => model.Vorname, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-5 mb-3">
+                        <!--group-merge olursa ikon ve input cizgizi kalkalr bir bütünlesme yapar-->
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-icon-default-fullname2" style="background-color: #f1f1f1">
+                                <i class=" bx bxs-user"></i>
+                            </span>
+                            @Html.TextBoxFor(model => model.Vorname, new { @class = "form-control", required = "required", maxlength = "30", id = "Vorname" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Vorname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <!-- Nachname -->
+                <div class="form-group  mt-lg-2">
+                    @Html.LabelFor(model => model.Nachname, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-icon-default-fullname2" style="background-color: #f1f1f1">
+                                <i class="bx bx-id-card"></i>
+                            </span>
+                            @Html.TextBoxFor(model => model.Nachname, new { @class = "form-control", required = "required", maxlength = "30", id = "Nachname" })
+
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Nachname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <!-- Bild -->
+                <div class="form-group mt-lg-2">
+                    @Html.LabelFor(model => model.Bild, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group">
+                            <span id="basic-icon-default-fullname2" class="input-group-text" style="background-color: #f1f1f1"><i class="bx bx-image"></i></span>
+                            <input type="file" id="Bild" name="Bild" class="form-control" accept="image/*" />
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Bild, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div id="imagePreview" class="mb-3">
+                    <!-- IMAGE görseli burada görünecek -->
+                </div>
+
+
+                <!-- Email -->
+                <div class="form-group mt-lg-1">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text" style="background-color: #f1f1f1">
+                                <i class="menu-icon tf-icons bx bx-envelope"></i>
+                            </span>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", required = "required", @type = "email", maxlength = "25", placeholder = "E-Posta@example.com", @id = "Email" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <!-- Passwort -->
+                <div class="form-group mt-lg-2 mb-3">
+                    @Html.LabelFor(model => model.Passwort, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-5 mb-4">
+                        <div class="input-group">
+                            <span id="basic-icon-default-fullname2" class="input-group-text" style="background-color: #f1f1f1">
+                                <i class=" bx bxs-key"></i>
+                            </span>
+                            <input type="password" class="form-control" id="Passwort" maxlength="9" name="Passwort" placeholder="" aria-describedby="password">
+                            <span class="input-group-text cursor-pointer" style="background-color: #f1f1f1">
+                                <i class="bx bx-hide" id="togglePassword"></i>
+                            </span>
+                        </div>
+                        <!--Progress bar von Passwort-->
+                        <div class="d-flex align-items-center mt-2 " style="margin-top:5px !important ;margin-bottom:-18px !important">
+                            <div class="progress" style="height: 3px; width: 25%; background-color:#bebebe">
+                                <div id="passwordStrength" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                            </div>
+                            <!-- Şifre Güvenliği Metni -->
+                            <span class="ms-2" id="passwordStrengthText"><i clas="bx bx-check-double" style="font-size:9px !important;background-color:blue;color:white;border-radius:5px"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Rufnummer -->
+                <div class="form-group mt-5">
+                    @Html.LabelFor(model => model.RufNummer, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group ">
+                            <span id="basic-icon-default-fullname2" class="input-group-text" style="background-color: #f1f1f1">
+                                <i class="menu-icon tf-icons bx bx-phone-call"></i>
+                            </span>
+                            @Html.TextBoxFor(model => model.RufNummer, new { @class = "form-control", required = "required", type = "tel", maxlength = "20", id = "RufNummer" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--Die Rolle der Person-->
+                <div class="form-group mt-lg-2">
+                    <span>Rolle</span> <i class="bx bx-key" style="color:red"></i>
+                    <div class="col-md-2 mb-3">
+                        <div class="input-group">
+                            <span id="basic-icon-default-fullname2" class="input-group-text" style="background-color: #f1f1f1">
+                                <i class=" bx bx-key" style="color:orange"></i>
+                            </span>
+                            @Html.DropDownListFor(model => model.Rol, new List<SelectListItem>
+                            {  new SelectListItem { Text = "-- ", Value = "", Disabled = true, Selected = true },
+                               new SelectListItem { Text = "»  Admin*", Value = "Admin" },
+                               new SelectListItem { Text = "»  Moderator", Value = "Moderator" },
+                               new SelectListItem { Text = "»  Personal", Value = "Personal" }
+                            }, new { @class = "form-control", required = "required" })
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
+                </div>
+
+
+                <!-- Abteilung -->
+                <div class="form-group mt-lg-2">
+                    @Html.LabelFor(model => model.Abteilung, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-2 mb-3">
+                        <div class="input-group ">
+                            <span id="basic-icon-default-fullname2" class="input-group-text" style="background-color: #f1f1f1">
+                                <i class=" bx bx-building-house"></i>
+                            </span>
+                            @Html.DropDownListFor(model => model.Abteilung, new List<SelectListItem>  //Datenbindung icin cok iyi
+                            { new SelectListItem { Text = " Wählen", Value = "", Disabled = true, Selected = true },
+                              new SelectListItem { Text = "IT-Service", Value = "IT-Service" },
+                              new SelectListItem { Text = "Consulting", Value = "Consulting" },
+                              new SelectListItem { Text = "Recruiting", Value = "Recruiting" },
+                              new SelectListItem { Text = "Vertrieb", Value = "Vertrieb" }
+                            }, new { @class = "form-control", required = "required" })
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Berechtigung -->
+                <div class="form-group mt-lg-2">
+                    @Html.LabelFor(model => model.Berechtigung, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-2 mb-3">
+                        <div class="input-group">
+                            <span id="basic-icon-default-fullname2" class="input-group-text " style="background-color: #f1f1f1">
+                                <i class=" bx bxs-hand"></i>
+                            </span>
+                            @Html.DropDownListFor(model => model.Berechtigung, new List<SelectListItem>
+                             {    new SelectListItem { Text = "Wählen", Value = "", Disabled = true, Selected = true },
+                                  new SelectListItem { Text = "Admin*", Value = "Geschäftsführung" },
+                                  new SelectListItem { Text = "Abteilungsleiter*in", Value = "Abteilungsleiter*in" },
+                                  new SelectListItem { Text = "Mitarbeiter*in", Value = "Mitarbeiter*in" }
+                             }, new { @class = "form-control", required = "required" })
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Berechtigung, "", new { @class = "text-danger" })
+                </div>
+
+
+                <!-- Aufgaben -->
+                <div class="form-group mt-lg-2">
+                    @Html.LabelFor(model => model.Aufgaben, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group ">
+                            <span id="basic-icon-default-fullname2" class="input-group-text" style="background-color: #f1f1f1">
+                                <i class=" bx bx-task"></i>
+                            </span>
+                            @Html.TextBoxFor(model => model.Aufgaben, new { @class = "form-control", required = "required", maxlength = "70", id = "Aufgaben", placeholder = "" })
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Aufgaben, "", new { @class = "text-danger" })
+                </div>
+
+
+                <!-- Hinweise -->
+                <div class="form-group mt-lg-2">
+                    @Html.LabelFor(model => model.Hinweise, htmlAttributes: new { @class = "control-label col-md-5" })
+                    <div class="col-md-5 mb-3">
+                        <div class="input-group ">
+                            <span class="input-group-text" style="background-color: #f1f1f1">
+                                <i class="bx bx-notepad"></i>
+                            </span>
+                            @Html.TextAreaFor(model => model.Hinweise, 1, 100, new { @class = "form-control", required = "required", placeholder = "..." })
+                        </div>
+
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Hinweise, "", new { @class = "text-danger" })
+                </div>
+
+
+                <br />
+                <br />
+
+
+                <i style="font-size:10px; color:royalblue">Neue Daten</i>
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button id="btnadd" type="submit" class="btn btn-sm btn-default" style="border:1px solid gray; border-radius:5px; padding:5px; padding-right:18px; background-color:#b2b2b2; color:black" onclick="return validateForm();">
+                        <i class="bx bx-plus" style="margin-left:9px; margin-right:7px; color:black"></i>
+                        Erstellen
+                    </button>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+    </div>
+
+
+}
+
+<hr />
+
+<div>
+    <div class="mt-0">
+        <a href="/PersonalAngabens/Index" class="btn btn-sm btn-secondary">
+            <i class='bx bx-chevron-left' style="margin-left:-10px"></i> Zurück zur Liste
+        </a>
+    </div>
+</div>
+
+<!--
+// Parça                 | Görevi
+
+// DropDownListFor       | Açılır liste oluşturur +
+// Razor                 | Dinamik HTML üretir +
+// ModelBinding          | Form verisini modele bağlar +
+// required              | HTML5 ile boş geçmeyi engeller (client-side)
+// ValidationMessageFor  | Hata mesajı gösterir
+// TextBoxFor            | Input alanı oluşturur
+// input-group           | İkon + input hizalar (Bootstrap)
+// ViewBag               | Controller'dan veri taşır +
+// AntiForgeryToken      | Güvenlik sağlar (CSRF)
+// JS validate           | Formu gönderilmeden kontrol eder
+-->
+
+<!--
+ Parça                       | Görevi
+
+ @@Html.ValidationMessageFor | Modeldeki doğrulama hatalarını gösterir
+ @@ViewBag                   | Controller'dan View'e veri taşır
+ @@Html.TextBoxFor           | Modele bağlı input alanı üretir
+ @@Html.DropDownListFor      | Modele bağlı açılır liste üretir
+ @@Html.AntiForgeryToken     | CSRF saldırılarına karşı koruma sağlar
+ @@Html.LabelFor             | Input’a ait başlık (label) üretir
+ ModelState.IsValid          | Form verisi kurallara uygun mu kontrol eder
+ Html.BeginForm              | Form başlatır, post ayarlarını belirler
+ @@Html.TextAreaFor          | Modele bağlı çok satırlı alan üretir
+-->
+
+
+<audio id="errorSound" src="~/THEMA/klang_datei/error-sound2.mp3"></audio>
+<audio id="successSound" src="~/THEMA/klang_datei/success.mp3"></audio>
+
+<!-- IMAGE Preview -->
+<script>
+    document.querySelector('input[type="file"]').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const imagePreview = document.getElementById('imagePreview');
+        imagePreview.innerHTML = '';
+        if (file) {
+            const fileSizeInBytes = file.size;
+            const fileSizeInKB = (fileSizeInBytes / 1024).toFixed(2);
+            const fileSizeInMB = (fileSizeInKB / 1024).toFixed(2);
+            if (file.type === "image/jpeg" || file.type === "image/png") {
+                const imageUrl = URL.createObjectURL(file);
+                imagePreview.innerHTML = `
+                    <img src="${imageUrl}" alt="Image Preview" style="max-width: 200px; max-height: 200px; object-fit: cover;  border-radius:10px"/>
+                    <p style="color:dimgray;font-size:11px;margin-top:10px"><i class='bx bx-image'></i>  ${fileSizeInKB} KB ,(${fileSizeInMB} MB)</p>
+                `;
+            } else {
+                alert("Lütfen yalnızca JPEG veya PNG formatında bir resim dosyası yükleyin!");
+                event.target.value = '';
+            }
+        }
+    });
+</script>
+
+<script>
+    function validateEmail(email) {
+        // Temel bir e-posta doğrulama regex'i & Ein grundlegender E-Mail-Bestätigungs-Regex
+        var re = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+        return re.test(email);
+    }
+
+    function validateForm() {
+        var bild = document.getElementById("Bild").value;
+        var vorname = document.getElementById("Vorname").value;
+        var nachname = document.getElementById("Nachname").value;
+        var email = document.getElementById("Email").value;
+        var passwort = document.getElementById("Passwort").value;
+        var rufnummer = document.getElementById("RufNummer").value;
+        var abteilung = document.getElementById("Abteilung").value;
+        var aufgaben = document.getElementById("Aufgaben").value;
+        var berechtigung = document.getElementById("Berechtigung").value;
+        var hinweise = document.getElementById("Hinweise").value;
+
+        // Boş alan kontrolü
+        if (!vorname || !nachname || !bild || !email || !passwort || !rufnummer || !abteilung || !aufgaben || !berechtigung || !hinweise) {
+            errorSound.play();
+            alert("\n VORSICHT ⚠  \n \n Bitte vervollständigen Sie alle jedes Felder !");
+            return false;
+        }
+        // Email kontrolü
+        if (!validateEmail(email)) {
+            errorSound.play();
+            alert("\n VORSICHT ⚠  \n \n Bitte geben Sie eine gültige E-Mail-Adresse ein!");
+            return false;
+        }
+        // Abteilung ve Berechtigung SCHALTER
+        if (!abteilung || abteilung === "wählen") {
+            errorSound.play();
+            alert("\n VORSICHT ⚠  \n \n Bitte wählen Sie eine Abteilung aus !");
+            return false;
+        }
+        if (!berechtigung || berechtigung === "wählen") {
+            errorSound.play();
+            alert("\n VORSICHT ⚠  \n \n Bitte wählen Sie eine Berechtigung aus !");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.querySelector("#togglePassword");
+        const passwordField = document.querySelector("#Passwort");
+        togglePassword.addEventListener("click", function () {
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+            this.classList.toggle("bx-show");
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const passwordField = document.querySelector("#Passwort");
+        const passwordStrengthBar = document.querySelector("#passwordStrength");
+        passwordField.addEventListener("input", function () {
+            const password = passwordField.value;
+            const strength = calculatePasswordStrength(password);
+            if (strength === 1) {
+                passwordStrengthBar.style.width = "33%";
+                passwordStrengthBar.classList.remove("medium", "strong");
+                passwordStrengthBar.classList.add("weak");
+            } else if (strength === 2) {
+                passwordStrengthBar.style.width = "66%";
+                passwordStrengthBar.classList.remove("weak", "strong");
+                passwordStrengthBar.classList.add("medium");
+            } else if (strength === 3) {
+                passwordStrengthBar.style.width = "100%";
+                passwordStrengthBar.classList.remove("weak", "medium");
+                passwordStrengthBar.classList.add("strong");
+            } else {
+                passwordStrengthBar.style.width = "0%";
+                passwordStrengthBar.classList.remove("weak", "medium", "strong");
+            }
+        });
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 1 && password.length < 6) {
+                strength = 1;
+            }
+            if (password.length >= 6 && password.length < 8) {
+                strength = 2;
+            }
+            if (password.length >= 8) {
+                strength = 3;
+            }
+            return strength;
+        }
+    });
+</script>

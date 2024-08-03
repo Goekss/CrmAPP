@@ -1,0 +1,282 @@
+﻿@model IEnumerable<CrmAPP.Models.Personal.PersonalAngaben>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- DataTables Bootstrap 5 Style -->
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<!-- DataTables Buttons extension CSS -->
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- DataTables Buttons extension -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+
+<!-- JSZip (Excel export için) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<!-- pdfmake (PDF export için) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<!-- DataTables HTML5 export ve print -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+
+
+
+
+<style>
+    .table {
+        width: 100%;
+        table-layout: auto;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+            font-size: 13px;
+            height: 60px;
+        }
+
+    .dataTables_filter {
+        float: right;
+        margin-bottom: 45px;
+    }
+
+    .pagination .active .page-link, button {
+        background-color: cadetblue !important;
+        font-size: 12px !important;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px 5px;
+        white-space: nowrap;
+        background-color: #4c7e80;
+        color: white !important;
+        height: 50px;
+    }
+
+        table.dataTable thead th.sorting:after,
+        table.dataTable thead th.sorting_asc:after,
+        table.dataTable thead th.sorting_desc:after {
+            margin-left: 4px;
+            font-size: 10px;
+            color: white !important;
+        }
+
+    #pic1 {
+        object-fit: cover;
+        width: 75px;
+        height: 75px;
+        border-radius: 5px;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-danger, .btn-primary, .btn-warning {
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #übrsch {
+        padding-top: 60px;
+        padding-bottom: 90px;
+    }
+
+
+    /* 768px ve altı ekranlarda tablo hücrelerini küçült */
+    @@media screen and (max-width: 768px) {
+        #perliste th, #perliste td {
+            font-size: 12px;
+            padding: 6px 4px;
+        }
+
+        .dataTables_filter {
+            float: none;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    }
+
+    /* 480px ve altı ekranlarda search input'u tam genişlik */
+    @@media screen and (max-width: 480px) {
+        .dataTables_filter input {
+            width: 50% !important;
+            box-sizing: border-box;
+            margin-top: 10px;
+        }
+
+        .dataTables_length, .dataTables_info {
+            text-align: center;
+            float: none;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<div id="übrsch">
+
+    <h3 class="text-lg-start" style="color: cadetblue;">Liste von Angestellter</h3>
+    <hr />
+</div>
+
+<!--<p class="mt-2 mb-4">-->
+ 
+
+    @* --- İŞTE BİZİM BUTONUMUZ --- *@
+    <!--<a href="@Url.Action("Import", "PersonalAngabens")" class="btn btn-success" style="box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);">
+        <i class="bx bxs-file-import"></i> Von Excel importieren
+    </a>
+</p>-->
+<body>
+    <div class="table-responsive">
+        <table id="perliste" class="table table-hover table-bordered table-light ">
+            <thead>
+
+                <tr>
+                    <th>#</th>
+                    <th>Bild</th>
+                    <th>@Html.DisplayNameFor(model => model.Vorname)</th>
+                    <th>@Html.DisplayNameFor(model => model.Nachname)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.RufNummer)</th>
+                    <th>@Html.DisplayNameFor(model => model.Abteilung)</th>
+                    <th style="color: red!important;">@Html.DisplayNameFor(model => model.Berechtigung)</th>
+                    <th style="color:black!important;">Operationen</th>
+                </tr>
+            </thead>
+
+            <tbody style="background-color:whitesmoke">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.IsLockedOut == true)
+                            {
+
+
+                                <u class="bx bxs-lock-alt text-danger hidden" title="Konto ist gesperrt"> </u>
+                            }
+                            else
+                            {
+                                <b class="bx bx-check text-success " title="Konto ist aktiv"> </b>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Bild))
+                            {
+                                <img id="pic1" src="@Url.Content("~/Images/" + item.Bild)" alt="Bild" />
+                            }
+                            else
+                            {
+                                <span>Kein Bild</span>
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Vorname)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Nachname)</td>
+                        <td>
+                            <a href="mailto:@item.Email" style="color:mediumblue">@item.Email</a>
+                            @if (item.IsLockedOut == true)
+                            {
+                                <u class="bx bxs-lock-alt text-danger hidden" title="Konto ist gesperrt"> </u>
+                            }
+                        </td>
+                        <td><a href="tel:@item.RufNummer" style="color:mediumblue">@item.RufNummer</a></td>
+                        <td>@Html.DisplayFor(modelItem => item.Abteilung)</td>
+                        <td style="color: red;">@Html.DisplayFor(modelItem => item.Berechtigung)</td>
+                        <td>
+                            <a href="/PersonalAngabens/Edit/@item.PersonalDatenID" class="btn btn-warning btn-sm" title="Bearbeiten">
+                                <i class="bx bx-edit"></i>
+                            </a>
+                            <a href="/PersonalAngabens/Details/@item.PersonalDatenID" class="btn btn-primary btn-sm" title="Details">
+                                <i class="bx bx-info-square"></i>
+                            </a>
+                            <a href="/PersonalAngabens/Delete/@item.PersonalDatenID" class="btn btn-danger btn-sm" title="Löschen">
+                                <i class="bx bx-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+<!-- pdfmake ve vfs_fonts dosyalarını ekleyin -->
+<!--Dieser Skript-Code wurde von Chat-GPT bearbeitet!-->
+<script>
+    $('#perliste').DataTable({
+        language: {
+            info: "_TOTAL_ Eintrag von _START_ bis _END_ werden angezeigt.",
+            infoEmpty: "Keine Einträge vorhanden.",
+            loadingRecords: "Einträge werden geladen.",
+            zeroRecords: "Tabelle ist leer.",
+            search: "Durchsuchen :",
+            infoFiltered: "(gefiltert aus insgesamt _MAX_ Einträgen)",
+            buttons: {
+                copyTitle: "In die Zwischenablage kopiert",
+                copySuccess: "%d Zeilen wurden in die Zwischenablage kopiert",
+                copy: "Kopieren ",
+                print: "Drucken ",
+                pdf: "PDF"
+            },
+            paginate: {
+                first: "Erste",
+                previous: "« Vorherige",
+                next: "Nächste » ",
+                last: "Letzte"
+            }
+        },
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: '<i class="icon-base bx bx-copy me-1 ms-2"></i> ',
+                titleAttr: 'Kopieren'
+            },
+            {
+                extend: 'excel',
+                text: '<i class="icon-base bx bxs-file-export me-1 ms-1"></i> ',
+                titleAttr: 'Excel'
+            },
+            {
+                extend: 'print',
+                text: '<i class="icon-base bx bx-printer me-1 ms-1"></i> ',
+                titleAttr: 'Drucken'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="icon-base bx bxs-file-pdf me-2 ms-1"></i> ',
+                titleAttr: 'PDF'
+            }
+        ],
+        responsive: true,
+    });
+
+
+</script>

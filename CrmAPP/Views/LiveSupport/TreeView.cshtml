@@ -1,0 +1,146 @@
+﻿
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .tree ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+    }
+
+    .tree li {
+        margin: 0;
+        margin-top: 10px;
+        padding: 0 12px;
+        line-height: 20px;
+        color: #369;
+        font-weight: 100;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .tree li::before, .tree li::after {
+            content: '';
+            position: absolute;
+            left: -20px;
+        }
+
+        .tree li::before {
+            border-left: 1px solid #ccc;
+            top: 0;
+            bottom: 50%;
+            height: 100%;
+            width: 1px;
+        }
+
+        .tree li::after {
+            border-top: 1px solid #ccc;
+            top: 50%;
+            width: 20px;
+            height: 1px;
+        }
+
+    .tree ul > li:last-child::before {
+        height: 50%;
+    }
+
+    .tree li > ul::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -20px;
+        bottom: 0;
+        border-left: 1px solid #ccc;
+    }
+
+    /* Başlangıçta kapalı */
+    .tree li > ul {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease;
+    }
+
+
+    /* Açıldığında */
+    .tree li.open > ul {
+        max-height: 500px; /* Yeterli büyük bir değer */
+    }
+
+
+    .icon {
+        margin-right: 5px;
+        color: dimgray;
+    }
+</style>
+
+
+
+<br />
+
+<h2><i class='bx bx-sitemap' style="font-size:40px"></i>- Site Map </h2>
+
+
+<hr />
+
+
+<div class="tree card-body">
+    <br />
+
+    <ul>
+
+        <li>
+
+            <span class="icon"><i class='bx bxs-dashboard'></i></span>Dashboard
+        </li>
+        <li class="collapsible">
+            <span class="icon"> 🗂️</span>Personal
+            <ul>
+                <li><span class="icon"><i class='bx bxs-user'></i></span>Personal-List</li>
+                <li><span class="icon"><i class='bx bx-user-plus'></i></span>Neue Personal</li>
+                <li><span class="icon"><i class='bx bx-shield-x'></i></span>Blockierter Personal</li>
+                <li><span class="icon"><i class='bx bxs-id-card'></i></span>Personal Cards</li>
+            </ul>
+        </li>
+
+        <li class="collapsible">
+            <span class="icon">🗂️</span>Kunden
+            <ul>
+                <li><span class="icon"><i class='bx bx-list-ol'></i></span>Kunden List</li>
+                <li><span class="icon"><i class='bx bxs-user-circle'></i></span>Neue Kunden</li>
+
+            </ul>
+        </li>
+        <li class="collapsible">
+            <span class="icon">🗂️</span>Projekte
+            <ul>
+                <li><span class="icon"><i class='bx bx-table'></i></span>Projekte</li>
+                <li><span class="icon"><i class='bx bx-bookmark-alt-plus'></i></span>Neues Projekt</li>
+
+            </ul>
+        </li>
+        <li class="collapsible">
+            <span class="icon">🗂️</span>Sonstige
+            <ul>
+                <li><span class="icon"><i class='bx bx-support'></i></span>Support Team</li>
+                <li><span class="icon"><i class='bx bx-sitemap'></i></span>Site Map</li>
+
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+
+<script>
+    document.querySelectorAll('.tree .collapsible').forEach(function (folder) {
+        folder.addEventListener('click', function (event) {
+            event.stopPropagation(); // Alt öğelere bulaşmasın
+            folder.classList.toggle('open');
+        });
+    });
+</script>

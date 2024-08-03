@@ -1,0 +1,206 @@
+﻿@model CrmAPP.Models.Kunden.KundenDaten
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #logo {
+        max-width: 100px;
+        max-height: 100px;
+        border: 1px solid darkgray;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #btndlt:hover {
+        background-color: gray !important;
+        color: orange !important;
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+    }
+</style>
+
+<br />
+<h2>
+    Delete
+    <span class="menu-icon tf-icon bx bx-error" style="inline-size:20px; font-size:35px; color:darkorange;margin-top:-10px"></span>
+</h2>
+
+<p style="font-size:10px"><b style="color: red; font-weight:bold"> ACHTUNG ! </b> <i style="color:black"> Sind Sie sicher, dass Sie das Unternehmen / den Kunden endgültig entfernen möchten?</i> </p>
+<br />
+
+<div>
+    <h5>Unternehmen & Kunden;<b> @Html.DisplayFor(model => model.Unternehmen)</b></h5>
+    <hr style="color:red" />
+    <br />
+
+
+
+    <div class="col">
+        <div class="col-md-12">
+            <div class="card mb-4">
+
+
+                <div class="card-body">
+
+                    <div class="mb-lg-5 mt-lg-3">
+                        <img id="logo" src="@Url.Content("~/Logos/"+Model.Logo)" alt="Alternate Text" class="rounded card-img" style="height:100px;width:auto" />
+                    </div>
+
+
+                    <div class="mb-3 col-md-6 mt-lg-5">
+                        <b class="form-label ">Unternehmen :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Unternehmen)</i>
+                    </div>
+                    <hr style="width:15%" />
+                    <div class="mb-3 col-md-6">
+                        <b class="form-label">Vor-Nachname :</b>
+                        <i style="margin-left:20px;color:darkgray"> @Html.DisplayFor(model => model.Vorname) @Html.DisplayFor(model => model.Nachname)</i>
+                    </div>
+                    <hr style="width:22%" />
+                    <div class="mb-3 col-md-6">
+                        <i class="bx bx-envelope"></i>  <b class="form-label ">E-mail :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Email)</i>
+                    </div>
+                    <hr style="width:30%" />
+                    <div class="mb-3 col-md-6">
+                        <i class="bx bx-mobile-alt"></i> <b class="form-label ">Telefon :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.TelefonMobil)</i>
+                    </div>
+                    <hr style="width:40%" />
+                    <div class="mb-3 col-md-6">
+                        <i class="bx bx-phone-call"></i> <b class="form-label ">Telefon :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.TelefonHaus)</i>
+                    </div>
+                    <hr style="width:50%" />
+                    <div class="mb-3 col-md-6">
+                        <b class="form-label ">Projekt/Auftrag :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.ProjektAuftrag)</i>
+                    </div>
+                    <hr style="width:60%" />
+                    <div class="mb-3 col-md-6">
+                        <i class='bx bx-world' style="color:blue"></i> <b class="form-label ">Website :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Website)</i>
+                    </div>
+                    <hr style="width:70%" />
+                    <div class="mb-3 col-md-6">
+                        <i class='bx bx-map' style="color:red"></i> <b class="form-label ">Adresse :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Adresse)</i>
+                    </div>
+                    <hr style="width:80%" />
+                    <!--Ansprechparners -->
+                    <div class="accordion accordion-popout mt-3 w-75" id="accordionPopout">
+                        <i>Kontaktpersonen</i>
+
+                        <div class="accordion accordion-popout mt-3 w-75" id="accordionPopout">
+                            @if (Model.AnsprechpartnerList != null && Model.AnsprechpartnerList.Any())
+                            {
+                                int partnerIndex = 1;
+                                foreach (var partner in Model.AnsprechpartnerList)
+                                {
+                                    string collapseId = "collapsePartner" + partnerIndex;
+                                    string headingId = "headingPartner" + partnerIndex;
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="@headingId">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                                                <b>Ansprechpartner*in @partnerIndex</b>
+                                            </button>
+                                        </h2>
+                                        <div id="@collapseId" class="accordion-collapse collapse">
+                                            <div class="accordion-body" style="margin-left:30px">
+                                                <label class="mb-3 mt-2 "><u style="color:cadetblue"> <b>@(partner.Name)</b> </u></label>
+                                                <br />
+                                                <span>
+                                                    <i class="bx bx-phone-call" style="color: #28a745; margin-right: 14px"></i>:
+                                                    <a href="tel:@partner.Tel">@partner.Tel </a>
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    <i class="bx bx-envelope" style="color: #ff4d4f; margin-right: 14px"></i>:
+                                                    <a href="mailto:@partner.Mail">@partner.Mail</a>
+                                                </span>
+                                                <br />
+                                                @{
+                                                    var url = "https://www.google.com/maps/search/?api=1&query=" + HttpUtility.UrlEncode(partner.Filiale);
+                                                }
+                                                <span>
+                                                    <i class="bx bx-building-house" style="color: lightslategray; margin-right: 14px"></i>:
+
+                                                    <a href="@url" target="_blank" style=" text-decoration: underline">@partner.Filiale</a>
+                                                </span>
+                                                <small style="color:red !important" class="text-muted">(Filiale)</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    partnerIndex++;
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning mt-2 w-50">
+                                    Es gibt noch keinen Ansprechpartner für diesen Kunden.
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+
+                    <hr style="width:90%" />
+                    <div class="mb-3 col-md-6">
+                        <b class="form-label ">Hinweise :</b>
+                        <i style="margin-left: 20px; color: darkgray"> @Html.DisplayFor(model => model.Hinweise)</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <button id="btndlt" type="submit" class="btn btn-default" style="border:1px solid gray;font-size:12px; border-radius:5px; padding:5px; padding-right:18px; background-color:black; color:white;" onclick="return loeschenfunkt()">
+                <i class="bx bx-error-alt" style="margin-left:9px ;margin-right:7px;color:red"></i>
+                Löschen
+            </button>
+        </div>
+
+
+    }
+</div>
+<hr style="color:red" />
+<div>
+    <div class="mt-2">
+        <a href="/KundenDatens/Index" type="submit" class="btn btn-secondary" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Zurück zur Liste </a>
+    </div>
+</div>
+
+
+<audio id="errorSound" src="/THEMA/klang_datei/error-sound2.mp3" preload="auto"></audio>
+<script>
+    function loeschenfunkt() {
+        var errorSound = document.getElementById("errorSound");
+        errorSound.currentTime = 0; // Baştan başlat
+        errorSound.play();
+        return confirm("\n ACHTUNG ❗ \n \nDiese Kunde & Firma und alle zugehörigen Daten werden dauerhaft gelöscht! Bitte bestätigen Sie den Löschvorgang❗\n");
+    }
+</script>
+
+
+<!--Fonks/Kütüphane 	Özellik 	                 Kullanımı
+alert()	                Bilgi mesajı	             alert("Mesaj")
+confirm()               Evet/Hayır (ok/cancel)	     confirm("Onay?")
+prompt()	            Metin girişi isteği          prompt("Adınız?")
+SweetAlert2	            Modern ve şık onay/info	     Swal.fire({...})
+Bootstrap Modal	        Tam özelleştirilebilir	     Modal HTML ve JS
+HTML5 <dialog>          Yerleşik dialog            	 dialog.showModal()
+-->

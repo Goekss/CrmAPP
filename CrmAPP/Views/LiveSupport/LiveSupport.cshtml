@@ -1,0 +1,380 @@
+﻿@model IEnumerable<CrmAPP.Models.Personal.PersonalAngaben>
+@{
+    ViewBag.Title = "LiveSupport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    body {
+        font-family: 'Lato', sans-serif; /* Schriftfamilie für die gesamte Seite - Sayfa genelinde yazı tipi ailesi */
+        background: #f1f1f1; /* Hintergrundfarbe der Seite - Sayfa arka plan rengi */
+    }
+
+    a:link,
+    a:visited {
+        color: #444; /* Farbe der Links - Bağlantıların rengi */
+        text-decoration: none; /* Entfernt die Textdekoration von Links - Bağlantılardaki metin dekorasyonunu kaldırır */
+        transition: all .4s ease-in-out; /* Übergangseffekt für Links - Bağlantılar için geçiş efekti */
+    }
+
+    #whatsapp-chat {
+        border: 2px solid #d1d1d1; /* Rahmen um das Element - Elemanın etrafındaki kenarlık */
+        position: fixed; /* Fixiert die Position des Elements - Elemanın pozisyonunu sabitler */
+        background: #fff; /* Hintergrundfarbe des Elements - Elemanın arka plan rengi */
+        width: 25%; /* Breite des Elements - Elemanın genişliği */
+        border-radius: 10px; /* Abgerundete Ecken - Yuvarlak köşeler */
+        box-shadow: 0 1px 15px rgba(32, 33, 36, .28); /* Schatten um das Element - Elemanın etrafındaki gölge */
+        bottom: auto; /* Platzierung unten - Alt yerleşim */
+        top: auto; /* Platzierung oben - Üst yerleşim */
+        height: 50%; /* Höhe des Elements - Elemanın yüksekliği */
+        overflow: auto; /* Scrollbarkeit des Inhalts - İçeriğin kaydırılabilirliği */
+        z-index: 99; /* Schichtreihenfolge des Elements - Elemanın yığın sırası */
+        animation-name: showchat; /* Name der Animation - Animasyonun adı */
+        animation-duration: 200ms; /* Dauer der Animation - Animasyon süresi */
+    }
+
+    a.blantershow-chat {
+        background: linear-gradient(#25d366, #25d366) 14% 84%/16% 16%; /* Hintergrundverlauf - Arka plan gradyanı */
+        color: #fff; /* Textfarbe des Links - Bağlantının yazı rengi */
+        position: fixed; /* Fixiert die Position des Links - Bağlantının pozisyonunu sabitler */
+        z-index: 98; /* Schichtreihenfolge des Links - Bağlantının yığın sırası */
+        bottom: 35px; /* Platzierung unten - Alt yerleşim */
+        right: 50px; /* Platzierung rechts - Sağ yerleşim */
+        font-size: 15px; /* Schriftgröße des Links - Bağlantının yazı boyutu */
+        padding: 10px 10px; /* Innenabstand - Dolgu */
+        border-radius: 30px; /* Abgerundete Ecken - Yuvarlak köşeler */
+        box-shadow: 0 1px 15px rgba(32, 33, 36, .28); /* Schatten um das Element - Elemanın etrafındaki gölge */
+    }
+
+        a.blantershow-chat i {
+            transform: scale(1.2); /* Vergrößerung des Icons - Simgenin büyütülmesi */
+            margin: 5px 5px 5px 5px; /* Außenabstand um das Icon - Simgenin çevresindeki kenar boşluğu */
+        }
+
+    .header-chat {
+        background: linear-gradient(#25d366, #25d366) 14% 84%/16% 16%; /* Hintergrundverlauf - Arka plan gradyanı */
+        color: #fff; /* Textfarbe des Headers - Başlığın yazı rengi */
+        padding: 20px; /* Innenabstand - Dolgu */
+    }
+
+        .header-chat h3 {
+            margin: 0 0 10px; /* Außenabstand um die Überschrift - Başlığın çevresindeki kenar boşluğu */
+        }
+
+        .header-chat p {
+            font-size: 14px; /* Schriftgröße des Textes - Metin yazı boyutu */
+            line-height: 1.7; /* Zeilenhöhe des Textes - Metin satır yüksekliği */
+            margin: 0; /* Außenabstand um den Text - Metin çevresindeki kenar boşluğu */
+        }
+
+    .info-avatar {
+        position: relative; /* Relative Positionierung des Elements - Elemanın görece pozisyonu */
+    }
+
+        .info-avatar img {
+            border-radius: 100%; /* Runde Form des Bildes - Resmin yuvarlak şekli */
+            width: 55px; /* Breite des Bildes - Resmin genişliği */
+            height: 55px; /* Höhe des Bildes - Resmin yüksekliği */
+            float: left; /* Bild nach links ausrichten - Resmi sola hizala */
+            margin: 0 10px 0 0; /* Außenabstand um das Bild - Resmin çevresindeki kenar boşluğu */
+        }
+
+        .info-avatar:before {
+            content: '\e900'; /* Inhalt vor dem Element - Elemandan önceki içerik */
+            z-index: 1; /* Schichtreihenfolge - Yığın sırası */
+            font-family: "Font Awesome 5 Brands"; /* Schriftfamilie des Icons - Simgenin yazı tipi ailesi */
+            background: #23ab23; /* Hintergrundfarbe des Icons - Simgenin arka plan rengi */
+            color: #fff; /* Textfarbe des Icons - Simgenin yazı rengi */
+            padding: 2px 6px; /* Innenabstand um das Icon - Simgenin çevresindeki dolgu */
+            border-radius: 100%; /* Runde Form des Icons - Simgenin yuvarlak şekli */
+            position: absolute; /* Absolute Positionierung des Icons - Simgenin mutlak pozisyonu */
+            top: 38px; /* Platzierung oben - Üst yerleşim */
+            left: 33px; /* Platzierung links - Sol yerleşim */
+            font-size: 10px; /* Schriftgröße des Icons - Simgenin yazı boyutu */
+        }
+
+    a.informasi {
+        padding: 20px; /* Innenabstand - Dolgu */
+        display: block; /* Block-Element - Blok eleman */
+        overflow: hidden; /* Überlauf - Taşma */
+        animation-name: showhide; /* Name der Animation - Animasyonun adı */
+        animation-duration: 600ms; /* Dauer der Animation - Animasyon süresi */
+    }
+
+        a.informasi:hover {
+            background: #ebebeb; /* Hintergrundfarbe bei Hover - Üzerine gelindiğinde arka plan rengi */
+        }
+
+    .info-chat span {
+        display: block; /* Block-Element - Blok eleman */
+    }
+
+    #get-label,
+    span.chat-label {
+        font-size: 12px; /* Schriftgröße - Yazı boyutu */
+        color: darkgray; /* Textfarbe - Yazı rengi */
+    }
+
+    #get-nama,
+    span.chat-nama {
+        margin: 5px 0 0; /* Außenabstand - Kenar boşluğu */
+        font-size: 15px; /* Schriftgröße - Yazı boyutu */
+        font-weight: 350; /* Schriftgewicht - Yazı kalınlığı */
+        color: black; /* Textfarbe - Yazı rengi */
+    }
+
+    #get-label,
+    #get-nama {
+        color: #fff; /* Textfarbe - Yazı rengi */
+    }
+
+    span.my-number {
+        display: none; /* Element nicht anzeigen - Elemanı gösterme */
+    }
+
+    textarea#chat-input {
+        width: 100%; /* Breite des Textbereichs - Metin alanının genişliği */
+        border: solid 1px #e2e2e2; /* Rahmen um den Textbereich - Metin alanının kenarlığı */
+        border-radius: 33px; /* Abgerundete Ecken des Textbereichs - Metin alanının yuvarlak köşeleri */
+        font-size: 13px; /* Schriftgröße des Textes - Metin yazı boyutu */
+        height: 44px; /* Höhe des Textbereichs - Metin alanının yüksekliği */
+        margin: 0px !important; /* Außenabstand des Textbereichs - Metin alanının kenar boşluğu */
+        outline: none; /* Entfernt den Umriss des Textbereichs - Metin alanının ana hatlarını kaldırır */
+        resize: none; /* Verhindert die Größenänderung des Textbereichs - Metin alanının boyutlandırılmasını engeller */
+        padding: 10px 20px 0px 10px; /* Innenabstand des Textbereichs - Metin alanının dolgu boşluğu */
+        overflow: hidden; /* Versteckt den Überlauf - Taşmayı gizler */
+    }
+
+    a#send-it {
+        color: #555; /* Textfarbe des Send-Buttons - Gönder düğmesinin yazı rengi */
+        width: 41px; /* Breite des Send-Buttons - Gönder düğmesinin genişliği */
+        font-weight: 700; /* Schriftgewicht des Textes - Metin yazı kalınlığı */
+        padding: 8px; /* Innenabstand des Send-Buttons - Gönder düğmesinin dolgu boşluğu */
+        background: #e2e2e2; /* Hintergrundfarbe des Send-Buttons - Gönder düğmesinin arka plan rengi */
+        margin-right: 9px; /* Rechter Außenabstand - Sağ kenar boşluğu */
+        border-radius: 50%; /* Runde Form des Send-Buttons - Gönder düğmesinin yuvarlak şekli */
+        position: absolute; /* Absolute Positionierung des Send-Buttons - Gönder düğmesinin mutlak pozisyonu */
+        right: 2px; /* Platzierung rechts - Sağ yerleşim */
+        height: 43px; /* Höhe des Send-Buttons - Gönder düğmesinin yüksekliği */
+        text-align: center; /* Textausrichtung - Metin hizalama */
+        display: flex; /* Flexbox-Layout - Flex kutu düzeni */
+        justify-content: center; /* Zentriert den Inhalt horizontal - İçeriği yatay olarak ortalar */
+        align-items: center; /* Zentriert den Inhalt vertikal - İçeriği dikey olarak ortalar */
+    }
+
+    #send-it:hover {
+        background: #25d366; /* Hintergrundfarbe bei Hover - Üzerine gelindiğinde arka plan rengi */
+        color: white; /* Textfarbe bei Hover - Üzerine gelindiğinde yazı rengi */
+        transform: rotate(90deg); /* Drehung des Send-Buttons - Gönder düğmesinin döndürülmesi */
+        transition: transform 1s ease; /* Übergangseffekt der Drehung - Döndürme geçiş efekti */
+    }
+
+    .first-msg {
+        background: white; /* Hintergrundfarbe der ersten Nachricht - İlk mesajın arka plan rengi */
+        padding: 30px; /* Innenabstand - Dolgu */
+        text-align: left; /* Textausrichtung - Metin hizalama */
+    }
+
+        .first-msg span {
+            background: #e2e2e2; /* Hintergrundfarbe des Textbereichs - Metin alanının arka plan rengi */
+            color: #333; /* Textfarbe - Yazı rengi */
+            font-size: 12px; /* Schriftgröße - Yazı boyutu */
+            line-height: 1; /* Zeilenhöhe - Satır yüksekliği */
+            border-radius: 10px; /* Abgerundete Ecken - Yuvarlak köşeler */
+            padding: 15px 20px; /* Innenabstand - Dolgu */
+            display: inline-block; /* Inline-Block-Element - Satır içi blok eleman */
+        }
+
+    .start-chat .blanter-msg {
+        display: flex; /* Flexbox-Layout - Flex kutu düzeni */
+        padding: 10px; /* Innenabstand - Dolgu */
+    }
+
+    #get-number {
+        display: none; /* Element nicht anzeigen - Elemanı gösterme */
+    }
+
+    a.close-chat {
+        position: absolute; /* Absolute Positionierung des Schließen-Buttons - Kapat düğmesinin mutlak pozisyonu */
+        top: 5px; /* Platzierung oben - Üst yerleşim */
+        right: 15px; /* Platzierung rechts - Sağ yerleşim */
+        color: #fff; /* Textfarbe des Schließen-Buttons - Kapat düğmesinin yazı rengi */
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; /* Schriftfamilie des Schließen-Buttons - Kapat düğmesinin yazı tipi ailesi */
+        font-size: 30px; /* Schriftgröße des Schließen-Buttons - Kapat düğmesinin yazı boyutu */
+    }
+
+    a.back-chat {
+        position: absolute; /* Absolute Positionierung des Zurück-Buttons - Geri düğmesinin mutlak pozisyonu */
+        top: 15px; /* Platzierung oben - Üst yerleşim */
+        right: 40px; /* Platzierung rechts - Sağ yerleşim */
+        color: #fff; /* Textfarbe des Zurück-Buttons - Geri düğmesinin yazı rengi */
+        font-size: 16px; /* Schriftgröße des Zurück-Buttons - Geri düğmesinin yazı boyutu */
+    }
+
+    .hide {
+        display: none; /* Element nicht anzeigen - Elemanı gösterme */
+        animation-name: showhide; /* Name der Animation - Animasyonun adı */
+        animation-duration: 600ms; /* Dauer der Animation - Animasyon süresi */
+        opacity: 1; /* Deckkraft des Elements - Elemanın opaklığı */
+    }
+
+    .show {
+        display: block; /* Element anzeigen - Elemanı göster */
+        animation-name: showhide; /* Name der Animation - Animasyonun adı */
+        animation-duration: 600ms; /* Dauer der Animation - Animasyon süresi */
+        opacity: 1; /* Deckkraft des Elements - Elemanın opaklığı */
+    }
+
+    #get-avatar img { /* Avatar-Bild - Avatar resmi */
+        width: 80px; /* Breite des Bildes - Resmin genişliği */
+        height: 80px; /* Höhe des Bildes - Resmin yüksekliği */
+        border-radius: 50%; /* Runde Form des Bildes - Resmin yuvarlak şekli */
+        object-fit: cover; /* Objektanpassung - Nesne sığdırma */
+        margin-right: 10px; /* Rechter Außenabstand - Sağ kenar boşluğu */
+        margin-top: 10px; /* Oberer Außenabstand - Üst kenar boşluğu */
+        margin-bottom: 10px; /* Unterer Außenabstand - Alt kenar boşluğu */
+    }
+
+    #get-nama {
+        font-size: 15px !important; /* Schriftgröße - Yazı boyutu */
+        text-align: left; /* Textausrichtung - Metin hizalama */
+    }
+
+    ::placeholder {
+        opacity: 0.5; /* Deckkraft des Platzhalters - Yer tutucunun opaklığı */
+    }
+
+    
+</style>
+
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel='stylesheet' href='~/Content/supportfont.css'>
+    <link rel='stylesheet' href='~/Content/googlefont.css'>
+</head>
+<body>
+    <div id='whatsapp-chat' class='card'>
+        <div class='header-chat'>
+            <div class='head-home'>
+                <h6> <b>Online Support</b> <i class='bx bx-message-square-dots' style="margin-left:10px!important"></i></h6>
+
+            </div>
+            <div class='get-new hide'>
+                <a class='back-chat' href='#' style="margin-top:-8px!important"><i class="bx bx-caret-left"></i></a><!--Zurück Pfeil-->
+                <div id='get-label'></div>
+                <div id='get-avatar'></div> <!-- Resim için yeni alan -->
+                <div id='get-nama'></div>
+
+            </div>
+
+        </div>
+
+        <!--Erste Chat-Box-->
+        <div class='home-chat'>
+
+            @foreach (var item in Model)
+            {
+                <a class='informasi' href='#' title='@item.Vorname @item.Nachname'>
+                    <div class='info-avatar'>
+                        @if (!string.IsNullOrEmpty(item.Bild))
+                        {
+                            <i class='bx bx-support'></i>
+                            <img src='@Url.Content("~/Images/" + item.Bild)' alt='User Avatar' class="avatar-img" />
+                        }
+                        else
+                        {
+                            <span>Kein Bild</span>
+                        }
+                             </div>
+
+
+
+                    <div class='info-chat'>
+                        <span class='chat-label'> @item.Abteilung</span>
+                        <span class='chat-nama'>@item.Vorname @item.Nachname </span>
+                    </div>
+                    <span class='my-number'>@item.RufNummer</span>
+                </a>
+            }
+
+        </div>
+
+        <!--2. versteckte Chat-Box-->
+        <div class='start-chat hide '>
+
+            <div class='first-msg' style="height:200px!important"><span>Guten Tag,  Wie kann ich Ihnen helfen?</span></div>
+            <div class='blanter-msg'>
+                <textarea id='chat-input' placeholder='Bitte schraben Sie hier...' maxlength='120' row='1'></textarea>
+                <a href='#;' id='send-it'><i class="bx bx-send bx-rotate-270"></i></a>
+            </div>
+
+
+        </div>
+        <div id='get-number'></div>
+        <a class='close-chat' href='#'><i class='bx bx-x' style="margin-top:-20px!important;font-size:19px!important"></i></a>
+    </div>
+    <a class='blantershow-chat' href='#' title='Show Chat'><i class='bx bxl-whatsapp' style="color:white"></i></a>
+    <script src='~/Scripts/whatsappchat.js'></script>
+    <script src="./script.js"></script>
+</body>
+</html>
+
+
+<script>
+    $(document).on("click", "#send-it", function () {
+        var a = document.getElementById("chat-input");
+        if ("" != a.value) { // Prüfen: Wenn das Nachrichtenfeld nicht leer ist - Kontrol: Mesaj kutusu boş değilse
+            var b = $("#get-number").text(), // Telefonnummer abrufen - Telefon numarasını al
+                c = document.getElementById("chat-input").value, // Nachricht abrufen - Mesajı al
+                d = "https://web.whatsapp.com/send", // Web-URL - Web URL'si
+                e = b, // Telefonnummer - Telefon numarası
+                f = "&text=" + c; // Nachrichteninhalt - Mesaj içeriği
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) var d = "whatsapp://send"; // Mobilgeräteprüfung - Mobil cihaz kontrolü
+            var g = d + "?phone=" + e + f; // URL erstellen - URL oluştur
+            window.open(g, '_blank') // Öffne WhatsApp-URL in einem neuen Tab - Yeni sekmede WhatsApp URL'sini aç
+        }
+    }),
+
+        $(document).on("click", ".informasi", function () {
+            var avatarSrc = $(this).find(".info-avatar img").attr("src"); // Avatar-Bildquelle abrufen - Avatar resim kaynağını al
+            var personName = $(this).children(".info-chat").children(".chat-nama").text(); // Namen der Person abrufen - Kişi ismini al
+            var personLabel = $(this).children(".info-chat").children(".chat-label").text(); // Etikett der Person abrufen - Kişi etiketini al
+            var phoneNumber = $(this).children(".my-number").text(); // Telefonnummer abrufen - Telefon numarasını al
+
+            $("#get-number").text(phoneNumber); // Telefonnummer aktualisieren - Telefon numarasını güncelle
+            $("#get-nama").text(personName); // Namen der Person aktualisieren - Kişi ismini güncelle
+            $("#get-label").text(personLabel); // Etikett der Person aktualisieren - Kişi etiketini güncelle
+            $("#get-avatar").html("<img src='" + avatarSrc + "' alt='User Avatar' />"); // Avatar-Bild aktualisieren - Avatar resmini güncelle
+
+            $(".start-chat,.get-new").addClass("show").removeClass("hide"); // Start-Chat-Bereiche anzeigen - Sohbeti başlat bölümlerini göster
+            $(".home-chat,.head-home").addClass("hide").removeClass("show"); // Home-Chat-Bereiche ausblenden - Ana sohbet bölümlerini gizle
+        }),
+
+        $(document).on("click", ".close-chat", function () {
+            $("#whatsapp-chat").addClass("hide").removeClass("show"); // Chat-Fenster ausblenden - Sohbet penceresini gizle
+        }),
+
+        $(document).on("click", ".back-chat", function () {
+            $(".home-chat").addClass("show").removeClass("hide"); // Home-Chat-Bereiche anzeigen - Ana sohbet bölümlerini göster
+            $(".start-chat").addClass("hide").removeClass("show"); // Start-Chat-Bereiche ausblenden - Sohbeti başlat bölümlerini gizle
+            $(".head-home").addClass("show").removeClass("hide"); // Home-Header-Bereich anzeigen - Ana başlık bölümünü göster
+            $(".get-new").addClass("hide").removeClass("show"); // Neue Chat-Bereiche ausblenden - Yeni sohbet bölümlerini gizle
+        }),
+
+        $(document).on("click", ".blantershow-chat", function () {
+            var chat = $("#whatsapp-chat");
+
+            // Wenn der Chat bereits geöffnet ist, schließen - Eğer chat zaten açıksa, kapat
+            if (chat.hasClass("show")) {
+                chat.removeClass("show").addClass("hide"); // Chat-Fenster ausblenden - Sohbet penceresini gizle
+            }
+            // Wenn der Chat geschlossen ist, öffnen - Eğer chat kapalıysa, aç
+            else {
+                chat.removeClass("hide").addClass("show"); // Chat-Fenster anzeigen - Sohbet penceresini göster
+            }
+        });
+    
+</script>

@@ -1,0 +1,377 @@
+﻿@model CrmAPP.Models.Personal.PersonalAngaben
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<style>
+    #brbtn:hover {
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        background-color: darkorange !important;
+    }
+
+    #img {
+        width: 160px;
+        height: 160px !important;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+    }
+</style>
+<style>
+    .image-preview {
+        max-width: 150px;
+        max-height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .file-info {
+        color: dimgray;
+        font-size: 11px;
+        margin-top: 10px;
+    }
+</style>
+
+
+
+
+<br />
+<br />
+
+<!-- Anfang des  -->
+@using (Html.BeginForm("Edit", "PersonalAngabens", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h2 style="margin-bottom: 80px ;margin-top:-40px">
+        Bearbeitung
+        <span class="menu-icon tf-icon bx bxs-edit" style="margin-bottom: 10px; font-size: 25px;"></span>
+    </h2>
+    @* --- YENİ: HATA AYIKLAMA GÖSTERGE PANELİ --- *@
+    @if (ViewBag.ValidationErrors != null)
+    {
+        <div class="alert alert-danger">
+            <h4>ModelState Doğrulama Hataları:</h4>
+            <p>Formun kaydedilememesinin nedeni aşağıdaki hatalardır. Lütfen bu listeyi bana geri bildirin:</p>
+            <ul>
+                @foreach (var error in (List<string>)ViewBag.ValidationErrors)
+                {
+                    <li><strong>@error</strong></li>
+                }
+            </ul>
+        </div>
+    }
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.PersonalDatenID)
+    <div class="card mb-6">
+        <h4 class="card-header">Mitarbeiter*innen Infos</h4>
+        <hr class="my-0">
+        <div class="card-body">
+
+            <div class="" style="color:dimgray">
+                <!-- Bild -->
+                <div class="mb-5 mt-3 col-md-6">
+                    @if (!string.IsNullOrEmpty(Model.Bild))
+                    {
+                        <img id="pic1" src="@Url.Content("~/Images/" + Model.Bild)" alt="Bild" class="rounded" style="max-width: 150px; max-height: 150px; object-fit: cover !important; box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3)" />
+                    }
+                    else
+                    {
+                        <span>Kein Bild</span>
+                    }
+
+                </div>
+
+                <!-- Bild umändern -->
+                <div class="mb-5 col-md-3">
+                    <label for="Bild" class="form-label">Neues Bild Hochladen</label>
+                    <input type="file" name="Bild" id="Bild" class="form-control" accept="image/png, image/jpeg" />
+                    <div id="imagePreview"></div>
+                </div>
+
+                <!-- Vorname -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Vorname, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bxs-user"></i></span>
+                        <input class="form-control" type="text" id="Vorname" name="Vorname" value="@Model.Vorname"><!--requerd ekle-->
+                    </div>
+                </div>
+
+                <br />
+
+                <!-- Nachname -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Nachname, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bxs-user"></i></span>
+                        <input class="form-control" type="text" id="Nachname" name="Nachname" value="@Model.Nachname">
+                    </div>
+                </div>
+
+                <br />
+
+                <!-- Email -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"> <i class="menu-icon tf-icons bx bx-envelope"></i></span>
+                        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <br />
+
+                <!-- Passwort -->
+                @*<div class="mb-3 col-md-6">
+                        @Html.LabelFor(model => model.Passwort, htmlAttributes: new { @class = "control-label col-md-6" })
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bxs-key"></i></span>
+                            <input type="password" class="form-control" id="Passwort" name="Passwort" maxlength="9" value="@Model.Passwort" >
+                        </div>
+                    </div>*@
+
+                <!-- Passwort Vers.2-->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Passwort, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text">
+                            <i id="toggle-password-icon" class="menu-icon tf-icons bx bxs-key" onclick="togglePasswordVisibility()"></i> <!-- Anahtar ikonu -->
+                        </span>
+                        <input type="password" class="form-control" id="Passwort" name="Passwort" maxlength="9" value="@Model.Passwort" readonly>
+                    </div>
+                </div>
+                <br />
+
+                <!-- Rufnummer -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.RufNummer, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bx-phone-call"></i></span>
+                        <input type="tel" class="form-control" id="RufNummer" name="RufNummer" value="@Model.RufNummer" maxlength="15"
+                               pattern="^\+?[0-9]*$" required oninput="validateInput(this)">
+
+
+                    </div>
+                </div>
+
+                <br />
+
+                <!-- Abteilung -->
+                @*<div class="mb-3 col-md-6">
+
+                        @Html.LabelFor(model => model.Abteilung, htmlAttributes: new { @class = "control-label col-md-6" })
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bx-building-house"></i></span>
+                            <input class="form-control" type="text" name="Abteilung" id="Abteilung" value="@Model.Abteilung" />
+
+                        </div>
+                    </div>*@
+
+                <!-- Abteilung -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Abteilung, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bx-building-house"></i></span>
+                        <select id="Abteilung" name="Abteilung" class="form-control">
+                            <option value="" disabled selected style="color:orangered;font-size:11px"> - Wählen - </option>
+                            <option value="IT-Service" @(Model.Abteilung == "IT-Service" ? "selected" : "")> » IT-Service </option>
+                            <option value="Consulting" @(Model.Abteilung == "Consulting" ? "selected" : "")> » Consulting </option>
+                            <option value="Recruiting" @(Model.Abteilung == "Recruiting" ? "selected" : "")> » Recruiting </option>
+                            <option value="Vertrieb" @(Model.Abteilung == "Vertrieb" ? "selected" : "")> » Vertrieb </option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <br />
+
+                <!-- Aufgaben -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Aufgaben, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bx-task"></i></span>
+                        <input type="text" class="form-control" id="Aufgaben" maxlength="50" name="Aufgaben" value="@Model.Aufgaben">
+                    </div>
+                </div>
+
+                <br />
+                <!-- Die Rolle der Person -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mb-3 col-md-6">
+                        @Html.LabelFor(model => model.Rol, htmlAttributes: new { @class = "control-label col-md-6" })
+                        <div class="input-group input-group-merge">
+                            <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-key"></i></span>
+                            <select id="Rol" name="Rol" class="form-control">
+                                <option value="" disabled selected style="color:orangered;font-size:11px"> - Wählen - </option>
+                                <option value="Admin" @(Model.Rol == "Admin" ? "selected" : "")> » Admin </option>
+                                <option value="Moderator" @(Model.Rol == "Moderator" ? "selected" : "")> » Moderator</option>
+                                <option value="Personal" @(Model.Rol == "Personal" ? "selected" : "")> » Personal </option>
+
+                            </select>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(model => model.Rol)<!--Moderator edit yaptığında formda mevcut Rol değeri yine POST edilir ve validasyon hatası olmaz.-->
+                    <div><small> <i class='bx bx-key'></i> </small></div>
+                }
+
+                <br />
+                <!-- Berechtigung -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Berechtigung, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bxs-hand"></i></span>
+
+                        <select id="Berechtigung" name="Berechtigung" class="form-control">
+                            <option value="" disabled selected style="color:orangered;font-size:11px"> - Wählen - </option>
+                            <option value="Admin" @(Model.Berechtigung == "Admin" ? "selected" : "")> » Admin</option>
+                            <option value="Abteilungsleiter*in" @(Model.Berechtigung == "Abteilungsleiter*in" ? "selected" : "")> » Abteilungsleiter*in</option>
+                            <option value="Mitarbeiter*in" @(Model.Berechtigung == "Mitarbeiter*in" ? "selected" : "")>» Mitarbeiter*in</option>
+
+
+
+                        </select>
+
+                    </div>
+                </div>
+
+                <br />
+
+                <!-- Hinweise -->
+                <!--<div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Hinweise, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-fullname2" class="input-group-text"><i class="menu-icon tf-icons bx bx-notepad"></i></span>
+                        <input type="text" class="form-control" id="Hinweise" name="Hinweise" value="@Model.Hinweise">
+                    </div>
+                </div>-->
+                <!-- Hinweise -->
+                <div class="mb-3 col-md-6">
+                    @Html.LabelFor(model => model.Hinweise, htmlAttributes: new { @class = "control-label col-md-6" })
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text" id="basic-icon-default-hinweise">
+                            <i class="menu-icon tf-icons bx bx-notepad"></i>
+                        </span>
+                        @Html.TextAreaFor(model => model.Hinweise, 5, 70, new { @class = "form-control", id = "Hinweise", name = "Hinweise", aria_describedby = "basic-icon-default-hinweise" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Hinweise, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <br />
+            <br />
+            <i style="font-size:10px; color:royalblue">Änderungen speichern <b class="menu-icon tf-icon bx bx-error" style="color:darkorange; margin-bottom:9px"></b> </i>
+
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button id="brbtn" type="submit" class="btn btn-warning" style=" border-radius:5px; padding:5px; padding-right:18px; color:black" title="Bearbeiten">
+                    <i class="bx bx-edit" style="margin-left:9px; margin-right:7px; color:black"></i>
+                    Bearbeiten
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+</div>
+}
+
+<hr />
+<div>
+    <div class="mt-2">
+        <a href="/PersonalAngabens/Index" type="submit" class="btn btn-secondary" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Zurück zur Liste </a>
+    </div>
+</div>
+<script>
+    // Değişiklik yapılan alanları saklamak için bir obje oluşturuyoruz
+    let changes = {};
+
+    // Her input'a onchange event ekliyoruz
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', function () {
+            // Eğer bir değişiklik varsa, bu değeri 'changes' objesine ekliyoruz
+            if (this.value !== this.defaultValue) {
+                changes[this.name] = `${this.name} geändert`;  // İsim değiştirildi gibi
+            } else {
+                // Eğer değer eski haline dönerse, değişiklikleri siliyoruz
+                delete changes[this.name];
+            }
+        });
+    });
+
+   
+</script>
+<script>
+    // Şifreyi gösterme/gizleme fonksiyonu
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById('Passwort');
+        var icon = document.getElementById('toggle-password-icon');
+
+        // Şifreyi gösterme/gizleme
+        if (passwordField.type === "password") {
+            passwordField.type = "text";  // Şifreyi görünür hale getir
+            icon.classList.remove('bx-key');  // Anahtar ikonunu değiştir
+            icon.classList.add('bx-show');  // Şifreyi gösteren ikon
+        } else {
+            passwordField.type = "password";  // Şifreyi gizle
+            icon.classList.remove('bx-show');  // Göster ikonunu değiştir
+            icon.classList.add('bx-key');  // Anahtar ikonunu tekrar göster
+        }
+    }
+</script>
+
+<script>
+    // Dosya yükleme işlemi ve resim önizlemesi
+    document.getElementById('Bild').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const imagePreview = document.getElementById('imagePreview');
+
+        // Önceki önizlemeyi temizle (güvenli bir şekilde)
+        while (imagePreview.firstChild) {
+            imagePreview.removeChild(imagePreview.firstChild);
+        }
+
+        if (file) {
+            // Dosya boyutunu al (bayt cinsinden)
+            const fileSizeInBytes = file.size;
+            const fileSizeInKB = (fileSizeInBytes / 1024).toFixed(2);
+            const maxFileSizeInKB = 2048; // 2 MB
+
+            // Geçerli dosya türü kontrolü (sadece JPEG ve PNG)
+            if (file.type === "image/jpeg" || file.type === "image/png") {
+                // Dosya boyutu kontrolü
+                if (fileSizeInKB <= maxFileSizeInKB) {
+                    // Resim önizlemesini ekle
+                    const imageUrl = URL.createObjectURL(file);
+                    imagePreview.innerHTML = `
+                        <img src="${imageUrl}" alt="Image Preview" class="image-preview"/>
+                        <p class="file-info"><i class='bx bx-image'></i> ${fileSizeInKB} KB</p>
+                    `;
+                } else {
+                    alert("Dosya boyutu 2 MB'ı aşmamalıdır!");
+                    // Geçersiz dosya seçildiğinde dosya input'unu temizle
+                    event.target.value = '';
+                }
+            } else {
+                alert("Bitte laden Sie die Datei nur als JPEG oder PNG hoch! ");
+                // Geçersiz dosya seçildiğinde dosya input'unu temizle
+                event.target.value = '';
+            }
+        }
+    });
+</script>

@@ -1,0 +1,145 @@
+﻿@model CrmAPP.Models.Projekt.Bericht
+@using System.IO
+
+@{
+    ViewBag.Title = "Bericht Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Dosya tipi ikonunu seç
+    Func<string, string> GetFileIcon = ext =>
+    {
+        switch ((ext ?? "").ToLower())
+        {
+            case "pdf": return "fa-file-pdf text-danger";
+            case "doc":
+            case "docx": return "fa-file-word text-primary";
+            case "xls":
+            case "xlsx": return "fa-file-excel text-success";
+            default: return "fa-file-alt text-muted";
+        }
+    };
+
+    Func<CrmAPP.Models.Personal.PersonalAngaben, int?, string> FormatUserWithId = (personal, personalId) =>
+    {
+        if (personal != null && !string.IsNullOrWhiteSpace(personal.Vorname))
+        {
+            return $"{personal.Vorname} {personal.Nachname} (ID: {personal.PersonalDatenID})";
+        }
+        if (personalId.HasValue)
+        {
+            return $"Unbekannt (ID: {personalId.Value})";
+        }
+        return "Unbekannt";
+    };
+}
+
+<div class="card shadow-sm">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h2 class="h4 mb-0">@ViewBag.Title</h2>
+        <span class="badge bg-primary rounded-pill">Version: @(Model.Version ?? "N/A")</span>
+    </div>
+
+    <div class="card-body">
+        <h3 class="h5 card-title">@Model.Titel</h3>
+        <hr />
+
+        <div class="row">
+            <!-- Bilgiler -->
+            <div class="col-md-7">
+                <h4>Allgemeine Informationen</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Kunde</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Kunde != null)
+                        {
+                            @(string.IsNullOrEmpty(Model.Kunde.Unternehmen) ? $"{Model.Kunde.Vorname} {Model.Kunde.Nachname}" : Model.Kunde.Unternehmen)
+                        }
+                        else
+                        {
+                            <span class="text-muted">--</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-4">Projekt</dt>
+                    <dd class="col-sm-8">@(Model.Projekt?.Projektname ?? "Kein Projekt zugeordnet")</dd>
+                </dl>
+            </div>
+
+            <!-- Dosya -->
+            <div class="col-md-5">
+                <h4>Dateianhang</h4>
+                @if (!string.IsNullOrWhiteSpace(Model.DateiPfad))
+                {
+                    var iconClass = GetFileIcon(Model.DateiTuru);
+
+                    <div class="d-flex align-items-center gap-0">
+                        <i class="fas @iconClass fa-2x"></i>
+                        <a href="@Url.Action("Download", "Berichts", new { id = Model.BerichtId })" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-download me-1"></i> Herunterladen
+                        </a>
+
+                    </div>
+                    <small class="text-muted mt-3 mt-1 d-block">Dateityp: <b>@Model.DateiTuru</b></small>
+
+                }
+                else
+                {
+                    <p class="text-muted">Kein Dateianhang vorhanden.</p>
+                }
+            </div>
+        </div>
+
+        <hr />
+
+        <h4>Verlauf</h4>
+        <div class="table-responsive ">
+            <table class="table table-sm table-bordered table-responsive table-hover table-warning" style="max-width: 600px;">
+                <tbody>
+                    <tr>
+                        <th style="width: 35%;">Hochgeladen am</th>
+                        <td>
+                            @if (Model.HochgeladenAm.HasValue)
+                            {
+                                @Model.HochgeladenAm.Value.ToString("dd.MM.yyyy HH:mm")
+                            }
+                            else
+                            {
+                                <span class="text-muted">Unbekannt</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Hochgeladen von</th>
+                        <td>@FormatUserWithId(Model.HochgeladenVon, Model.HochgeladenVonId)</td>
+                    </tr>
+                    @if (Model.BearbeitetAm.HasValue)
+                    {
+                        <tr>
+                            <th>Zuletzt bearbeitet am</th>
+                            <td>@Model.BearbeitetAm.Value.ToString("dd.MM.yyyy HH:mm")</td>
+                        </tr>
+                        <tr>
+                            <th>Bearbeitet von</th>
+                            <td>@FormatUserWithId(Model.BearbeitetVon, Model.BearbeitetVonId)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer text-end">
+        @Html.ActionLink("Bearbeiten", "Edit", new { id = Model.BerichtId }, new { @class = "btn btn-warning" })
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+        {
+            @Html.ActionLink("Löschen", "Delete", new { id = Model.BerichtId }, new { @class = "btn btn-danger" })
+        }
+
+
+    </div>
+</div>
+
+<div class="mt-lg-5">
+    @Html.ActionLink("Zurück zur Liste", "Index", null, new { @class = "btn btn-secondary" })
+</div>

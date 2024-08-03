@@ -1,0 +1,508 @@
+﻿@model CrmAPP.Models.Projekt.PersonalProjekte
+
+@{
+    ViewBag.Title = "Edit Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- pdfmake ve vfs_fonts  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src='https://unpkg.com/boxicons@latest/dist/boxicons.js'></script>
+
+<style>
+    .mycontainer {
+        width: 50px;
+        float: left;
+        padding-left: 30px;
+        padding-top: 30px;
+        border-radius: 10px;
+        display: table;
+        background-color: cadetblue;
+        color: white;
+    }
+
+    .mycontainer2 {
+        width: 20%;
+        padding-left: 25px;
+        float: left;
+        display: table;
+    }
+
+    #hnws {
+        margin-left: 20px;
+        border: 1px solid #898484;
+        border-radius: 10px;
+        font-size: 10px;
+        padding: 10px;
+        width: 160px;
+        height: 80px;
+        text-align: justify;
+        float: left;
+        opacity: 0.7;
+    }
+
+    #bars {
+        background-color: lightgray !important;
+        width: 60%;
+        border-radius: 10px;
+        height: 30px !important;
+        padding-left: 20px !important;
+    }
+
+    .ansprechpartner-list {
+        display: flex;
+        flex-wrap: wrap; /* Satır sonuna gelince alta geçmesini sağlar */
+        gap: 5px 55px;
+    }
+
+    .form-check-label > b {
+        margin-right: 7px;
+    }
+
+    #prginfo {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .cbx {
+        height: 32px !important;
+        margin-left: 15px !important;
+        padding-right: 40px;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    #barscheck {
+        border-radius: 10px;
+        display: grid;
+        align-items: center;
+        height: 150px;
+        padding-right: 0px !important;
+    }
+
+    .zustand {
+        width: 110px;
+        margin-top: -100px;
+        margin-right: -30px;
+        padding-left: 0px;
+        padding-bottom: 10px !important;
+        color: black;
+        font-size: 10px;
+    }
+
+    @@media (max-width: 768px) {
+        #bigcon {
+            width: 100% !important;
+            padding: 10px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        #bigcon {
+            width: 100% !important;
+            padding: 5px;
+            display: block;
+            overflow-x: hidden;
+        }
+
+        .card-body {
+            min-width: auto !important;
+            width: 100% !important;
+            overflow-x: hidden;
+        }
+
+        #uploaded-files {
+            max-width: 100% !important;
+            overflow-x: auto;
+            word-wrap: break-word;
+        }
+    }
+
+    #frma {
+        text-align: right;
+        margin: 30px !important;
+        height: 75px !important;
+        background-color: #ececec;
+        border-radius: 8px !important;
+        background: rgb(235,235,235);
+        background: linear-gradient(90deg, rgba(235,235,235,1) 5%, rgba(244,244,244,0) 94%);
+        margin-top: 60px !important;
+    }
+  
+</style>
+
+<br />
+<br />
+<h2>Projekt Bearbeiten</h2>
+<hr />
+
+<div id="bigcon" class="content-wrapper col-xxl-12" >
+    <div class="container-xxl  flex-grow-1 container-p-y" >
+        <div class="row g-6">
+            @using (Html.BeginForm("Edit", "PersonalProjektes", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="col-xxl">
+                    <div class="card mb-4">
+
+                        <div id="frma" class="mb-0" style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                            @{
+                                // Güvenli şekilde müşteri bilgisi gösterimi
+                                var musteri = Model.KundenDatens?.FirstOrDefault();
+                            }
+                            @if (musteri != null)
+                            {
+                                <div style="margin-bottom:15px;">
+                                    <img src="@Url.Content("~/Logos/" + musteri.Logo)" class="rounded" style="max-width: auto; max-height: 75px; margin-left: 15px; box-shadow: 5px 6px 7px rgba(0, 0, 0, 0.3);" />
+                                    <span style="color: black; margin-left: 10px;">@musteri.Unternehmen</span>
+                                    <input type="hidden" name="SelectedKundenId" value="@musteri.KundenDatenID" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert-warning w-25" style="margin-left:10px">Keine Kundeninformation!</div>
+                            }
+                        </div>
+
+
+
+                        <!-- ====  ANSPRECHPARTNER  ==== -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                        {
+                            <div class="card-body">
+                                @{
+                                    var ansprechpartnerList = ViewBag.AnsprechpartnerList as List<CrmAPP.Models.Kunden.Ansprechpartner>;
+                                    var selectedAnsprechpartnerIds = Model.SelectedAnsprechpartnerIds ?? new List<int>();
+                                }
+                                <div class="card-body">
+                                    <div class="mb-0 mt-4">
+                                        <u class="form-label fw-bold " style="margin-left:10px">Ansprechpartner*in</u>
+                                        @if (ansprechpartnerList?.Any() == true)
+                                        {
+                                            <div class="ansprechpartner-list mt-3 " style="margin-left:10px">
+                                                @foreach (var ans in ansprechpartnerList)
+                                                {
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input"
+                                                               type="checkbox"
+                                                               name="SelectedAnsprechpartnerIds"
+                                                               value="@ans.Id"
+                                                               id="ans_@ans.Id"
+                                                               @(selectedAnsprechpartnerIds.Contains(ans.Id) ? "checked" : "") />
+                                                        <label class="form-check-label" for="ans_@ans.Id">
+                                                            <b>@ans.Name</b>
+                                                            <span class="text-muted small">
+                                                                ( <i class="bx bx-phone-call" style="color: #28a745;"></i>: @ans.Tel,
+                                                                <i class="bx bx-envelope" style="color: #ff4d4f; margin-left: 14px"></i>: @ans.Mail,
+                                                                <i class="bx bx-building-house" style="color: lightslategray; margin-left: 14px"></i>: @ans.Filiale )
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert-warning w-25" style="margin-left:10px"> Keine Informationen über die Kontaktpersonen !</div>
+                                        }
+                                    </div>
+                                </div>
+                                <hr class="w-50 mt-1" />
+
+                                @{
+                                    var personalList = ViewBag.PersonalDatenID as SelectList;
+                                    // Hangileri seçili? Eğer Model.SelectedPersonalIds yoksa ViewBag.SelectedPersonalIds kullan
+                                    var selectedPersonalIds = Model.SelectedPersonalIds ?? ViewBag.SelectedPersonalIds as List<int> ?? new List<int>();
+                                }
+
+                                <!--=== Personal === -->
+                                <div class="card-body accordion-item ">
+                                    <div>
+                                        <!-- Collapse Toggle Button -->
+                                        <button style="background-color:whitesmoke" class="accordion-button collapsed w-50" type="button" data-bs-toggle="collapse" data-bs-target="#personalCollapse" aria-expanded="true" aria-controls="personalCollapse">
+                                            <u class="form-label fw-bold ">zugewiesene Personal</u>
+                                        </button>
+
+                                        <!-- Collapse Area -->
+                                        <div id="personalCollapse" class="accordion-collapse collapse ">
+                                            <div class="row mt-4  ">
+                                                @if (personalList != null)
+                                                {
+                                                    foreach (var personel in personalList)
+                                                    {
+                                                        var isChecked = selectedPersonalIds.Contains(Convert.ToInt32(personel.Value));
+                                                        <div class="form-check mb-2 col-md-2 col-6 mb-3 gap-2 " style="margin-left:20px">
+                                                            <input class="form-check-input "
+                                                                   type="checkbox"
+                                                                   name="SelectedPersonalIds"
+                                                                   value="@personel.Value"
+                                                                   id="personal_@personel.Value"
+                                                                   @(isChecked ? "checked" : "") />
+                                                            <label class="form-check-label" for="personal_@personel.Value">
+                                                                @personel.Text
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-warning">Keine Infos!</div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+
+                        else
+                        {
+                            <div style="margin-left:50px!important" class="mb-0"><small> <i class='bx bx-key'></i> </small></div>
+                        }
+
+
+
+                        <hr class="w-100 mt-1" />
+                        <div class="card-header ">
+                            @Html.HiddenFor(m => m.PerProjID)
+                        </div>
+                        <div class="card-body" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <!--Sol Blok-->
+                            <div style="width: 40%;">
+                                <!--Projekt Titel-->
+                                <div class="mb-3" style="width:100% !important">
+                                    <label class="form-label" for="Projektname">Projekt Titel</label>
+                                    <input class="form-control" name="Projektname" type="text" maxlength="30" value="@Model.Projektname" />
+                                </div>
+                                <br />
+                                <!--Projekt Beschreibung-->
+                                <div style="width:100% !important">
+                                    <label class="form-label" for="Erklärung">Beschreibung</label>
+                                    <input id="basic-default-message" class="form-control" name="Erklärung" maxlength="70" value="@Model.Erklärung">
+                                </div>
+                                <br />
+                                <br />
+                                <!--Projekt Abschlussquote-->
+                                <label id="barlabel" class="form-label">Projektabschluss </label>
+                                <div id="bars" class="progress-bar-animated" style="display: flex; align-items: center;height:40px;width:100%!important ">
+
+                                    <button type="button" onclick="decreaseValue()" style="margin-right: 5px; background-color: orange; border: unset; border-radius: 10px 0px 0px 10px !important">-</button>
+                                    <input id="slider" name="ProjektStatus" value="@Model.ProjektStatus" type="range" min="0" max="100" style="width: 70%" oninput="Prozentbearbeitung(this)" />
+
+                                    <button type="button" onclick="increaseValue()" style="margin-left: 5px; background-color: orange; border: unset; border-radius: 0px 10px 10px 0px !important">+</button>
+                                    <span id="sliderValue" style="margin-left:15px !important;font-size:12px !important;color:#000000 !important">  @Model.ProjektStatus %</span>
+                                </div>
+                                <br />
+
+                                <!--Rund-Diagramm-->
+                                <div style=" margin-left:20px!important">
+                                    <i class="zustand"> Derzeitige Abschlussquote </i>
+                                    <div id="circleContainer" style="position: relative; width: 100px; height: 100px;">
+                                        <svg width="100" height="100">
+                                            <circle cx="50" cy="50" r="45" stroke="silver" stroke-width="10" fill="none" />
+                                            <circle id="progressCircle" cx="50" cy="50" r="45" stroke="orange" stroke-width="10" fill="none"
+                                                    stroke-dasharray="283" stroke-dashoffset="283" transform="rotate(-90 50 50)" />
+                                        </svg>
+                                        <div id="circleText" style="color:black;position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px;">@Model.ProjektStatus %</div>
+                                    </div>
+                                </div>
+                                <br />
+
+                                <!--Checkboxen-->
+                                <div id="prginfo" style="max-width:100%">
+                                    <div id="barscheck" class="progress-bar-animated">
+                                        <!-- 5 Kademeli Checkbox -->
+                                        <label class="cbx"><input type="checkbox" id="checkbox1" onclick="setSliderValue(1)"> (0-20 %) Start</label>
+                                        <label class="cbx"><input type="checkbox" id="checkbox2" onclick="setSliderValue(25)"> (20-40 %) Vorbereitung</label>
+                                        <label class="cbx"><input type="checkbox" id="checkbox3" onclick="setSliderValue(50)"> 40-60% Nachbesprechung</label>
+                                        <label class="cbx"><input type="checkbox" id="checkbox4" onclick="setSliderValue(75)"> 60-80% Abschluss</label>
+                                        <label class="cbx"><input type="checkbox" id="checkbox5" onclick="setSliderValue(100)"> 80-100% Nacharbeit</label>
+                                    </div>
+                                </div>
+
+                                <br />
+                                <br />
+
+                                <!--Priorität-->
+                                <div class="mb-3 col-md-6" style="width:100% !important;">
+                                    <label class="form-label" for="Priorität">Priorität</label>
+                                    <select name="Priorität" class="form-control">
+                                        <option value="high" @(Model.Priorität == "high" ? "selected" : "")>» High Priorität (⭐⭐⭐)</option>
+                                        <option value="middle" @(Model.Priorität == "middle" ? "selected" : "")>» Middle Priorität (⭐⭐)</option>
+                                        <option value="low" @(Model.Priorität == "low" ? "selected" : "")>» Low Priorität (⭐)</option>
+                                    </select>
+                                    <!-- Debug için -->
+                                    <small class="text-muted">Priorität Werte war: @Model.Priorität</small>
+                                </div>
+                               
+                            </div>
+                        </div>
+
+                        <hr />
+                        <!-- BERICHT -->
+                        
+                        <!--<div class="card-body" style="background-image: url('@Url.Content("~/THEMA/assets/img/elements/LoginImgEd2.jpg")')">
+                            
+                            <div class="mb-3 w-50">
+                                <label for="report-file" class="form-label"> den Bericht hochladen</label>
+                                <input type="file" class="form-control" accept=".pdf,.doc,.docx" multiple id="report-file" name="RaporDosyalari" />
+                                <small class="text-muted">Erlaubte Formate: .pdf, .docx, .xlsx</small>
+                            </div>
+                            <br />
+                            <div class="card mt-4" style="background-color: rgba(255, 255, 255, 0.1)" >
+                                <div class="container">
+                                    <div class="row mt-4"  >
+                                        @for (int i = 0; i < Model.Berichte.Count; i++)
+                                        {
+                                            var bericht = Model.Berichte.ElementAt(i);
+                                            <div class="col-md-3 mb-4">
+                                                <div class="card" style="background-color: rgba(255, 255, 255, 0.9)">
+                                                    <div class="card-body" >
+                                                        <input type="hidden" name="BerichtList[@i].BerichtId" value="@bericht.BerichtId" />
+                                                        <input type="text" name="BerichtList[@i].Titel" value="@bericht.Titel" class="form-control form-control-sm mb-2 text-bg-dark" placeholder="Bericht Titel" />
+                                                        <small class="text-muted mb-3 d-block">Hochgeladen am: @bericht.HochgeladenAm.ToShortDateString()</small>
+                                                        <div>
+                                                            <a href="@Url.Action("BerichtDownload", "PersonalProjektes", new { id = bericht.BerichtId })"
+                                                               class="btn btn-sm btn-success me-2" title="Download">
+                                                                <i class='bx bx-download'></i>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteBericht(@bericht.BerichtId)" title="Löschen">
+                                                                <i class='bx bxs-trash'></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>-->
+                        
+                    </div>
+                    <!--Button-Bearbeiten-->
+                    <button type="submit" class="btn-sm btn-warning" style="color:white!important"><i class='bx bx-rotate-right bx-rotate-290' style="font-size:25px!important;margin-right:10px!important"></i>Bearbeiten </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--<div>-->
+    <!--ONLINE EDITOR -->
+<!--</div>-->
+
+<hr />
+<!--Zurück-Button-->
+<a href="/PersonalProjektes/Index" class="btn-sm btn-secondary">
+    <i class="bx bx-chevron-left"></i> Zurück zur Projekte
+</a>
+<script>
+   
+</script>
+<script>
+    function decreaseValue() {
+        const slider = document.getElementById('slider');
+        let value = parseInt(slider.value);
+        if (value > parseInt(slider.min)) {
+            slider.value = value - 1;
+            Prozentbearbeitung(slider);
+        }
+    }
+    function increaseValue() {
+        const slider = document.getElementById('slider');
+        let value = parseInt(slider.value);
+        if (value < parseInt(slider.max)) {
+            slider.value = value + 1;
+            Prozentbearbeitung(slider);
+        }
+    }
+    function Prozentbearbeitung(element) {
+        const text = document.getElementById('sliderValue');
+        text.innerHTML = " % " + element.value;
+    }
+    function setSliderValue(value) {
+        const slider = document.getElementById('slider');
+        slider.value = value;
+        Prozentbearbeitung(slider);
+        clearOtherCheckboxes(value);
+    }
+    function clearOtherCheckboxes(checkedValue) {
+        const checkboxes = [
+            { id: 'checkbox1', value: 1 },
+            { id: 'checkbox2', value: 25 },
+            { id: 'checkbox3', value: 50 },
+            { id: 'checkbox4', value: 75 },
+            { id: 'checkbox5', value: 100 }
+        ];
+        checkboxes.forEach(checkbox => {
+            if (checkbox.value !== checkedValue) {
+                document.getElementById(checkbox.id).checked = false;
+            }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const projektStatus = parseInt("@Model.ProjektStatus");
+        function updateProgressCircle(value) {
+            const progressCircle = document.getElementById('progressCircle');
+            const circleText = document.getElementById('circleText');
+            const radius = 45;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (value / 100) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+            circleText.innerHTML = value + "%";
+        }
+        updateProgressCircle(projektStatus);
+    });
+</script>
+<script>
+    function uploadFile() {
+        var fileInput = document.getElementById('report-file');
+        var fileList = document.getElementById('uploaded-files');
+        if (fileInput.files.length === 0) {
+            alert("Lütfen bir dosya seçin!");
+            return;
+        }
+        for (var i = 0; i < fileInput.files.length; i++) {
+            var file = fileInput.files[i];
+            var fileName = file.name;
+            var fileUrl = URL.createObjectURL(file);
+            var now = new Date();
+            var uploadDate = now.toLocaleString();
+            var listItem = document.createElement("li");
+            listItem.className = "list-group-item";
+            listItem.setAttribute("data-upload-date", uploadDate);
+            listItem.innerHTML = `
+            <div  style="display: flex; flex-direction: column; flex-grow: 1; color: dimgray; overflow: hidden;">
+                <span style="font-weight: bold; overflow: hidden; text-overflow: ellipsis;">${fileName}</span>
+                <small style="color: gray;">📅 Hochgeladen am: <um style="color:blue">${uploadDate}</um> </small>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 3px; max-width: 100%;">
+                <a href="${fileUrl}" download="${fileName}" class="btn btn-sm btn-success"><i class='bx bx-download'></i></a>
+                <button class="btn btn-sm btn-danger" onclick="deleteFile(this)"><i class='bx bxs-trash'></i></button>
+            </div>
+        `;
+            fileList.appendChild(listItem);
+        }
+        fileInput.value = "";
+    }
+    function deleteFile(button) {
+        var listItem = button.parentElement.parentElement;
+        var fileName = listItem.querySelector('span').textContent.trim();
+        var uploadDate = listItem.getAttribute("data-upload-date");
+        var now = new Date();
+        var deleteDate = now.toLocaleString();
+        listItem.innerHTML = `
+        <div style="display: flex; flex-direction: column;shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+            <span style="font-weight: bold;color:#DCDCDC">${fileName}</span>
+            <small style="color:red;opacity:0.5">📅 Hochgeladen am: ${uploadDate}</small>
+            <small style="color:red;opacity:0.5">❌ Gelöscht am: ${deleteDate}</small>
+        </div>
+    `;
+        button.disabled = true;
+        button.style.visibility = 'hidden';
+    }
+</script>

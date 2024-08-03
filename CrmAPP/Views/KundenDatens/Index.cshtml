@@ -1,0 +1,305 @@
+﻿@model IEnumerable<CrmAPP.Models.Kunden.KundenDaten>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<style>
+    /* Kart gölgelendirme ve yuvarlatılmış köşeler / Kartenschatten und abgerundete Ecken */
+    .card {
+        border-radius: 10px; /* Kartın köşelerini yuvarlatıyoruz / Wir runden die Ecken der Karte ab */
+        box-shadow: 6px 6px 11px rgba(0, 0, 0, 0.2);
+        overflow: hidden; /* Kartın içeriği taşarsa gizli tutuyoruz / Wir verstecken den Inhalt, wenn er überläuft */
+    }
+
+
+    #logo {
+        box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid #cecece /* Logonun etrafında ince bir kenarlık ekliyoruz / Wir fügen eine dünne Grenze um das Logo hinzu */
+    }
+
+
+    /* Tablo başlık stili / Tabellenkopf-Stil */
+    thead th {
+        padding: 15px; /* Başlık hücrelerine iç boşluk ekliyoruz / Wir fügen Innenabstand zu den Kopfzellen hinzu */
+        text-transform: uppercase; /* Başlık metnini büyük harfe çeviriyoruz / Wir machen den Text der Kopfzeilen groß */
+        text-align: center !important; /* Başlıkları sola hizalıyoruz / Wir richten die Kopfzeilen links aus */
+        vertical-align: middle!important;
+    }
+
+    /* Tablo hücre stili / Tabellenzellen-Stil */
+    tbody td {
+        padding: 9px 11px; /* Hücrelere iç boşluk ekliyoruz / Wir fügen Innenabstand zu den Zellen hinzu */
+        text-align: center !important; /* Hücreleri sola hizalıyoruz / Wir richten die Zellen links aus */
+        vertical-align: middle; /* Hücre içeriğini dikey olarak ortalıyoruz / Wir zentrieren den Zellinhalt vertikal */
+    }
+
+    /* Mobil uyumluluk için butonlar  / Buttons für die mobile Ansicht*/
+    .btn {
+        padding: 5px 10px; /* Butonların iç boşluklarını ayarlıyoruz / Wir passen den Innenabstand der Buttons an */
+        border-radius: 5px; /* Butonların köşelerini yuvarlatıyoruz / Wir runden die Ecken der Buttons ab */
+    }
+
+    /* Sayfa bilgisi ve sayfalama kontrolleri için margin-top ekliyoruz */
+    .pagination { /*buttons Vorherige -Nächste*/
+        padding-right: 20px !important;
+        padding-bottom: 5px !important;
+        
+        font-size: 12px !important;
+        filter: drop-shadow( 4px 2px 4px rgba(0,0,0,0.3)) !important; /*Der Schatten ist nach links angelehnt.*/
+    }
+
+
+    .dt-buttons .buttons-print, .dt-buttons .buttons-copy, .dt-buttons .buttons-excel, .dt-buttons .buttons-pdf { /*PDF-EXCEL-DRUCKEN btn-group*/
+        background-color: cadetblue; /*- Hintergrundfarbe */
+        color: white; /* Textfarbe */
+        opacity: 0.8 !important;
+        font-size: 15px !important;
+    }
+
+    .page-item.active .page-link, .page-item.active .page-link:hover, .page-item.active .page-link:focus, .pagination li.active > a:not(.page-link), .pagination li.active > a:not(.page-link):hover, .pagination li.active > a:not(.page-link):focus { /* vorherige [1-2]btn nächste*/
+        background-color: cadetblue !important;
+    }
+    .btn-group { /*Excel-PDF-Drucken*/
+        padding-top: 50px !important;
+        padding-bottom: 0px !important;
+        padding-left: 10px !important;
+        filter: drop-shadow( 4px 4px 8px rgba(0,0,0,0.3)) !important; /*Der Schatten ist nach links angelehnt.*/
+    }
+    #kundenTable_info{ /*_TOTAL_ Eintrag von _START_ bis _END_ werden angezeigt.*/
+        margin-left: 10px !important;
+        padding-top: 50px !important;
+       
+        font-size: 10px !important;
+    }
+</style>
+
+<h2>Kunden </h2>
+<hr />
+<br />
+
+
+<div class="col" id="table-bordered">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-header" style="background-color: #90909031; color: white;">
+                @* --- YENİ EXCEL'DEN AKTAR BUTONU --- *@
+                @{
+                    var userRoles = User.IsInRole("Admin") || User.IsInRole("Moderator");
+                }
+
+                @if (userRoles)
+                {
+                    <a href="@Url.Action("Import", "KundenDatens")" class="btn btn-outline-dark btn-sm" style="box-shadow: 0 4px 8px rgba(0,0,0,0.15); float:right">
+                        <i class="bx bxs-file-import"></i> Von Excel importieren
+                    </a>
+                }
+
+                <h4 class="card-title" style="margin: 0;">Kundenübersicht</h4>
+
+            </div>
+            <div class="card-content">
+                
+                    <p class="card-text" style="font-size:10px; padding-top:5px !important;margin-bottom:-25px !important;margin-left:-20px">
+                        Sie können alle relevanten Angaben der Kunden hier einsehen.
+                    </p>
+               
+
+
+            </div>
+        </div>
+    </div>
+    <div class="table " style="overflow-x: auto;">
+        <table class="table table-borderless table-hover " id="kundenTable">
+            <thead>
+                <tr style="text-align: center; background-color: #ff9999; height:60px!important">
+                    <th><i class='bx bxs-city'></i>Kunde</th>
+                    <th><i class='bx bxs-component'></i>Logo</th>
+                    <th><i class='bx bx-envelope'></i>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th><i class='bx bx-mobile-alt'></i>Mobile</th>
+                    <th><i class='bx bx-phone'></i>Home</th>
+                    <th><i class='bx bx-world'></i>@Html.DisplayNameFor(model => model.Website)</th>
+                    <th style=""><i class="bx bx-cog"></i> </th>
+                </tr>
+            </thead>
+            <tbody style="word-wrap:break-word; background-color:white !important">
+                @foreach (var item in Model)
+                {
+                    <tr style="text-align: start; border-bottom: 1px solid #f0f0f0;">
+                        <td><b>@Html.DisplayFor(modelItem => item.Unternehmen)</b></td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.Logo))
+                            {
+                                <img id="logo" src="@Url.Content("~/Logos/"+ item.Logo)" alt="Logo" class="rounded" style="max-width: 40px; max-height: 40px;object-fit:cover !important" />
+                            }
+                            else
+                            {
+                                <span>Kein Logo</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="mailto:@item.Email">@item.Email</a>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.TelefonMobil)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TelefonHaus)</td>
+                        <td>
+                            @{
+                                var url = !string.IsNullOrEmpty(item.Website) && item.Website.StartsWith("http") ? item.Website : "https://" + item.Website;
+                                //var url = item.Website.StartsWith("http") ? item.Website : "https://" + item.Website;
+                            }
+                            <a href="@url" target="_blank">@item.Website</a>
+                        <td>
+                            <div style="display: flex; gap: 5px; justify-content: center;">
+                                <a href="@Url.Action("Edit", new { id = item.KundenDatenID })"
+                                   class="btn btn-group-sm btn-warning" title="Bearbeiten">
+                                    <i class="bx bx-edit"></i>
+                                </a>
+                                <a href="@Url.Action("Details", new {id =item.KundenDatenID})" class="btn btn-group-sm btn-info" title="Details">
+                                    <i class="bx bx-info-square"></i>
+                                </a>
+
+                                <a href="@Url.Action("Delete", new {id = item.KundenDatenID})" class="btn btn-group-sm btn-danger" title="Löschen">
+                                    <i class="bx bx-trash"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr />
+</div>
+
+
+<!-- DataTables Bootstrap 5 Style -->
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<!-- DataTables Buttons extension CSS -->
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- DataTables Buttons extension -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
+
+<!-- JSZip (Excel export için) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<!-- pdfmake (PDF export için) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<!-- DataTables HTML5 export ve print -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
+<!--  pdfmake- und vfs_fonts-Dateien  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+
+<!--Dieser Skript-Code wurde von GitHub-Copilot bearbeitet!-->
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {              // Sayfa yüklendikten sonra çalışacak fonksiyonu başlatıyoruz && Wir starten die Funktion nach dem Laden der Seite
+        const searchInput = document.getElementById('searchKundenInput');   // Arama input elementini alıyoruz && Wir holen das Such-Input-Element
+        searchInput.addEventListener('keyup', function () {                 // Klavye tuşlarında arama işlemini tetikliyoruz & Wir lösen die Suchaktion aus, wenn eine Taste gedrückt wird
+            const filter = searchInput.value.toLowerCase();                 // Arama terimini küçük harfe çeviriyoruz / Wir konvertieren den Suchbegriff in Kleinbuchstaben
+            const table = document.getElementById('kundenTable');
+            const trs = table.getElementsByTagName('tr');                   // Tablodaki tüm satırları alıyoruz / Wir holen alle Zeilen in der Tabelle
+
+            for (let i = 1; i < trs.length; i++) {         // döngü yaparak, her satırı arama terimi ile karşılaştırıyoruz / Wir durchlaufen die Zeilen und vergleichen jede Zeile mit dem Suchbegriff
+                const tds = trs[i].getElementsByTagName('td');              // Her satırdaki hücreleri alıyoruz / Wir holen die Zellen jeder Zeile
+                let showRow = false;
+
+                for (let j = 0; j < tds.length; j++) {                       // Her hücrede arama terimi ile karşılaştırma yapıyoruz / Wir vergleichen jede Zelle mit dem Suchbegriff
+                    if (tds[j].textContent.toLowerCase().includes(filter)) {  // Eğer hücre içeriği arama terimi içeriyorsa satırı gösteriyoruz / Wenn der Zellinhalt den Suchbegriff enthält, zeigen wir die Zeile an
+                        showRow = true;
+                        break;
+                    }
+                }
+
+                trs[i].style.display = showRow ? '' : 'none';               // Satırı gösterme veya gizleme / Zeile anzeigen oder ausblenden
+            }
+        });
+    });
+</script>
+<script>
+    // Sayfa yüklendikten sonra çalışacak fonksiyonu başlatıyoruz / Wir starten die Funktion nach dem Laden der Seite
+    document.addEventListener('DOMContentLoaded', (event) => {              // DataTables kütüphanesini başlatıyoruz / Wir initialisieren die DataTables-Bibliothek
+
+        const table = $('#kundenTable').DataTable({                         // İlk sütunda varsayılan sıralama / Standard-Sortierung in der ersten Spalte
+            "order": [[0, "asc"]]
+        });
+
+        // DataTables araması ile entegre olabilmesi için özel arama inputu / Benutzerdefiniertes Suchfeld, das mit der DataTables-Suche integriert ist
+        const searchInput = document.getElementById('searchKundenInput');
+        searchInput.addEventListener('keyup', function () {                // Aramada her tuşa basıldığında DT'in arama fnk çağırıyoruz & Wir rufen die Suchfunktion von DaTab. bei jeder Taste auf
+            table.search(this.value).draw();                               // Arama değeri ile tabloyu güncelliyoruz / Wir aktualisieren die Tabelle mit dem Suchwert
+        });
+    });
+</script>
+<script>
+    $('#kundenTable').DataTable({
+        language: {
+            info: "_TOTAL_ Eintrag von _START_ bis _END_ werden angezeigt.",
+            infoEmpty: "Keine Einträge vorhanden.",
+            loadingRecords: "Einträge werden geladen.",
+            zeroRecords: "Tabelle ist leer.",
+            search: "Durchsuchen : ",
+            infoFiltered: "(gefiltert aus insgesamt _MAX_ Einträgen)",
+            buttons: {
+                copyTitle: "In die Zwischenablage kopiert",
+                copySuccess: "%d Zeilen wurden in die Zwischenablage kopiert",
+                copy: "Kopieren ",
+                print: "Drucken ",
+                pdf: "PDF"
+            },
+            paginate: {
+                first: "Erste",
+                previous: "« Vorherige",
+                next: "Nächste » ",
+                last: "Letzte"
+            }
+        },
+
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: '<i class="icon-base bx bx-copy me-1 ms-2 "></i> ',
+                titleAttr: 'Kopieren'
+            },
+            {
+                extend: 'excel',
+                text: '<i class="icon-base bx bxs-file-export me-1 ms-1"></i> ',
+                titleAttr: 'Excel'
+            },
+            {
+                extend: 'print',
+                text: '<i class="icon-base bx bx-printer me-1 ms-1"></i> ',
+                titleAttr: 'Drucken'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="icon-base bx bxs-file-pdf me-2 ms-1"></i> ',
+                titleAttr: 'PDF'
+            }
+
+        ],
+        responsive: true,
+    });
+</script>

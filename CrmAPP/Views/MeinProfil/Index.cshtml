@@ -1,0 +1,137 @@
+﻿@model CrmAPP.Models.Personal.PersonalAngaben
+
+@{
+    ViewBag.Title = "Mein Profil";
+}
+
+<style>
+    #img {
+        width: 150px;
+        height: 150px !important;
+        border-radius: 10px;
+        border:2px solid #808080;
+        margin-left: 20px;
+        margin-top: 50px;
+        box-shadow: 10px 12px 15px rgba(0, 0, 0, 0.3);
+        margin-bottom: 50px !important;
+        
+    }
+</style>
+
+<br />
+<h2>@ViewBag.Title </h2>
+<hr />
+@{
+    string badgeClass = "bg-secondary"; // default
+    string textColors = "";
+
+    if (Model.Rol == "Admin")
+    {
+        badgeClass = "bg-danger"; // kırmızı
+        textColors = "text-white";
+    }
+    else if (Model.Rol == "Moderator")
+    {
+        badgeClass = "bg-warning"; // mavi
+        textColors = "text-dark";
+    }
+    // İstersen başka roller için de ekleyebilirsin
+    else if (Model.Rol == "Personal")
+    {
+        badgeClass = "bg-secondary";
+        textColors = "text-white";
+    }
+}
+<p class="badge @badgeClass @textColors text-bg-dark" style="float:right;">@Model.Rol</p>
+<br />
+<br />
+<img id="img" src="@Url.Content("~/Images/"+ Model.Bild )" alt="Alternate Text" />
+
+
+<div>
+
+    <table class="table cell-fit">
+
+
+        <tr>
+            <td><strong>Vorname:</strong></td>
+            <td>@Model.Vorname</td>
+        </tr>
+        <tr>
+            <td><strong>Nachname:</strong></td>
+            <td>@Model.Nachname</td>
+        </tr>
+        <tr>
+            <td><strong>Email:</strong></td>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <td><strong>Passwort:</strong></td>
+            <td>
+                <span>••••••••</span>
+
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Rufnummer:</strong></td>
+            <td>@Model.RufNummer</td>
+        </tr>
+        <tr>
+            <td><strong>Abteilung:</strong></td>
+            <td>@Model.Abteilung</td>
+        </tr>
+        <tr>
+            <td><strong>Aufgaben:</strong></td>
+            <td>@Model.Aufgaben</td>
+        </tr>
+        <tr>
+            <td><strong>Berechtigung:</strong></td>
+            <td>@Model.Berechtigung</td>
+        </tr>
+        <tr>
+            <td><strong>Hinweise:</strong></td>
+            <td style="word-wrap: break-word; word-break: break-word; max-width: 50%; white-space: normal;">
+                @Model.Hinweise
+            </td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    <div>
+
+        <a href="@Url.Action("Edit","MeinProfil",new { id = Model.PersonalDatenID })" class="btn btn-warning btn-sm">Profil Bearbeiten</a>
+
+
+    </div>
+</div>
+<hr />
+<div>
+    <div class="mt-2">
+        <a href="/Dashboard/Index" type="submit" class="btn btn-secondary btn-sm" style=" font-size: 13px"><i class='bx bx-chevron-left' style=" margin-left:-10px"></i> Zurück </a>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordField = document.getElementById("passwordField");
+        const originalPassword = passwordField.getAttribute("data-password");
+
+        let isVisible = false;
+
+        togglePassword.addEventListener("click", function () {
+            if (isVisible) {
+                passwordField.textContent = "••••••••";
+                togglePassword.classList.remove("bx-hide");
+                togglePassword.classList.add("bx-show");
+                isVisible = false;
+            } else {
+                passwordField.textContent = originalPassword;
+                togglePassword.classList.remove("bx-show");
+                togglePassword.classList.add("bx-hide");
+                isVisible = true;
+            }
+        });
+    });
+</script>

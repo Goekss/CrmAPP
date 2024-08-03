@@ -1,0 +1,247 @@
+﻿@model CrmAPP.Models.Personal.PersonalAngaben
+
+@{
+    ViewBag.Title = "Profil Bearbeitung";
+}
+
+
+<h2>@ViewBag.Title</h2>
+<hr />
+@{
+    string badgeClass = "bg-secondary"; // default
+    string textColors= "";
+
+    if (Model.Rol == "Admin")
+    {
+        badgeClass = "bg-danger"; // kırmızı
+        textColors = "text-white";
+    }
+    else if (Model.Rol == "Moderator")
+    {
+        badgeClass = "bg-warning"; // mavi
+        textColors = "text-dark";
+    }
+    // İstersen başka roller için de ekleyebilirsin
+    else if(Model.Rol == "Personal")
+    {
+        badgeClass = "bg-secondary";
+        textColors = "text-white";
+    }
+}
+<p class="badge @badgeClass @textColors text-bg-dark" style="float:right;">@Model.Rol</p>
+<br />
+
+
+@using (Html.BeginForm("Edit", "MeinProfil", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.PersonalDatenID)
+
+    <br />
+    @*<div class="mb-3 col-md-6">
+            @Html.LabelFor(model => model.Bild, htmlAttributes: new { @class = "control-label col-md-4" })
+            <input type="file" name="BildUpload" class="form-control" accept="image/*" />
+            @if (!string.IsNullOrEmpty(Model.Bild))
+            {
+                <img src="~/images/@Model.Bild" alt="Profilbild" style="width:100px;height:100px;margin-top:10px;object-fit:cover;" />
+            }
+        </div>*@
+
+
+    <div class="mb-4 col-md-3 ">
+        @Html.Label(" Profilbild", htmlAttributes: new { @class = "control-label col-md-6" })
+
+        <div id="drop-area" style="border:2px dashed #ccc; border-radius:10px; padding:20px; text-align:center; cursor:pointer;">
+            <span id="drop-text" class="text-muted">Hier Klicken oder <br>Das Bild per Drag & Drop hineinziehen</span>
+            <input type="file" name="BildUpload" id="fileElem" class="form-control" accept="image/*" style="display:none;" />
+            <div id="preview" style="margin-top:10px;">
+                @if (!string.IsNullOrEmpty(Model.Bild))
+                {
+                    <img src="~/images/@Model.Bild" alt="Profilbild" style="width:100px;height:100px;object-fit:cover;border-radius:10px" />
+                }
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dropArea = document.getElementById('drop-area');
+            var fileInput = document.getElementById('fileElem');
+            var preview = document.getElementById('preview');
+            var dropText = document.getElementById('drop-text');
+
+            // Alanı tıklayınca file input açılsın
+            dropArea.addEventListener('click', function () {
+                fileInput.click();
+            });
+
+            // Dosya seçilince önizleme
+            fileInput.addEventListener('change', function (e) {
+                handleFiles(this.files);
+            });
+
+            // Drag & drop eventleri
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropArea.style.background = "#f0f0f0";
+                });
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropArea.style.background = "";
+                });
+            });
+
+            dropArea.addEventListener('drop', function (e) {
+                var dt = e.dataTransfer;
+                var files = dt.files;
+                fileInput.files = files;
+                handleFiles(files);
+            });
+
+            function handleFiles(files) {
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    // Önceki önizlemeyi sil
+                    preview.innerHTML = "";
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.width = "100px";
+                        img.style.height = "100px";
+                        img.style.objectFit = "cover";
+                        preview.appendChild(img);
+                    };
+                    reader.readAsDataURL(files[0]);
+                    dropText.innerHTML = "ausgewählte Datei:"; // veya kendi metnin
+                }
+            }
+        });
+    </script>
+
+
+
+    <!--Vorname-->
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.Vorname, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="input-group input-group-merge">
+            <span class="input-group-text"><i class="menu-icon tf-icons bx bxs-user"></i></span>
+            @Html.TextBoxFor(model => model.Vorname, new { @class = "form-control", required = "required" })
+        </div>
+        @Html.ValidationMessageFor(model => model.Vorname, "", new { @class = "text-danger" })
+    </div>
+
+
+    <!--Nachname-->
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.Nachname, htmlAttributes: new { @class = "control-label col-md-6" })
+        <div class="input-group input-group-merge">
+            <span class="input-group-text"><i class="menu-icon tf-icons bx bxs-user"></i></span>
+            @Html.TextBoxFor(model => model.Nachname, new { @class = "form-control", required = "required" })
+        </div>
+        @Html.ValidationMessageFor(model => model.Nachname, "", new { @class = "text-danger" })
+    </div>
+
+    <!-- E-Mail sadece Admin ise düzenlenebilir, diğerlerinde readonly -->
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-6" })
+        @if (User.IsInRole("Admin"))
+        {
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", required = "required" })
+        }
+        else
+        {
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @readonly = "readonly" })
+        }
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <!--Passwort-->
+    <div class="mb-3 col-md-3" style="position: relative;">
+        @Html.LabelFor(model => model.Passwort, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="input-group">
+            <span id="basic-icon-default-fullname2" class="input-group-text">
+                <i id="toggle-password-icon" class="bx bxs-key"></i>
+            </span>
+            <input type="password" class="form-control" value="*******" readonly disabled>
+            <a href="@Url.Action("ChangePassword", "MeinProfil")" class="btn btn-warning btn-sm m-sm-1">
+                Passwort ändern
+            </a>
+        </div>
+    </div>
+
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.RufNummer)
+        @Html.TextBoxFor(model => model.RufNummer, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.Abteilung)
+        @Html.TextBoxFor(model => model.Abteilung, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.Aufgaben)
+        @Html.TextBoxFor(model => model.Aufgaben, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="mb-3 col-md-3">
+        @Html.LabelFor(model => model.Berechtigung)
+        @Html.TextBoxFor(model => model.Berechtigung, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="mb-3 col-md-3">
+        <span style="min-width: 50px;">Hinweise</span>
+        @Html.TextAreaFor(model => model.Hinweise, new { @class = "form-control", @placeholder = "Kommentar", style = "height: 100px;max-width: 100%;" })
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success btn-sm">Abspreichern</button>
+}
+
+
+<hr />
+<div>
+    <div class="mt-2">
+        <a href="/MeinProfil/Index" class="btn btn-secondary btn-sm" style="font-size: 13px">
+            <i class='bx bx-chevron-left' style="margin-left:-10px"></i> Zurück
+        </a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.querySelector(".togglePassword");
+        const passwordField = document.querySelector(".passwordField");
+
+        if (togglePassword && passwordField) {
+            togglePassword.addEventListener("click", function () {
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    togglePassword.classList.replace("bx-hide", "bx-show");
+                } else {
+                    passwordField.type = "password";
+                    togglePassword.classList.replace("bx-show", "bx-hide");
+                }
+            });
+        }
+    });
+</script>
+
+@*<div class="mb-4 col-md-3" style="position: relative;">
+        @Html.LabelFor(model => model.Passwort, htmlAttributes: new { @class = "control-label col-md-3" })
+        <div class="input-group">
+            <span id="basic-icon-default-fullname2" class="input-group-text">
+                <i id="toggle-password-icon" class="bx bxs-key"></i>
+            </span>
+            <input type="password" class="form-control" value="*******" readonly disabled>
+            <a href="@Url.Action("ChangePassword", "MeinProfil")" class="btn btn-warning btn-sm m-sm-1">
+                Passwort ändern
+            </a>
+        </div>
+    </div>*@
