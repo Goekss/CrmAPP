@@ -41,3 +41,5 @@
 
 - [2024-08-20 11:20:15] perf(cache): redis cache layer for sales dashboard deal metrics
 
+- [2024-08-25 09:20:15] perf(search): full-text elastic search indexing for client documents
+
