@@ -69,3 +69,5 @@
 
 - [2024-08-30 11:10:42] feat(email): imap/smtp email sync with two-way conversation threading
 
+- [2024-08-30 14:05:19] feat(invoices): recurring billing generator and stripe checkout gateway
+
