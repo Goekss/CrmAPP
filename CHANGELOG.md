@@ -89,3 +89,5 @@
 
 - [2024-09-03 15:10:44] refactor(db): add composite indexes for lead status and assigned user query
 
+- [2024-09-03 18:25:39] perf(cache): redis cache layer for sales dashboard deal metrics
+
