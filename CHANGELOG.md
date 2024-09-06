@@ -93,3 +93,5 @@
 
 - [2024-09-06 09:45:10] perf(search): full-text elastic search indexing for client documents
 
+- [2024-09-06 11:30:25] style(ui): modern tailwind dark theme and responsive navigation bar
+
