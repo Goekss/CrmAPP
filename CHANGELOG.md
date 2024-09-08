@@ -113,3 +113,5 @@
 
 - [2024-09-08 16:30:51] feat(contacts): bulk vcard/csv contact import with duplicate detection
 
+- [2024-09-08 19:15:28] feat(analytics): quarterly sales forecast and revenue conversion chart
+
