@@ -137,3 +137,5 @@
 
 - [2024-09-12 10:15:32] refactor(api): rest api v2 response standardization and pagination
 
+- [2024-09-12 16:42:07] refactor(db): add composite indexes for lead status and assigned user query
+
