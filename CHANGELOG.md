@@ -179,3 +179,5 @@
 
 - [2024-09-25 11:20:15] fix(leads): correct timezone offset for outbound meeting booking
 
+- [2024-09-26 09:30:14] fix(pipeline): prevent concurrent deal stage updates with row locking
+
