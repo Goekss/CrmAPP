@@ -197,3 +197,5 @@
 
 - [2024-10-01 11:30:25] style(components): polish kanban board column styling and drag preview
 
+- [2024-10-01 15:10:44] test(deals): unit tests for weighted pipeline revenue projection
+
