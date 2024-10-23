@@ -255,3 +255,5 @@
 
 - [2024-10-23 18:05:15] feat(leads): add smart lead scoring algorithm and lead status tracker
 
+- [2024-10-23 20:10:05] feat(customers): customer profile enrichment and 360-degree timeline view
+
