@@ -257,3 +257,5 @@
 
 - [2024-10-23 20:10:05] feat(customers): customer profile enrichment and 360-degree timeline view
 
+- [2024-10-24 09:20:15] feat(pipeline): drag-and-drop sales deal pipeline with stage probability
+
