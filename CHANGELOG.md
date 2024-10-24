@@ -261,3 +261,5 @@
 
 - [2024-10-24 11:10:42] feat(deals): multi-currency deal revenue calculation and quote generator
 
+- [2024-10-24 14:05:19] feat(contacts): bulk vcard/csv contact import with duplicate detection
+
