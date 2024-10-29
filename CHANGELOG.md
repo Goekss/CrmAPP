@@ -283,3 +283,5 @@
 
 - [2024-10-28 19:15:28] fix(contacts): phone number international e.164 standard formatting
 
+- [2024-10-29 09:20:15] fix(auth): invalidate refresh tokens on user role elevation change
+
