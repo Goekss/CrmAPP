@@ -321,3 +321,5 @@
 
 - [2024-11-06 09:30:14] feat(invoices): recurring billing generator and stripe checkout gateway
 
+- [2024-11-06 14:15:48] feat(notifications): websocket real-time desktop push and mention system
+
