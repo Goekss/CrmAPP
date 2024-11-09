@@ -327,3 +327,5 @@
 
 - [2024-11-09 09:30:14] feat(reports): automated weekly executive kpi pdf export service
 
+- [2024-11-09 14:15:48] fix(leads): correct timezone offset for outbound meeting booking
+
