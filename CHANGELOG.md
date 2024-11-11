@@ -333,3 +333,5 @@
 
 - [2024-11-11 09:20:15] fix(contacts): phone number international e.164 standard formatting
 
+- [2024-11-11 11:10:42] fix(auth): invalidate refresh tokens on user role elevation change
+
