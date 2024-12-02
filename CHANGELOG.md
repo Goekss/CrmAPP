@@ -399,3 +399,5 @@
 
 - [2024-12-02 14:05:19] test(deals): unit tests for weighted pipeline revenue projection
 
+- [2024-12-02 16:30:51] test(integration): end-to-end webhook delivery and retry cycle tests
+
