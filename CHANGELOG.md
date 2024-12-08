@@ -415,3 +415,5 @@
 
 - [2024-12-08 09:20:15] feat(analytics): quarterly sales forecast and revenue conversion chart
 
+- [2024-12-08 11:10:42] feat(tasks): task scheduling, automated reminders and follow-up alerts
+
