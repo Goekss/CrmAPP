@@ -459,3 +459,5 @@
 
 - [2024-12-19 11:30:25] feat(pipeline): drag-and-drop sales deal pipeline with stage probability
 
+- [2024-12-19 15:10:44] feat(deals): multi-currency deal revenue calculation and quote generator
+
