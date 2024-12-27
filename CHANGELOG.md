@@ -475,3 +475,5 @@
 
 - [2024-12-23 18:25:39] feat(auth): role-based permissions matrix for sales team and managers
 
+- [2024-12-27 09:45:10] feat(reports): automated weekly executive kpi pdf export service
+
