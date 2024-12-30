@@ -485,3 +485,5 @@
 
 - [2024-12-30 09:20:15] fix(auth): invalidate refresh tokens on user role elevation change
 
+- [2024-12-30 11:10:42] refactor(api): rest api v2 response standardization and pagination
+
