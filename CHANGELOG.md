@@ -531,3 +531,5 @@
 
 - [2025-01-13 09:20:15] fix(pipeline): prevent concurrent deal stage updates with row locking
 
+- [2025-01-13 11:10:42] fix(contacts): phone number international e.164 standard formatting
+
