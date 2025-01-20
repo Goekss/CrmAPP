@@ -569,3 +569,5 @@
 
 - [2025-01-20 18:05:15] feat(email): imap/smtp email sync with two-way conversation threading
 
+- [2025-01-20 20:10:05] feat(invoices): recurring billing generator and stripe checkout gateway
+
