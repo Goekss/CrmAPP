@@ -623,3 +623,5 @@
 
 - [2025-01-31 19:15:28] feat(notifications): websocket real-time desktop push and mention system
 
+- [2025-02-01 11:20:15] feat(auth): role-based permissions matrix for sales team and managers
+
