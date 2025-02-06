@@ -645,3 +645,5 @@
 
 - [2025-02-05 19:15:28] style(ui): modern tailwind dark theme and responsive navigation bar
 
+- [2025-02-06 09:20:15] style(components): polish kanban board column styling and drag preview
+
