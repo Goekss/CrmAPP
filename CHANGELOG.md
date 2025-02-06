@@ -653,3 +653,5 @@
 
 - [2025-02-06 16:30:51] docs: update developer setup guide and api webhook documentation
 
+- [2025-02-06 19:15:28] feat(leads): add smart lead scoring algorithm and lead status tracker
+
