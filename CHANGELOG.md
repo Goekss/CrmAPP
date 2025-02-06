@@ -651,3 +651,5 @@
 
 - [2025-02-06 14:05:19] test(integration): end-to-end webhook delivery and retry cycle tests
 
+- [2025-02-06 16:30:51] docs: update developer setup guide and api webhook documentation
+
