@@ -717,3 +717,5 @@
 
 - [2025-02-23 09:30:14] feat(tasks): task scheduling, automated reminders and follow-up alerts
 
+- [2025-02-23 14:15:48] feat(email): imap/smtp email sync with two-way conversation threading
+
