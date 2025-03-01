@@ -733,3 +733,5 @@
 
 - [2025-03-01 09:20:15] fix(contacts): phone number international e.164 standard formatting
 
+- [2025-03-01 11:10:42] fix(auth): invalidate refresh tokens on user role elevation change
+
