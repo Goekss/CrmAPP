@@ -1,8 +1,8 @@
 # 🏢 Enterprise CRM & Projektmanagement System (C# / ASP.NET)
 
 <p align="center">
-  <a href="#-deutsch-version">🇩🇪 <b>Deutsch</b></a> &nbsp;|&nbsp; 
-  <a href="#-türkçe-surum">🇹🇷 <b>Türkçe</b></a>
+  <a href="#deutsch-version">🇩🇪 <b>Deutsch</b></a> &nbsp;|&nbsp; 
+  <a href="#turkce-surum">🇹🇷 <b>Türkçe</b></a>
 </p>
 
 [![C#](https://img.shields.io/badge/Language-C%23-239120?logo=csharp&logoColor=white)](#)
@@ -18,7 +18,8 @@
 
 ---
 
-# 🇩🇪 Deutsch Version
+<a id="deutsch-version"></a>
+# 🇩🇪 Deutsche Version
 
 ## 📌 Über das Projekt (Unternehmensinterne Management-Plattform & IHK-Abschlussprojekt)
 
@@ -28,7 +29,7 @@
 > * **Tech-Stack:** C#, .NET Framework 4.7.2, ASP.NET MVC 5, RESTful Web API, Entity Framework 6 (Code-First), MS SQL Server, JavaScript/jQuery, Bootstrap 5  
 > * **Mehrwert:** Skalierbare, wartungsfreundliche und kosteneffiziente Inhouse-Alternative zu teuren Enterprise-Lizenzen bei maximalem Datenschutz (2FA & Lockout-Schutz).
 
-Dieses Projekt ist eine vollständige, unternehmensnahe **CRM- und Projektmanagement-Webanwendung**, die primär als **interne, zentrale Verwaltungs- und Management-Plattform (Zentrale Administrationsplattform)** für mein damaliges Ausbildungsunternehmen konzipiert und zeitgleich als **offizielles IHK-Abschluss- und Prüfungsprojekt** (Fachinformatiker für Anwendungsentwicklung) mit großem Engagement von Grund auf entwickelt wurde.
+Die **CrmAPP-Plattform** ist eine **unternehmensinterne, zentrale Managementlösung**, die ich eigenverantwortlich konzipiert und entwickelt habe, um sämtliche operativen Unternehmensprozesse an einem zentralen Ort zu bündeln, und zugleich mein offizielles **IHK-Abschluss- und Prüfungsprojekt (Fachinformatiker für Anwendungsentwicklung)**.
 
 Das System kombiniert eine klassische, robuste **ASP.NET MVC Web-Architektur** mit modernen **RESTful Web APIs**, um betriebliche Kernprozesse (Kundenbeziehungen, Projektsteuerung, Personalressourcen, Dokumentenablage und Auswertungen) in einer einzigen, geschützten Unternehmensumgebung effizient, audit-sicher und benutzerfreundlich abzubilden.
 
@@ -227,6 +228,7 @@ Im Rahmen dieses Abschlussprojekts wurden wesentliche Aspekte moderner Softwaree
 ---
 ---
 
+<a id="turkce-surum"></a>
 # 🇹🇷 Türkçe Sürüm
 
 ## 📌 Proje Hakkında (Şirket İçi Merkezi Yönetim Platformu & IHK Bitirme Projesi)
@@ -237,7 +239,7 @@ Im Rahmen dieses Abschlussprojekts wurden wesentliche Aspekte moderner Softwaree
 > * **Teknoloji Yığını:** C#, .NET Framework 4.7.2, ASP.NET MVC 5, RESTful Web API, Entity Framework 6 (Code-First), MS SQL Server, JavaScript/jQuery, Bootstrap 5  
 > * **Sağlanan Katma Değer:** Yüksek maliyetli kurumsal yazılımlara karşı ölçeklenebilir, bakımı kolay, sıfır lisans maliyetli ve üst düzey güvenlikli (2FA & Hesap Kilitleme) yerel şirket içi alternatif.
 
-Bu proje; çalıştığım şirketin tüm operasyonel süreçlerini tek bir merkezden organize etmek amacıyla **şirket içi (intern) merkezi bir yönetim platformu (central management platform)** olarak tasarlanmış ve aynı zamanda Almanya **IHK (Fachinformatiker für Anwendungsentwicklung)** bitirme ve sınav projem olarak büyük bir emekle sıfırdan hayata geçirilmiştir.
+**CrmAPP platformu**; çalıştığım şirketin tüm operasyonel süreçlerini tek bir merkezden organize etmek amacıyla **şirket içi (intern) merkezi bir yönetim çözümü** olarak bizzat tasarlayıp geliştirdiğim, aynı zamanda Almanya **IHK (Fachinformatiker für Anwendungsentwicklung)** bitirme sınavı projemdir.
 
 Uygulama; güçlü ve güvenilir **ASP.NET MVC** mimarisini modern **RESTful Web API** altyapısıyla birleştirerek müşteri ilişkileri, proje yönetimi, ekip koordinasyonu, kurumsal doküman arşivleme ve iş zekası analizlerini şirketin iç kullanımına özel, güvenli ve pratik tek bir platform altında toplamaktadır.
 
@@ -261,7 +263,7 @@ Uygulama; güçlü ve güvenilir **ASP.NET MVC** mimarisini modern **RESTful Web
    - Müşteriye kimin baktığı, projede kimlerin görevli olduğu şeffaflaştı; ekipler arası iletişim kopuklukları ve mükerrer iş yapma riski sıfırlandı.
 4. **💰 Maliyet Avantajı (Sıfır Lisans Maliyeti)**:
    - Aylık kullanıcı başına yüksek döviz maliyeti çıkaran harici yabancı CRM yazılımlarına olan bağımlılığı ortadan kaldırdı; şirkete özel, sıfır lisans bedelli yerel bir sistem sağladı.
-5. **🚀 Geleceğe Hazır Mimari (Skalabilite)**:
+5. **🚀 Geleceğe Hazır Mimari (Ölçeklenebilirlik / Scalability)**:
    - Entegre edilen **RESTful Web API** sayesinde, backend koduna dokunmadan gelecekte sisteme React tabanlı web arayüzleri veya mobil uygulamalar bağlama esnekliği kazandırdı.
 
 ---
