@@ -1,4 +1,4 @@
-# 🏢 Enterprise CRM & Projektmanagement System (C# / ASP.NET)
+# 🏢 Enterprise CRM & Projektmanagement System (C# / ASP.NET MVC)
 
 <p align="center">
   <a href="#deutsch-version">🇩🇪 <b>Deutsch</b></a> &nbsp;|&nbsp; 
