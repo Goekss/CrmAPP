@@ -8,7 +8,7 @@
 [![C#](https://img.shields.io/badge/Language-C%23-239120?logo=csharp&logoColor=white)](#)
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.7.2-512BD4?logo=dotnet&logoColor=white)](#)
 [![ASP.NET MVC](https://img.shields.io/badge/ASP.NET%20MVC-5.3-blue?logo=dotnet&logoColor=white)](#)
-[![ASP.NET Web API](https://img.shields.io/badge/ASP.NET%20Web%20API-2.0-blueviolet?logo=dotnet&logoColor=white)](#)
+[![ASP.NET Web API](https://img.shields.io/badge/ASP.NET%20Web%20API-5.3.0-blueviolet?logo=dotnet&logoColor=white)](#)
 [![Entity Framework](https://img.shields.io/badge/Entity%20Framework-6.5.1%20(Code--First)-success?logo=dotnet&logoColor=white)](#)
 [![Microsoft SQL Server](https://img.shields.io/badge/MS%20SQL%20Server-Database-CC292B?logo=microsoftsqlserver&logoColor=white)](#)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5.2.3-7952B3?logo=bootstrap&logoColor=white)](#)
